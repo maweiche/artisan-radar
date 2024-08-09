@@ -3,7 +3,7 @@
 import { getArtisanProgram, getArtisanProgramId } from '@artsn-ui/anchor';
 import { Program } from '@coral-xyz/anchor';
 import { useConnection } from '@solana/wallet-adapter-react';
-import { Cluster, Keypair, PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY, TransactionMessage, VersionedTransaction, } from '@solana/web3.js';
+import { Cluster, Keypair, PublicKey, SystemProgram, SYSVAR_INSTRUCTIONS_PUBKEY, TransactionMessage, VersionedTransaction, } from '@solana/web3.js';
 import { useMutation, useQuery,  } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -13,6 +13,7 @@ import { useTransactionToast } from '../ui/ui-layout';
 import { TOKEN_2022_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID  } from '@solana/spl-token';
 import * as b58 from 'bs58';
 import * as anchor from '@coral-xyz/anchor';
+import { profile } from 'console';
 
 export function useArtisanProgram() {
   const { connection } = useConnection();
@@ -50,24 +51,7 @@ export function useArtisanProgram() {
     queryFn: () => connection.getParsedAccountInfo(programId),
   });
 
-  // const profileInitialize = useMutation({
-  //   mutationKey: ['profile', 'initialize', { cluster }],
-  //   mutationFn: (username: string, ) =>
-  //     program.methods
-  //       .initializeProfile(username)
-  //       .accounts({ 
 
-  //        })
-  //       .signers([
-
-  //       ])
-  //       .rpc(),
-  //   onSuccess: (signature) => {
-  //     transactionToast(signature);
-  //     return accounts.refetch();
-  //   },
-  //   onError: () => toast.error('Failed to initialize account'),
-  // });
 
   // TODO: RELOCATE TO API
   async function buyListing(params:{id: number, reference: string, key: string, amount: number, uri: string}) {
@@ -109,11 +93,13 @@ export function useArtisanProgram() {
   };
 }
 
-export function useArtisanProgramAccount({ account }: { account: PublicKey }) {
+export function useArtisanProgramAccount({ account, username }: { account: PublicKey , username?: string}) { 
   const { cluster } = useCluster();
   const transactionToast = useTransactionToast();
   const { program, listings } = useArtisanProgram();
-
+  const buyerProfile = PublicKey.findProgramAddressSync([Buffer.from('profile'), account.toBuffer()], program.programId)[0];
+  const feeKey = process.env.PRIVATE_KEY!;
+  const feePayer = Keypair.fromSecretKey(b58.decode(feeKey));
   const listingQuery = useQuery({
     queryKey: ['listing', 'fetch', { cluster, account }],
     queryFn: () => program.account.fractionalizedListing.fetch(account),
@@ -129,6 +115,28 @@ export function useArtisanProgramAccount({ account }: { account: PublicKey }) {
   const profileQuery = useQuery({
     queryKey: ['profile', 'fetch', { cluster, account }],
     queryFn: () => program.account.profile.fetch(account),
+  });
+
+  const profileInitialize = useMutation({
+    mutationKey: ['profile', 'initialize', { cluster, account, username }],
+    mutationFn: (username: string, ) =>
+      program.methods
+        .initializeProfile(username)
+        .accountsPartial({ 
+          user: account,
+          payer: feePayer.publicKey,
+          profile: buyerProfile,
+          systemProgram: SystemProgram.programId,
+         })
+        .signers([
+          feePayer
+        ])
+        .rpc(),
+    onSuccess: (signature) => {
+      transactionToast(signature);
+      // return account.refetch();
+    },
+    onError: () => toast.error('Failed to initialize account'),
   });
 
   // const closeMutation = useMutation({
@@ -175,6 +183,7 @@ export function useArtisanProgramAccount({ account }: { account: PublicKey }) {
     listingQuery,
     watchesQuery,
     profileQuery,
+    profileInitialize,
     // closeMutation,
     // decrementMutation,
     // incrementMutation,

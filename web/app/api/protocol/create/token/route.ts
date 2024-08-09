@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
-import { Program, AnchorProvider, Wallet } from "@coral-xyz/anchor";
-import { ArtsnCore, getArtisanProgramId, USDC_MINT, MANAGER, mplCoreProgram, getArtisanProgram, ArtsnCoreIDL, PROTOCOL } from '@artsn-ui/anchor';
+import { Program, AnchorProvider } from "@coral-xyz/anchor";
+import { ArtsnCore, MANAGER, mplCoreProgram, ArtsnCoreIDL, PROTOCOL } from '@artsn-ui/anchor';
 import {
     PublicKey,
     SystemProgram,
@@ -8,13 +8,11 @@ import {
     TransactionMessage,
     VersionedTransaction,
     Connection,
-    ComputeBudgetProgram
     // sendAndConfirmTransaction,
   } from "@solana/web3.js";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
-import { createGenericFile, createSignerFromKeypair, signerIdentity, createGenericFileFromBrowserFile } from "@metaplex-foundation/umi"
+import { createSignerFromKeypair, signerIdentity, createGenericFileFromBrowserFile } from "@metaplex-foundation/umi"
 import { irysUploader } from "@metaplex-foundation/umi-uploader-irys"
-import { sign } from "crypto";
   
 export async function POST( request: Request ) {
     const wallet = Keypair.generate();
