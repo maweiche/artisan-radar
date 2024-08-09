@@ -18,12 +18,20 @@ export function getArtisanProgram(provider: AnchorProvider) {
 // This is a helper function to get the program ID for the Counter program depending on the cluster.
 export function getArtisanProgramId(cluster: Cluster) {
   switch (cluster) {
-    case 'devnet':
-    case 'testnet':
-      // This is the program ID for the Counter program on devnet and testnet.
-      return new PublicKey('Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K');
-    case 'mainnet-beta':
+    case 'devnet': 
+      return new PublicKey("Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K");
+    case 'testnet': 
+      return new PublicKey("Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K");
+    case 'mainnet-beta': 
+      return new PublicKey("Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K");
     default:
       return ARTISAN_PROGRAM_ID;
   }
 }
+
+export const USDC_MINT = new PublicKey('4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU'); // circle DEVNET - USDC
+
+export const PROTOCOL = PublicKey.findProgramAddressSync([Buffer.from("protocol")], ARTISAN_PROGRAM_ID)[0];
+export const MANAGER = PublicKey.findProgramAddressSync([Buffer.from("manager")], ARTISAN_PROGRAM_ID)[0];
+
+export const mplCoreProgram = new PublicKey("CoREENxT6tW1HoK8ypY1SxRMZTcVPm7R94rH4PZNhX7d");
