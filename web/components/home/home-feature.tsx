@@ -6,7 +6,7 @@ export default function HomeFeature() {
         <Wrapper
             id="hero"
             style={{ 
-                height: '90vh',
+                height: '100vh',
             }}
             className="flex flex-col justify-center gap-6 mt-12 xs:gap-7 xs:mt-0"
         >            
