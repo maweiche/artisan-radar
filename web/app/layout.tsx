@@ -3,6 +3,7 @@ import { UiLayout } from '@/components/ui/ui-layout';
 import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
 import { ReactQueryProvider } from './react-query-provider';
+import ThemeProvider from '@/lib/hooks/use-theme';
 
 export const metadata = {
   title: 'artsn-ui',
@@ -22,11 +23,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className='
+        bg-primary text-primary font-sans
+        dark:bg-dark dark:text-dark dark:font-sans
+        transition-colors duration-200 ease-in-out
+      '
+      >
         <ReactQueryProvider>
           <ClusterProvider>
             <SolanaProvider>
-              <UiLayout links={links}>{children}</UiLayout>
+              <ThemeProvider>
+                <UiLayout links={links}>{children}</UiLayout>
+              </ThemeProvider>
             </SolanaProvider>
           </ClusterProvider>
         </ReactQueryProvider>

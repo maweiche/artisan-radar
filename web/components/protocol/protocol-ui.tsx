@@ -35,7 +35,7 @@ export function ListingList() {
         <span className="loading loading-spinner loading-lg"></span>
       ) : listings.data?.length ? (
         <div className="grid md:grid-cols-2 gap-4">
-          {listings.data?.slice(0,2).map((account) => (
+          {listings.data?.slice(0,1).map((account) => (
             <ListingCard
               key={account.publicKey.toString()}
               account={account.publicKey}
@@ -111,14 +111,7 @@ function ListingCard({ account }: { account: PublicKey }) {
       bump: listingQuery.data.bump ?? 0
     }
   }, [
-    listingQuery.data?.id,
-    listingQuery.data?.objectType,
-    listingQuery.data?.object,
-    listingQuery.data?.share,
-    listingQuery.data?.shareSold,
-    listingQuery.data?.price,
-    listingQuery.data?.startingTime,
-    listingQuery.data?.bump
+    listingQuery.data
   ]);
 
 
@@ -240,7 +233,6 @@ async function ObjectCard({ account, listingId }: { account: PublicKey, listingI
   const _obj = await fetchObjectDetails(account);
   const uri = _obj?.uri;
   const _objAssetDetails = _obj?.attributes?.attributeList;
-  console.log('watch', _objAssetDetails);
   const transactionToast = useTransactionToast();
   async function handleBuyListing() {
     if (!publicKey) {

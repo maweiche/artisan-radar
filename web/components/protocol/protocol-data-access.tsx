@@ -14,7 +14,7 @@ import { TOKEN_2022_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenA
 import * as b58 from 'bs58';
 import * as anchor from '@coral-xyz/anchor';
 import { profile } from 'console';
-
+import { encodeURL } from '@solana/pay';
 export function useArtisanProgram() {
   const { connection } = useConnection();
   const { cluster } = useCluster();
@@ -81,16 +81,17 @@ export function useArtisanProgram() {
     }
   }
 
-  return {
+  return useMemo(() => ({
     program,
     programId,
+    fraction,
     listings,
+    listingDetails,
     watches,
     profiles,
-    buyListing,
     getProgramAccount,
-    // initializeProfilee,
-  };
+    buyListing,
+  }), [program, programId, fraction, listings, listingDetails, watches, profiles, getProgramAccount]);
 }
 
 export function useArtisanProgramAccount({ account, username }: { account: PublicKey , username?: string}) { 
@@ -98,8 +99,7 @@ export function useArtisanProgramAccount({ account, username }: { account: Publi
   const transactionToast = useTransactionToast();
   const { program, listings } = useArtisanProgram();
   const buyerProfile = PublicKey.findProgramAddressSync([Buffer.from('profile'), account.toBuffer()], program.programId)[0];
-  const feeKey = process.env.PRIVATE_KEY!;
-  const feePayer = Keypair.fromSecretKey(b58.decode(feeKey));
+
   const listingQuery = useQuery({
     queryKey: ['listing', 'fetch', { cluster, account }],
     queryFn: () => program.account.fractionalizedListing.fetch(account),
@@ -117,27 +117,28 @@ export function useArtisanProgramAccount({ account, username }: { account: Publi
     queryFn: () => program.account.profile.fetch(account),
   });
 
-  const profileInitialize = useMutation({
-    mutationKey: ['profile', 'initialize', { cluster, account, username }],
-    mutationFn: (username: string, ) =>
-      program.methods
-        .initializeProfile(username)
-        .accountsPartial({ 
-          user: account,
-          payer: feePayer.publicKey,
-          profile: buyerProfile,
-          systemProgram: SystemProgram.programId,
-         })
-        .signers([
-          feePayer
-        ])
-        .rpc(),
-    onSuccess: (signature) => {
-      transactionToast(signature);
-      // return account.refetch();
-    },
-    onError: () => toast.error('Failed to initialize account'),
-  });
+  //TODO : RELOCATE TO API
+  // const profileInitialize = useMutation({
+  //   mutationKey: ['profile', 'initialize', { cluster, account, username }],
+  //   mutationFn: (username: string, ) =>
+  //     program.methods
+  //       .initializeProfile(username)
+  //       .accountsPartial({ 
+  //         user: account,
+  //         payer: feePayer.publicKey,
+  //         profile: buyerProfile,
+  //         systemProgram: SystemProgram.programId,
+  //        })
+  //       .signers([
+  //         feePayer
+  //       ])
+  //       .rpc(),
+  //   onSuccess: (signature) => {
+  //     transactionToast(signature);
+  //     // return account.refetch();
+  //   },
+  //   onError: () => toast.error('Failed to initialize account'),
+  // });
 
   // const closeMutation = useMutation({
   //   mutationKey: ['counter', 'close', { cluster, account }],
@@ -179,14 +180,17 @@ export function useArtisanProgramAccount({ account, username }: { account: Publi
   //   },
   // });
 
-  return {
+  return useMemo(() => ({
+    program,
+    account,
+    buyerProfile,
     listingQuery,
     watchesQuery,
     profileQuery,
-    profileInitialize,
+    // profileInitialize,
     // closeMutation,
     // decrementMutation,
     // incrementMutation,
     // setMutation,
-  };
+  }), [program, account, buyerProfile, listingQuery, watchesQuery, profileQuery]);
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useConnection } from '@solana/wallet-adapter-react';
+import Button from '@/components/buttons/Button';
 import { IconTrash } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
@@ -63,15 +64,9 @@ export function ClusterChecker({ children }: { children: ReactNode }) {
 export function ClusterUiSelect() {
   const { clusters, setCluster, cluster } = useCluster();
   return (
-    <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn btn-primary rounded-btn">
-        {cluster.name}
-      </label>
-      <ul
-        tabIndex={0}
-        className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52 mt-4"
-      >
-        {clusters.map((item) => (
+    <div className="bg-white mt-2 capitalize absolute text-sm duration-200 md:bg-transparent z-50 w-[90%] left-1/2 -translate-x-1/2 top-full h-max rounded-xl shadow-xl p-6 bg-bg-secondary md:blocks md:static md:w-auto md:left-auto md:transform-none md:top-auto md:rounded-none md:shadow-none md:p-0 md:h-auto">
+        <ul className="flex flex-col items-stretch gap-3 list-style-none lg:gap-5 xl:gap-6 md:flex-row md:items-center">
+            {clusters.map((item) => (
           <li key={item.name}>
             <button
               className={`btn btn-sm ${
@@ -79,7 +74,7 @@ export function ClusterUiSelect() {
               }`}
               onClick={() => setCluster(item)}
             >
-              {item.name}
+              {item.name} - {item.network}
             </button>
           </li>
         ))}
