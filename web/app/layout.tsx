@@ -4,6 +4,7 @@ import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
 import { ReactQueryProvider } from './react-query-provider';
 import ThemeProvider from '@/lib/hooks/use-theme';
+import fontVariables from '@/lib/utils/fonts';
 
 export const metadata = {
   title: 'artsn-ui',
@@ -23,12 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className='
-        bg-primary text-primary font-sans
-        dark:bg-dark dark:text-dark dark:font-sans
-        transition-colors duration-200 ease-in-out
-      '
-      >
+      <body className={`${fontVariables}`}>
         <ReactQueryProvider>
           <ClusterProvider>
             <SolanaProvider>

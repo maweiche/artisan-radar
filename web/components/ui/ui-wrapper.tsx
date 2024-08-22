@@ -31,7 +31,7 @@ const Wrapper = ({
     return (
       <motion.section
         id={id}
-        className={`py-24 md:py-32 ${className}`}
+        className={`py-4 md:py-32 ${className}`}
         {...rest}
       >
         {children}

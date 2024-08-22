@@ -53,7 +53,8 @@
 
 :root {
   /* Light Theme */
-  --bg: aliceblue;
+  --bg: #c5d9fd;
+
   --bg-img: url('/patterns/bg-pattern.svg');
 }
 
