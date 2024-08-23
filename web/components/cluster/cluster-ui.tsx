@@ -1,7 +1,7 @@
 'use client';
 
 import { useConnection } from '@solana/wallet-adapter-react';
-import Button from '@/components/buttons/Button';
+import Button from '@/components/ui/buttons/Button';
 import { IconTrash } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';

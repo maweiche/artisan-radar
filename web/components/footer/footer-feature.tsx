@@ -1,11 +1,14 @@
 'use client'
 import styles from '@/styles/components/Footer.module.css'
-import { Suspense, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { Suspense } from 'react';
 import Image from 'next/image';
-import { fadeIn, slideIn } from '@/styles/animations';
-
+import toast from 'react-hot-toast';
 export default function FooterFeature() {
+    const handleCopy = (e: string) => {
+        console.log(e);
+        navigator.clipboard.writeText(e);
+        toast.success('Email Copied to Clipboard');
+    };
     return (
         <Suspense fallback={<div />}>
             <div
@@ -30,20 +33,20 @@ export default function FooterFeature() {
                     </span>
                     <div className={styles.logoContainer}>
                         <Image
-                            src='/logos/artisan-small-logo.svg'
+                            src='/assets/footer/solana-icon.webp'
                             alt="Logo"
-                            width={25}
-                            height={25}
+                            width={60}
+                            height={60}
                             className="cursor-pointer"
                             onClick={() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         />
                         <Image
-                            src='/logos/artisan-small-logo.svg'
+                            src='/assets/footer/swiss-icon.webp'
                             alt="Logo"
-                            width={25}
-                            height={25}
+                            width={60}
+                            height={60}
                             className="cursor-pointer"
                             onClick={() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -53,59 +56,72 @@ export default function FooterFeature() {
                 </div>
                 <div className={styles.linkContainerRow}>
                     <div className={styles.linkContainerCol}>
-                        <h2 className={styles.subText}>About</h2>
+                        <h2 className={styles.subText}>Site</h2>
                         <ul className={styles.linkList}>
                             <li>
-                                <a href='#' className='link'>About Us</a>
+                                <a href='/collect' className='link'>Start Collecting</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Mission</a>
+                                <a href='/about' className='link'>About Us</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Vision</a>
+                                <a href='tos' className='link'>Terms and Conditions</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Values</a>
+                                <a href='privacy' className='link'>Privacy Policy</a>
                             </li>
                         </ul>
                     </div>
                     <div className={styles.linkContainerCol}>
-                        <h2 className={styles.subText}>About</h2>
+                        <h2 className={styles.subText}>Socials</h2>
                         <ul className={styles.linkList}>
                             <li>
-                                <a href='#' className='link'>About Us</a>
+                                <a href='https://www.linkedin.com/company/the-artisan-nft/?viewAsMember=true' className='link'>LinkedIn</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Mission</a>
+                                <a href='https://twitter.com/ArtsnFi' className='link'>Twitter/X</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Vision</a>
+                                <a 
+                                    onClick={() => {
+                                        handleCopy('renato@artsn.fi');
+                                    }} 
+                                    className='link'
+                                >
+                                    Email
+                                </a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Values</a>
+                                <a href='https://t.me/rcapizz' className='link'>Telegram</a>
+                            </li>
+                            <li>
+                                <a href='https://discord.gg/DZHY6B7Q46' className='link'>Discord</a>
+                            </li>
+                            <li>
+                                <a href='https://www.instagram.com/theartisan_nft/' className='link'>Instagram</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div className={styles.linkContainerRow}>
+                {/* <div className={styles.linkContainerRow}>
                     <div className={styles.linkContainerCol}>
-                        <h2 className={styles.subText}>About</h2>
+                        <h2 className={styles.subText}>Site</h2>
                         <ul className={styles.linkList}>
                             <li>
-                                <a href='#' className='link'>About Us</a>
+                                <a href='/collect' className='link'>Start Collecting</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Mission</a>
+                                <a href='/about' className='link'>About Us</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Vision</a>
+                                <a href='tos' className='link'>Terms and Conditions</a>
                             </li>
                             <li>
-                                <a href='#' className='link'>Our Values</a>
+                                <a href='privacy' className='link'>Privacy Policy</a>
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> */}
             </div>
         </Suspense>
     )

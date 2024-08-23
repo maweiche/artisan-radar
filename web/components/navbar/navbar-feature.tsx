@@ -9,11 +9,11 @@ import { fadeIn, slideIn } from '@/styles/animations';
 import useWindowWidth from '@/lib/hooks/use-window-width';
 import { getBreakpointsWidth } from '@/lib/utils/helper';
 import { motion } from 'framer-motion';
-import DarkModeButton from '@/components/buttons/DarkModeButton';
-import Button from '@/components/buttons/Button'
-import NavButton from '@/components/buttons/NavButton';
+import DarkModeButton from '@/components/ui/buttons/DarkModeButton';
+import Button from '@/components/ui/buttons/Button'
+import NavButton from '@/components/ui/buttons/NavButton';
 import { useCluster } from '../cluster/cluster-data-access';
-import * as CLink from '@/components/buttons/Link';
+import * as CLink from '@/components/ui/buttons/Link';
 import {
     ClusterChecker,
     ClusterUiSelect,

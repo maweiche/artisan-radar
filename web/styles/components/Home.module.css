@@ -48,15 +48,29 @@
 .button {
     padding: 8px 8px 8px 8px;
     gap: 21px;
-    border-radius: 14px;
+    border-radius: 21px;
     border: 1px 0px 0px 0px;
+    background-color: #ffffff;
 }
 
 .selected {
     padding: 8px 8px 8px 8px;
     gap: 21px;
-    border-radius: 14px;
+    border-radius: 21px;
     border: 1px 0px 0px 0px;
     background-color: black;
     color: white;
+}
+
+.textBlock {
+    display: block;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    color: #00000059;
+}
+
+.textBlock > span {
+    font-weight: bold;
+    color: black;
 }
