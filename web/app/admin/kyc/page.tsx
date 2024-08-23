@@ -1,5 +1,5 @@
 import AdminKycFeature from "@/components/admin/kyc/admin-kyc-feature";
 
-export const AdminKycPage = () => {
+export default function AdminKycPage() {
     return <AdminKycFeature />;
 };

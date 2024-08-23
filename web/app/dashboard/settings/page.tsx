@@ -1,5 +1,5 @@
 import SettingsFeature from "@/components/dashboard/settings/settings-feature";
 
-export const SettingsPage = () => {
+export default function SettingsPage() {
     return <SettingsFeature />;
 }
