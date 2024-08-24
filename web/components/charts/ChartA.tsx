@@ -35,18 +35,18 @@ const ChartA = () => {
         />
         <div className={styles.subheader}>
           <div className={styles.textBlock}>
-            <p className={styles.primaryText}>
+            <p className="text-secondary">
               Price evolution
             </p>
-            <p className={styles.secondaryText}>
+            <p className="text-secondary">
               Watches
             </p>
           </div>
           <div className={styles.textBlock}>
-            <p className={styles.primaryText}>
+            <p className="text-secondary">
               This month
             </p>
-            <p className={styles.secondaryText}>
+            <p className="text-secondary">
               +60%
             </p>
           </div>
@@ -61,6 +61,7 @@ const ChartA = () => {
             tickMargin={10}
             axisLine={false}
             tickFormatter={(value) => value.slice(0, 3)}
+            className="text-secondary"
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
@@ -68,10 +69,10 @@ const ChartA = () => {
         </BarChart>
       </ChartContainer>
       <div className={styles.footer}>
-        <p className={styles.primaryText}>
+        <p className="text-secondary text-lg">
           All time:
         </p>
-        <p className={styles.secondaryText}>
+        <p className="text-secondary text-2xl">
           +1453%
         </p>
       </div>

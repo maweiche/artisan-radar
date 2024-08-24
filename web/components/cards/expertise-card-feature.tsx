@@ -26,7 +26,7 @@ const ExpertiseCard = () => {
                     <Card>
                       <CardContent className="flex flex-col aspect-square items-center justify-center p-6">
                         <div className={styles.header}>
-                          <p className={styles.number}>
+                          <p className="text-secondary text-8xl">
                             1
                           </p>
                         </div>
@@ -40,10 +40,10 @@ const ExpertiseCard = () => {
                           />
                         </div>
                         <div className={styles.footer}>
-                          <p className={styles.primaryText}>
+                          <p className="text-secondary text-xl">
                             We acquire Luxury Goods.
                           </p>
-                          <p className={styles.secondaryText}>
+                          <p className="text-secondary text-xl">
                             We selectively choose potential value-appreciating items.
                           </p>
                         </div>

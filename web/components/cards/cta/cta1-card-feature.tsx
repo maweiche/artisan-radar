@@ -20,7 +20,7 @@ const CtaCard1 = () => {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader> */}
       <CardContent className='flex flex-col py-4 pb-12 gap-4'>
-        <p className='text-2xl'>
+        <p className='text-2xl text-secondary'>
             Gain <span className='italic font-light'>priority</span> access by joining the waitlist
         </p>
         <p className='text-2xl text-slate-500'>
@@ -28,11 +28,11 @@ const CtaCard1 = () => {
         </p>
       </CardContent>
       <CardFooter className="flex-col gap-8 items-start">
-        <Button className='w-3/4 gap-6 rounded-xl'>
+        <Button className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary'>
             <EnvelopeClosedIcon className='w-6 h-6' />
             Join Waitlist
         </Button>
-        <Button className='w-3/4 gap-6 rounded-xl' variant='default'>
+        <Button className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary' variant='default'>
             <TwitterLogoIcon className='w-6 h-6' />
             Follow on Twitter
         </Button>

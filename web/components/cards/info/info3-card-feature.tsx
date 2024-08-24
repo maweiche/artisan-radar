@@ -20,9 +20,9 @@ const Card3 = () => {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader> */}
       <CardContent className='py-4 pb-12'>
-        <p className='text-4xl font-semibold'>
+        <p className='text-4xl font-semibold text-secondary'>
           We carefully{" "}
-          <span style={{ color: '#00000059'}}>
+          <span className="text-secondary">
             curate assets, selecting only those identified by our expert team 
             as having potential for value appreciation.
           </span>
@@ -30,7 +30,7 @@ const Card3 = () => {
         
       </CardContent>
       <CardFooter className="flex-row justify-between gap-2 text-lg">
-        <p className="text-white text-lg flex text-center truncate bg-black w-fit-content px-4 py-1 rounded-full">
+        <p className="text-secondaryText bg-secondary text-lg flex text-center truncate bg-black w-fit-content px-4 py-1 rounded-full">
           Transparency
         </p>
         <EyeOpenIcon className="w-12 h-12 text-black" />

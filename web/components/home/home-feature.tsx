@@ -20,7 +20,7 @@ export default function HomeFeature() {
     ]
 
     return (
-        <div className='bg-bg' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px'}}>
+        <div className='bg-bg pt-20' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px'}}>
             <Wrapper
                 // id="hero"
                 className='bg-bg'
@@ -96,11 +96,11 @@ export default function HomeFeature() {
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <TransparentCard>
-                    <h2>
+                    <h2 className='text-secondary border-solid border-2 border-secondary'>
                         Why Artisan?
                     </h2>
-                    <div className={styles.textBlock}>
-                        <span>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
+                    <div className='text-secondary text-2xl'>
+                        <span className='font-bold'>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
                     </div>
                 </TransparentCard>  
                 <Card1 /> 
@@ -108,7 +108,7 @@ export default function HomeFeature() {
                 <ChartC />
             </Wrapper>
             <TransparentCard>
-                <div className={styles.textBlock}>
+                <div className="text-secondary text-2xl">
                     We offer the opportunity to access these markets through digitization with a starting investment of just $100. 
                     Luxury Markets and Vintage collections tend to appreciate over time, yet they often remain out of reach for 
                     the majority of individuals.

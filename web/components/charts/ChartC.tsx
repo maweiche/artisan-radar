@@ -76,7 +76,7 @@ const ChartC = () => {
             <Line
               dataKey="desktop"
               type="natural"
-              stroke="black"
+              stroke="var(--color-secondary)"
               strokeWidth={2}
               dot={false}
             />
@@ -84,10 +84,10 @@ const ChartC = () => {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-lg">
-        <div className="flex gap-2 font-medium leading-none">
+        <div className="flex gap-2 font-medium leading-none text-secondary">
           Watches
         </div>
-        <div className="flex gap-2 leading-none text-muted-foreground text-5xl">
+        <div className="flex gap-2 leading-none text-muted-foreground text-5xl text-secondary">
           +60%
         </div>
       </CardFooter>

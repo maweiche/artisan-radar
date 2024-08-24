@@ -15,12 +15,12 @@ const Card1 = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
+        <CardTitle className="text-secondary">
           TOTAL VALUE
         </CardTitle>
         {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
-      <CardContent className='text-6xl'>
+      <CardContent className='text-6xl text-secondary'>
         +6% Volume Last 24h
       </CardContent>
       {/* <CardFooter className="flex-col items-start gap-2 text-lg">

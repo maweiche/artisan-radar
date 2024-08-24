@@ -20,16 +20,16 @@ const Card2 = () => {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader> */}
       <CardContent className='py-4 pb-12'>
-        <p className='text-4xl font-semibold'>
+        <p className='text-4xl font-semibold text-secondary'>
           All Luxury Goods on our platform are authenticated
-          <span style={{ color: '#00000059'}}>
+          <span className="text-secondary">
             , certified, and securely stored in a third-party vault.
           </span>
         </p>
         
       </CardContent>
       <CardFooter className="flex-row justify-between gap-2 text-lg">
-        <p className="text-white text-lg flex text-center truncate bg-black w-fit-content px-4 py-1 rounded-full">
+        <p className="text-secondaryText bg-secondary text-lg flex text-center truncate bg-black w-fit-content px-4 py-1 rounded-full">
           Certified
         </p>
         <Image

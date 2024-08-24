@@ -25,8 +25,8 @@ import { z } from "zod"
 import { Input } from "@/components/ui/shadcn/input-ui"
  
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  username: z.string().min(3, {
+    message: "Must be a valid email.",
   }),
 })
 
