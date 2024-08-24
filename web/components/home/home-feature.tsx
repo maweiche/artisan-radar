@@ -67,9 +67,9 @@ export default function HomeFeature() {
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <TransparentCard>
-                    <Button>
+                    <h2>
                         Why Artisan?
-                    </Button>
+                    </h2>
                     <div className={styles.textBlock}>
                         <span>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
                     </div>
