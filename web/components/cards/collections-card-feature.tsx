@@ -1,9 +1,11 @@
 'use client';
+import { useState, useEffect } from 'react';
 import styles from '@/styles/cards/CollectionsCard.module.css';
 import { Button }from '@/components/ui/shadcn/button-ui'
 import { ChevronRightIcon } from "@radix-ui/react-icons"
 import Image from 'next/image';
 import { Card, CardContent } from "@/components/ui/shadcn/card-ui"
+import { Progress } from "@/components/ui/shadcn/progress-ui"
 import {
   Carousel,
   CarouselContent,
@@ -14,13 +16,19 @@ import {
 // import { motion, MotionProps } from 'framer-motion';
 
 const CollectionsCard = () => {
-
+  const [slides, setSlides] = useState(Array.from({ length: 5 }));
+  const [progressAmount, setProgressAmount] = useState(0);
+  useEffect(() => {
+    // every time the CarouselItem changes, we need to update the progress bar value
+    // 1 * 100 / slides.length
+    setProgressAmount(1 * 100 / slides.length);
+  }, [CarouselItem]);
   return (
     <div className={styles.container}>
       <h2>The Collections</h2>
       <Carousel style={{ justifySelf: 'center'}}>
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {slides.map((_, index) => (
               <CarouselItem key={index}>
                 <div className="p-1">
                     <Card>
@@ -66,6 +74,7 @@ const CollectionsCard = () => {
         {/* <CarouselPrevious />
         <CarouselNext /> */}
       </Carousel>
+      <Progress value={progressAmount} />
     </div>
   );
 

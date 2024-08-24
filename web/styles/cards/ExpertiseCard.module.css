@@ -9,7 +9,7 @@
 
 .container > h2 {
     font-size: 14px;
-    font-weight: 600;
+    /* font-weight: 600; */
     line-height: 16.8px;
     /* width: Hug (154px)px; */
     padding: 6px 16px 6px 16px;
@@ -58,7 +58,7 @@
     justify-content: center;
     align-items: center;
     font-size: 7.8px;
-    font-weight: 600;
+    /* font-weight: 600; */
     line-height: 9.36px;
     text-align: left;
 }
@@ -83,7 +83,7 @@
 
 .primaryText {
     font-size: 24px;
-    font-weight: 600;
+    /* font-weight: 600; */
     line-height: 26.01px;
     text-align: left;
     color: black;
@@ -91,7 +91,7 @@
 
 .secondaryText {
     font-size: 24px;
-    font-weight: 600;
+    /* font-weight: 600; */
     line-height: 26.01px;
     text-align: left;
     color: #00000059;
