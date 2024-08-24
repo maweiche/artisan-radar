@@ -6,6 +6,7 @@
     height: 100vh;
     justify-content: space-evenly;
     overflow: hidden;
+    background-color: transparent;
 }
 
 .primaryText {

@@ -26,16 +26,26 @@ export default function FooterFeature() {
                 <CardContent className='flex flex-col py-4 gap-4 items-center'>
                     <div className={styles.headline}>
                         <Image
-                            src='/logos/artisan-small-logo.svg'
+                            src='/logos/artisan-small-logo-black.svg'
                             alt="Logo"
                             width={25}
                             height={25}
-                            className="cursor-pointer"
+                            className="dark:hidden cursor-pointer"
                             onClick={() => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
                         />
-                        <h1 className='text-3xl'>The Artisan</h1>
+                        <Image
+                            src='/logos/artisan-small-logo-white.svg'
+                            alt="Logo"
+                            width={32}
+                            height={32}
+                            className="hidden dark:flex cursor-pointer"
+                            onClick={() => {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                        />
+                        <h1 className='text-3xl text-secondary'>The Artisan</h1>
                     </div>
                     {/* <span className={styles.subText}>
                         Baseline
@@ -65,49 +75,49 @@ export default function FooterFeature() {
                 </CardContent>
                 <CardFooter className="flex-row items-center gap-8 items-start">
                     <div className={styles.linkContainerCol}>
-                        <h2 className='font-bold'>Site</h2>
+                        <h2 className='font-bold text-secondary'>Site</h2>
                         <ul className={styles.linkList}>
                             <li>
-                                <a href='/collect' target='_blank' className='link'>Start Collecting</a>
+                                <a href='/collect' target='_blank' className='link text-secondary'>Start Collecting</a>
                             </li>
                             <li>
-                                <a href='/about' target='_blank' className='link'>About Us</a>
+                                <a href='/about' target='_blank' className='link text-secondary'>About Us</a>
                             </li>
                             <li>
-                                <a href='tos' target='_blank' className='link'>Terms and Conditions</a>
+                                <a href='tos' target='_blank' className='link text-secondary'>Terms and Conditions</a>
                             </li>
                             <li>
-                                <a href='privacy' target='_blank' className='link'>Privacy Policy</a>
+                                <a href='privacy' target='_blank' className='link text-secondary'>Privacy Policy</a>
                             </li>
                         </ul>
                     </div>
                     <div className={styles.linkContainerCol}>
-                        <h2 className='font-bold'>Socials</h2>
+                        <h2 className='font-bold text-secondary'>Socials</h2>
                         <ul className={styles.linkList}>
                             <li>
-                                <a href='https://www.linkedin.com/company/the-artisan-nft/?viewAsMember=true' className='link' target='_blank'>LinkedIn</a>
+                                <a href='https://www.linkedin.com/company/the-artisan-nft/?viewAsMember=true' className='link text-secondary' target='_blank'>LinkedIn</a>
                             </li>
                             <li>
-                                <a href='https://twitter.com/ArtsnFi' className='link' target='_blank'>Twitter/X</a>
+                                <a href='https://twitter.com/ArtsnFi' className='link text-secondary' target='_blank'>Twitter/X</a>
                             </li>
                             <li>
                                 <a 
                                     onClick={() => {
                                         handleCopy('renato@artsn.fi');
                                     }} 
-                                    className='link'
+                                    className='link text-secondary'
                                 >
                                     Email
                                 </a>
                             </li>
                             <li>
-                                <a href='https://t.me/rcapizz' target='_blank' className='link'>Telegram</a>
+                                <a href='https://t.me/rcapizz' target='_blank' className='link text-secondary'>Telegram</a>
                             </li>
                             <li>
-                                <a href='https://discord.gg/DZHY6B7Q46' target='_blank' className='link'>Discord</a>
+                                <a href='https://discord.gg/DZHY6B7Q46' target='_blank' className='link text-secondary'>Discord</a>
                             </li>
                             <li>
-                                <a href='https://www.instagram.com/theartisan_nft/' target='_blank' className='link'>Instagram</a>
+                                <a href='https://www.instagram.com/theartisan_nft/' target='_blank' className='link text-secondary'>Instagram</a>
                             </li>
                         </ul>
                     </div>

@@ -20,31 +20,60 @@ export default function HomeFeature() {
     ]
 
     return (
-        <div className='' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px'}}>
+        <div className='bg-bg' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px'}}>
             <Wrapper
                 // id="hero"
-                className={styles.container}
+                className='bg-bg'
             >            
                 <motion.h1>
-                    <span className={styles.primaryText}>
+                    <p className="flex flex-col text-secondary text-4xl text-center ">
                         You collect shares of goods, <br />
                         we handle everything else
-                    </span>
+                    </p>
                 </motion.h1>
                 <motion.h4>
-                    <span className={styles.subText}>
+                    <p className="flex flex-col text-secondary text-2xl text-center ">
                         Collect & Trade luxury goods<br />
                         on-chain
-                    </span>
+                    </p>
                 </motion.h4>
                 <motion.picture className={styles.imageContainer}>
-                    <Image 
-                        src={'/products/freak-watch.png'}
-                        width={293}
-                        height={293}
-                        className={styles.featuredImage}
-                        alt='freak watch'
-                    />
+                    {selected == 0 && (
+                        <Image 
+                            src={'/products/freak-watch.png'}
+                            width={293}
+                            height={293}
+                            className={styles.featuredImage}
+                            alt='freak watch'
+                        />
+                    )}
+                    {selected == 1 && (
+                        <Image 
+                            src={'/products/car2.svg'}
+                            width={293}
+                            height={293}
+                            className={styles.featuredImage}
+                            alt='freak watch'
+                        />
+                    )}
+                    {selected == 2 && (
+                        <Image 
+                            src={'/products/diamond.svg'}
+                            width={293}
+                            height={293}
+                            className={styles.featuredImage}
+                            alt='freak watch'
+                        />
+                    )}
+                    {selected == 3 && (
+                        <Image 
+                            src={'/products/whisky.svg'}
+                            width={293}
+                            height={293}
+                            className={styles.featuredImage}
+                            alt='freak watch'
+                        />
+                    )}
                 </motion.picture>
                 <motion.hgroup className={styles.buttonContainer}>
                     {categories.map((category, index) => (
@@ -53,7 +82,7 @@ export default function HomeFeature() {
                             type='button'
                             onClick={() => setSelected(index)}
                             className={
-                                selected === index ? styles.selected : styles.button
+                                selected === index ? "bg-secondaryText text-secondary border-2 border-secondary rounded-full" : "bg-secondary text-secondaryText border-2 border-secondaryText rounded-full"
                             }
                         >
                             {category}
@@ -63,6 +92,7 @@ export default function HomeFeature() {
             </Wrapper>
             <Wrapper
                 // id="hero"
+                className='bg-bg'
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <TransparentCard>
