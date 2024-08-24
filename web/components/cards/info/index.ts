@@ -1,5 +1,5 @@
-import CardA from "./info1-card-feature";
-import CardB from "./info2-card-feature";
-import CardC from "./info3-card-feature";
+import Card1 from "./info1-card-feature";
+import Card2 from "./info2-card-feature";
+import Card3 from "./info3-card-feature";
 
-export { CardA, CardB, CardC };
+export { Card1, Card2, Card3 };

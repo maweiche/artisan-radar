@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/shadcn/card-ui"
 
-const CardA = () => {
+const Card1 = () => {
   return (
     <Card>
       <CardHeader>
@@ -35,4 +35,4 @@ const CardA = () => {
   )
 }
 
-export default CardA;
+export default Card1;

@@ -7,7 +7,7 @@ import Wrapper from '@/components/ui/ui-wrapper';
 import { Button } from '@/components/ui/shadcn/button-ui';
 import TransparentCard from '../ui/cards/TransparentCard';
 import { ChartA, ChartB, ChartC } from '@/components/charts';
-import { CardA, CardB, CardC } from '@/components/cards/info';
+import { Card1, Card2, Card3 } from '@/components/cards/info';
 import { CollectionsCard, ExpertiseCard } from '@/components/cards';
 export default function HomeFeature() {
     const [selected, setSelected] = useState(0);
@@ -72,9 +72,8 @@ export default function HomeFeature() {
                         <span>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
                     </div>
                 </TransparentCard>  
-                <CardA /> 
+                <Card1 /> 
                 <ChartA />
-                {/* <ChartB /> */}
                 <ChartC />
             </Wrapper>
             <TransparentCard>
@@ -84,9 +83,8 @@ export default function HomeFeature() {
                     the majority of individuals.
                 </div>
             </TransparentCard>
-            <CardA />
-            {/* <CardB />
-            <CardC /> */}
+            <Card2 />
+            <Card3 />
             <CollectionsCard /> 
             <ExpertiseCard />
             <Wrapper

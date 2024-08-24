@@ -29,6 +29,7 @@ const urbanist = Urbanist({
   weight: [
     '400', // Regular
     '500', // Medium
+    '600', // Semibold
     '700', // Bold
   ],
 });

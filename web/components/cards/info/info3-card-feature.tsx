@@ -1,17 +1,42 @@
 'use client';
-import styles from '@/styles/info/CardA.module.css';
-
-const CardA = () => {
-
+import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/shadcn/card-ui"
+import { Button } from "@/components/ui/shadcn/button-ui"
+import { EyeOpenIcon } from '@radix-ui/react-icons'
+const Card3 = () => {
   return (
-    <div>
-        <div className={styles.container}>
-            <div className={styles.textBlock}>
-                <span>All Luxury Goods on our platform are authenticated</span>, certified, and securely stored in a third-party vault.
-            </div>
-        </div>
-    </div>
-  );
-};
+    <Card>
+      {/* <CardHeader>
+        <CardTitle>
+          TOTAL VALUE
+        </CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
+      </CardHeader> */}
+      <CardContent className='py-4 pb-12'>
+        <p className='text-4xl font-semibold'>
+          We carefully{" "}
+          <span style={{ color: '#00000059'}}>
+            curate assets, selecting only those identified by our expert team 
+            as having potential for value appreciation.
+          </span>
+        </p>
+        
+      </CardContent>
+      <CardFooter className="flex-row justify-between gap-2 text-lg">
+        <p className="text-white text-lg flex text-center truncate bg-black w-fit-content px-4 py-1 rounded-full">
+          Transparency
+        </p>
+        <EyeOpenIcon className="w-12 h-12 text-black" />
+      </CardFooter>
+    </Card>
+  )
+}
 
-export default CardA;
+export default Card3;

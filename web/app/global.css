@@ -47,14 +47,14 @@
     --chart-5: 340 75% 55%;
   }
 
-  @font-face {
+  /* @font-face {
     font-family: Urbanist;
     font-size: 36px;
     font-weight: 600;
     line-height: 43.2px;
     text-align: center;
     src: url('/fonts/Agustina-Signature.otf') format('opentype');
-  }
+  } */
 
   * {
     @apply focus:outline-dashed outline-[3px] outline-offset-4 outline-accent;
