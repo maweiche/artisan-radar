@@ -5,8 +5,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Wrapper from '@/components/ui/ui-wrapper';
 import { Button } from '@/components/ui/shadcn/button-ui';
-import SquareCard from '../ui/cards/SquareCard';
-import LongCard from '../ui/cards/LongCard';
 import TransparentCard from '../ui/cards/TransparentCard';
 import { ChartA, ChartB, ChartC } from '@/components/charts';
 import { CardA, CardB, CardC } from '@/components/info';
@@ -75,8 +73,8 @@ export default function HomeFeature() {
                     </div>
                 </TransparentCard>   
                 <ChartA />
-                <ChartB />
-                <ChartC />
+                {/* <ChartB />
+                <ChartC /> */}
             </Wrapper>
             <TransparentCard>
                 <div className={styles.textBlock}>
@@ -86,8 +84,8 @@ export default function HomeFeature() {
                 </div>
             </TransparentCard>
             <CardA />
-            <CardB />
-            <CardC />
+            {/* <CardB />
+            <CardC /> */}
             <CollectionsCard /> 
             <ExpertiseCard />
             <Wrapper
