@@ -4,13 +4,13 @@ import styles from '@/styles/components/Home.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Wrapper from '@/components/ui/ui-wrapper';
-import Button from '@/components/ui/buttons/Button';
+import { Button } from '@/components/ui/shadcn/button-ui';
 import SquareCard from '../ui/cards/SquareCard';
 import LongCard from '../ui/cards/LongCard';
 import TransparentCard from '../ui/cards/TransparentCard';
 import { ChartA, ChartB, ChartC } from '@/components/charts';
 import { CardA, CardB, CardC } from '@/components/info';
-
+import { CollectionsCard, ExpertiseCard } from '@/components/cards';
 export default function HomeFeature() {
     const [selected, setSelected] = useState(0);
     const categories = [
@@ -21,7 +21,7 @@ export default function HomeFeature() {
     ]
 
     return (
-        <div className='' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '14px'}}>
+        <div className='' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '14px', gap: '24px'}}>
             <Wrapper
                 // id="hero"
                 className={styles.container}
@@ -78,37 +78,18 @@ export default function HomeFeature() {
                 <ChartB />
                 <ChartC />
             </Wrapper>
-            <Wrapper
-                // id="hero"
-                style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
-            >  
-                <TransparentCard>
-                    <div className={styles.textBlock}>
-                        We offer the opportunity to access these markets through digitization with a starting investment of just $100. 
-                        Luxury Markets and Vintage collections tend to appreciate over time, yet they often remain out of reach for 
-                        the majority of individuals.
-                    </div>
-                </TransparentCard>
-                <CardA />
-                <CardB />
-                <CardC />
-            </Wrapper>
-            <Wrapper
-                // id="hero"
-                style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
-            >
-                <Button>
-                    The Collections
-                </Button>  
-            </Wrapper>
-            <Wrapper
-                // id="hero"
-                style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
-            >
-                <Button>
-                    Our Expertise
-                </Button>  
-            </Wrapper>
+            <TransparentCard>
+                <div className={styles.textBlock}>
+                    We offer the opportunity to access these markets through digitization with a starting investment of just $100. 
+                    Luxury Markets and Vintage collections tend to appreciate over time, yet they often remain out of reach for 
+                    the majority of individuals.
+                </div>
+            </TransparentCard>
+            <CardA />
+            <CardB />
+            <CardC />
+            <CollectionsCard /> 
+            <ExpertiseCard />
             <Wrapper
                 // id="hero"
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}

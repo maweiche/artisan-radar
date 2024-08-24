@@ -61,7 +61,7 @@
 
 .dark {
   /* Dark Theme */
-  --bg: linear-gradient(159.77deg, #B7C6E1 0.43%, #DCE5E2 38%);
+  --bg: black;
   --bg-img: none;
 };
 

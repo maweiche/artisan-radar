@@ -10,7 +10,7 @@ import useWindowWidth from '@/lib/hooks/use-window-width';
 import { getBreakpointsWidth } from '@/lib/utils/helper';
 import { motion } from 'framer-motion';
 import DarkModeButton from '@/components/ui/buttons/DarkModeButton';
-import Button from '@/components/ui/buttons/Button'
+import { Button } from '@/components/ui/shadcn/button-ui';
 import NavButton from '@/components/ui/buttons/NavButton';
 import { useCluster } from '../cluster/cluster-data-access';
 import * as CLink from '@/components/ui/buttons/Link';
@@ -148,17 +148,8 @@ export default function NavbarFeature({
               <div className="flex flex-col items-center justify-between gap-5 xl:gap-6">
                 <div className="flex flex-row items-center gap-5">
                     <p className="">Current RPC:</p>            
-                    <Button
-                        type="button"
-                        variants={slideIn({
-                          delay: .3,
-                          direction: 'down',
-                        })}
-                        onClick={() => setClusterSelectCollapsed((prev) => !prev)}
-                        initial="hidden"
-                        animate="show"
-                    >
-                        {cluster.name}
+                    <Button>
+                      {cluster.name}
                     </Button>
                 </div>
                 <DarkModeButton
