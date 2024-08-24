@@ -141,14 +141,15 @@ export default function NavbarFeature({
                   {label}
                 </NavItem>
               ))}
-            <WalletButton style={{ width: 'fit-content' }}/>
+            
             {!clusterSelectCollapsed && (
                 <ClusterUiSelect /> 
             )}
               <div className="flex flex-col items-center justify-between gap-5 xl:gap-6">
+              <WalletButton style={{ width: 'fit-content' }}/>
                 <div className="flex flex-row items-center gap-5">
                     <p className="">Current RPC:</p>            
-                    <Button>
+                    <Button onClick={()=> setClusterSelectCollapsed(!clusterSelectCollapsed)}>
                       {cluster.name}
                     </Button>
                 </div>

@@ -89,16 +89,20 @@ body {
 /* Wallet Button  */
 
 .wallet-adapter-button-trigger {
-  background: rgb(100, 26, 230) !important;
+  background: black !important;
   border-radius: 8px !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
-  width: 100% !important;
+  width: fit-content !important;
   justify-content: center !important;
+  font-size: 13px;
+  padding: 14px;
+  border-radius: 28px;
+  border: 1px solid #000000;
+  align-self: center;
 }
 .wallet-adapter-dropdown-list,
 .wallet-adapter-button {
-  font-family: inherit !important;
   justify-content: center !important;
   align-items: center !important;
 }
