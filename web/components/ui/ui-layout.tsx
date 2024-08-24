@@ -23,7 +23,7 @@ export function UiLayout({
   
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-bg">
       <NavbarFeature links={links}/>
       <ClusterChecker>
         <AccountChecker />

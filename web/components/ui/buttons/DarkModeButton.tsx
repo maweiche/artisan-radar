@@ -22,7 +22,7 @@ const DarkModeButton = ({
 
   return (
     <motion.button
-      className={`rounded-lg p-1 hover:text-accent focus:text-accent focus:outline-none focus:bg-bg-secondary cursor-pointer w-fit ${className} duration-200`}
+      className={`rounded-lg p-1 text-black dark:text-white hover:text-secondary focus:bg-secondaryText focus:outline-none cursor-pointer w-fit ${className} duration-200`}
       onClick={clickHandler}
       {...rest}
     >

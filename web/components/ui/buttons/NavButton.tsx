@@ -6,7 +6,7 @@ type Props = {
 };
 
 const NavButton = ({ onClick, className, navbarCollapsed }: Props) => {
-  const classes = `bg-black h-0.5 duration-200 ${
+  const classes = `bg-secondary h-0.5 duration-200 ${
     navbarCollapsed ? 'absolute' : ''
   }`;
 

@@ -12,8 +12,8 @@ import { motion } from 'framer-motion';
 import DarkModeButton from '@/components/ui/buttons/DarkModeButton';
 import { Button } from '@/components/ui/shadcn/button-ui';
 import NavButton from '@/components/ui/buttons/NavButton';
+import LoginFeature from './login-feature';
 import { useCluster } from '../cluster/cluster-data-access';
-import * as CLink from '@/components/ui/buttons/Link';
 import {
     ClusterChecker,
     ClusterUiSelect,
@@ -103,12 +103,36 @@ export default function NavbarFeature({
         initial="hidden"
         animate="show"
         id="navbar"
-        className="fixed inset-x-0 top-0 right-0 z-50 flex items-end justify-between px-8 py-4 duration-500 md:px-6 xl:px-12 backdrop-blur-lg"
+        className="fixed inset-x-0 top-0 right-0 z-50 flex items-end align-center justify-between px-8 py-4 duration-500 md:px-6 xl:px-12 backdrop-blur-lg"
       >
-        
-        <div className="relative text-2xl capitalize font-signature text-accent group top-1">
+        {/* div for backdrop when !navbarCollapsed */}
+        <div
+          className={`bg-gradient-to-r from-bg to-accent fixed -z-50 inset-0 bg-opacity-50 duration-500 h-screen ${
+            !navbarCollapsed ? 'hidden' : ''
+          }`}
+        >
           <Image
-            src='/logos/artisan-small-logo.svg'
+            src={'/logos/logo-blur.svg'}
+            alt="Logo"
+            layout="fill"
+            objectFit="cover"
+            quality={100}
+            className='-z-200 opacity-25
+            // move it to the right
+            transform translate-x-10
+            '
+          />
+        </div>
+        <div
+          className={`bg-bg opacity-50 fixed -z-100 inset-0 bg-opacity-50 duration-500 h-screen ${
+            !navbarCollapsed ? 'hidden' : ''
+          }`}
+        ></div>
+        
+        
+        <div className="dark:hidden relative text-2xl capitalize font-signature text-accent group top-1">
+          <Image
+            src='/logos/artisan-small-logo-black.svg'
             alt="Logo"
             width={25}
             height={25}
@@ -118,53 +142,40 @@ export default function NavbarFeature({
             }}
           />
         </div>
-  
+        <div className="hidden dark:flex relative text-2xl capitalize font-signature text-accent group top-1">
+          <Image
+            src='/logos/artisan-small-logo-white.svg'
+            alt="Logo"
+            width={32}
+            height={32}
+            className="cursor-pointer"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </div>
+        {navbarCollapsed && (
+          <WalletButton style={{ width: 'fit-content' }}>
+            Connect Wallet
+          </WalletButton>
+        )}
         <NavButton
           onClick={() => {
             setNavbarCollapsed((prev) => !prev);
           }}
           navbarCollapsed={navbarCollapsed}
-          className="md:invisible"
+          className="text-secondary"
         />
   
         {navbarCollapsed && (
-          <nav className="bg-white flex flex-col items-center capitalize absolute text-sm duration-200 z-50 w-[90%] left-1/2 -translate-x-1/2 top-full h-max rounded-xl shadow-xl p-6 md:blocks md:static md:w-auto md:left-auto md:transform-none md:top-auto md:rounded-none md:shadow-none md:p-0 md:h-auto">
-            <ul className="flex flex-col items-stretch gap-3 list-style-none lg:gap-5 xl:gap-6 md:flex-row md:items-center">
-              {links.map(({ label, path }, i) => (
-                <NavItem
-                  key={i}
-                  href={path}
-                  index={i}
-                  delay={ANIMATION_DELAY}
-                  onClick={() => setNavbarCollapsed(false)}
-                >
-                  {label}
-                </NavItem>
-              ))}
-            
-            {!clusterSelectCollapsed && (
-                <ClusterUiSelect /> 
-            )}
-              <div className="flex flex-col items-center justify-between gap-5 xl:gap-6">
-              <WalletButton style={{ width: 'fit-content' }}/>
-                <div className="flex flex-row items-center gap-5">
-                    <p className="">Current RPC:</p>            
-                    <Button onClick={()=> setClusterSelectCollapsed(!clusterSelectCollapsed)}>
-                      {cluster.name}
-                    </Button>
-                </div>
-                <DarkModeButton
-                //   onClick={() => (console.log('click'))}
-                  variants={slideIn({
-                    delay: ANIMATION_DELAY + (links.length + 1) / 10,
-                    direction: 'down',
-                  })}
-                  initial="hidden"
-                  animate="show"
-                />
-              </div>
-            </ul>
-          </nav>
+          <LoginFeature 
+            links={links}
+            LoginFeatureProps={{ 
+              isOpen: navbarCollapsed,
+              onClose: () => setNavbarCollapsed(false),
+              onCompleted: () => setNavbarCollapsed(false),
+            }}
+          />
         )}
       </motion.header>
       </Suspense>

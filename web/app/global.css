@@ -4,6 +4,15 @@
 
 @layer base {
   :root {
+    --bg-img: url('/patterns/bg-pattern.svg');
+    --color-bg: #B7C6E1;
+    --color-secondary: black;
+    --color-secondary-text: white;
+    --color-accent: #DCE5E2;
+    --color-text: #1E293B;
+    --color-dark-1: #161E2E;
+    --color-dark-2: #3E4C59;
+    --color-dark-3: #6B7280;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -32,6 +41,14 @@
   }
 
   .dark {
+    --color-secondary: white;
+    --color-secondary-text: black;
+    --color-bg: #161E2E;
+    --color-accent: #3E4C59;
+    --color-text: #DCE5E2;
+    --color-dark-1: #1E293B;
+    --color-dark-2: #6B7280;
+    --color-dark-3: #3E4C59;
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -137,21 +154,30 @@ body {
   background-color: var(--bg);
 }
 
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Urbanist', sans-serif;
+}
 
 /* Wallet Button  */
 
 .wallet-adapter-button-trigger {
-  background: black !important;
-  border-radius: 8px !important;
-  padding-left: 16px !important;
-  padding-right: 16px !important;
-  width: fit-content !important;
-  justify-content: center !important;
-  font-size: 13px;
+  background: var(--color-secondary) !important;
+  color: var(--color-secondary-text);
+  width: 116px;
+  height: 27px;
+  top: 10px;
+  left: 104px;
   padding: 14px;
-  border-radius: 28px;
+  gap: 21px;
+  border-radius: 36px;
   border: 1px solid #000000;
-  align-self: center;
+  font-weight: 200;
 }
 .wallet-adapter-dropdown-list,
 .wallet-adapter-button {
