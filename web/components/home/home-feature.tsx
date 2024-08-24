@@ -73,8 +73,8 @@ export default function HomeFeature() {
                     </div>
                 </TransparentCard>   
                 <ChartA />
-                {/* <ChartB />
-                <ChartC /> */}
+                {/* <ChartB /> */}
+                <ChartC />
             </Wrapper>
             <TransparentCard>
                 <div className={styles.textBlock}>
