@@ -28,11 +28,11 @@ const CtaCard1 = () => {
         </p>
       </CardContent>
       <CardFooter className="flex-col gap-8 items-start">
-        <Button className='w-3/4 gap-6'>
+        <Button className='w-3/4 gap-6 rounded-xl'>
             <EnvelopeClosedIcon className='w-6 h-6' />
             Join Waitlist
         </Button>
-        <Button className='w-3/4 gap-6' variant='default'>
+        <Button className='w-3/4 gap-6 rounded-xl' variant='default'>
             <TwitterLogoIcon className='w-6 h-6' />
             Follow on Twitter
         </Button>
