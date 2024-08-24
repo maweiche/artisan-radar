@@ -15,8 +15,6 @@
 
     /* Light Theme */
     --bg: theme(colors.sky.500);
-    --bg-primary: theme(colors.sky.500);
-    --primary: theme(colors.sky.500);
     --color-bg-secondary: theme(stone.600);
     --color-accent: theme(colors.zinc.800);
     --color-accent-light: theme(colors.sky.500/0.1);
@@ -57,8 +55,6 @@
   /* Light Theme */
   /* --bg: linear-gradient(159.77deg, #B7C6E1 0.43%, #DCE5E2 38%); */
   --bg: aliceblue;
-  --bg-primary: black;
-  --primary: black;
   --bg-img: url('/patterns/bg-pattern.svg');
 }
 

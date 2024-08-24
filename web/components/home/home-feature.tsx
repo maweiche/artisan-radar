@@ -21,7 +21,7 @@ export default function HomeFeature() {
     ]
 
     return (
-        <div className='' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '14px', gap: '24px'}}>
+        <div className='' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginBottom: '14px', gap: '32px'}}>
             <Wrapper
                 // id="hero"
                 className={styles.container}

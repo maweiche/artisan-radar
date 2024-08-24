@@ -5,9 +5,10 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-
+import { Progress } from "./progress-ui"
 import { cn } from "@/lib/utils"
 import { Button } from "./button-ui"
+import { set } from "@metaplex-foundation/umi/serializers"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -58,6 +59,7 @@ const Carousel = React.forwardRef<
     },
     ref
   ) => {
+    const [currentIndex, setCurrentIndex] = React.useState(0)
     const [carouselRef, api] = useEmblaCarousel(
       {
         ...opts,
@@ -79,10 +81,12 @@ const Carousel = React.forwardRef<
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev()
+      setCurrentIndex(currentIndex - 1)
     }, [api])
 
     const scrollNext = React.useCallback(() => {
       api?.scrollNext()
+      setCurrentIndex(currentIndex + 1)
     }, [api])
 
     const handleKeyDown = React.useCallback(
@@ -145,6 +149,12 @@ const Carousel = React.forwardRef<
         >
           {children}
         </div>
+        <Progress 
+          value={
+            // currentIndex / (api?.slideNodes().length || 1) * 100
+            33
+          }
+        />
       </CarouselContext.Provider>
     )
   }

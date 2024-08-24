@@ -64,6 +64,7 @@ const CollectionsCard = () => {
                         </div>
                         <div className={styles.footer}>
                           <Button style={{ color: 'white', backgroundColor: 'black'}} variant="default">Check the whole car collection</Button>
+                          <Progress value={33} className="w-[60%]" />
                         </div>
                       </CardContent>
                     </Card>
@@ -73,8 +74,9 @@ const CollectionsCard = () => {
         </CarouselContent>
         {/* <CarouselPrevious />
         <CarouselNext /> */}
+        
       </Carousel>
-      <Progress value={progressAmount} />
+      
     </div>
   );
 
