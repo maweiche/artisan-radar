@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/shadcn/button-ui';
 import TransparentCard from '../ui/cards/TransparentCard';
 import { ChartA, ChartB, ChartC } from '@/components/charts';
 import { Card1, Card2, Card3 } from '@/components/cards/info';
-import { CtaCard1, CtaCard2 } from '@/components/cards/cta';
+import { CtaCard1, CtaCard2, CtaCard3 } from '@/components/cards/cta';
 import { CollectionsCard, ExpertiseCard } from '@/components/cards';
 export default function HomeFeature() {
     const [selected, setSelected] = useState(0);
@@ -90,6 +90,7 @@ export default function HomeFeature() {
             <ExpertiseCard />
             <CtaCard1 />
             <CtaCard2 />
+            <CtaCard3 />
         </div>
     )
 }
