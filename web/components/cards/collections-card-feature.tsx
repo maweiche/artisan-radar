@@ -26,7 +26,7 @@ const CollectionsCard = () => {
   return (
     <div className={styles.container}>
       <h2>The Collections</h2>
-      <Carousel style={{ justifySelf: 'center'}}>
+      <Carousel style={{ justifySelf: 'center'}} showProgress={true }>
         <CarouselContent>
           {slides.map((_, index) => (
               <CarouselItem key={index}>

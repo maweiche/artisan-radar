@@ -5,11 +5,10 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { Progress } from "./progress-ui"
-import { cn } from "@/lib/utils"
-import { Button } from "./button-ui"
-import { set } from "@metaplex-foundation/umi/serializers"
 
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/shadcn/button-ui"
+import { Progress } from "@/components/ui/shadcn/progress-ui"
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
@@ -18,7 +17,8 @@ type CarouselPlugin = UseCarouselParameters[1]
 type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
-  orientation?: "horizontal" | "vertical"
+  orientation?: "horizontal" | "vertical",
+  showProgress?: boolean | false,
   setApi?: (api: CarouselApi) => void
 }
 
@@ -54,12 +54,12 @@ const Carousel = React.forwardRef<
       setApi,
       plugins,
       className,
+      showProgress,
       children,
       ...props
     },
     ref
   ) => {
-    const [currentIndex, setCurrentIndex] = React.useState(0)
     const [carouselRef, api] = useEmblaCarousel(
       {
         ...opts,
@@ -81,12 +81,10 @@ const Carousel = React.forwardRef<
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev()
-      setCurrentIndex(currentIndex - 1)
     }, [api])
 
     const scrollNext = React.useCallback(() => {
       api?.scrollNext()
-      setCurrentIndex(currentIndex + 1)
     }, [api])
 
     const handleKeyDown = React.useCallback(
@@ -142,19 +140,20 @@ const Carousel = React.forwardRef<
           ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn("relative", className)}
-          style={{ display: "flex", flexDirection: "column" }}
           role="region"
           aria-roledescription="carousel"
           {...props}
         >
           {children}
         </div>
-        <Progress 
-          value={
-            // currentIndex / (api?.slideNodes().length || 1) * 100
-            33
-          }
-        />
+        {showProgress && (
+          <Progress 
+            value={
+              // currentIndex / (api?.slideNodes().length || 1) * 100
+              33
+            }
+          />
+        )}
       </CarouselContext.Provider>
     )
   }

@@ -21,7 +21,7 @@ const ChartA = () => {
     },
     mobile: {
       label: "Mobile",
-      color: "#60a5fa",
+      color: "lightgrey",
     },
   } satisfies ChartConfig
   return (
@@ -64,8 +64,8 @@ const ChartA = () => {
             className="text-secondary"
           />
           <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-          <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+          {/* <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} /> */}
+          <Bar dataKey="mobile" fill="var(--color-mobile)" radius={8} />
         </BarChart>
       </ChartContainer>
       <div className={styles.footer}>
