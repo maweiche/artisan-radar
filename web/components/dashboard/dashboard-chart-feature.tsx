@@ -38,14 +38,14 @@ const DashboardChart = () => {
     <Suspense fallback={<div />}>
         <ChartContainer config={chartConfig}>
             <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-                left: 12,
-                right: 12,
-            }}
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                  left: 12,
+                  right: 12,
+              }}
             >
-            {/* <CartesianGrid vertical={false} /> */}
+            <CartesianGrid vertical={false} />
             {/* <XAxis
                 dataKey="month"
                 tickLine={false}
@@ -60,8 +60,8 @@ const DashboardChart = () => {
             <Line
                 dataKey="desktop"
                 type="natural"
-                stroke="var(--color-secondary)"
-                strokeWidth={2}
+                stroke="var(--color-secondary-text)"
+                strokeWidth={1}
                 dot={false}
             />
             </LineChart>
