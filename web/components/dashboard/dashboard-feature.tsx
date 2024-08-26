@@ -38,7 +38,7 @@ import { CtaCard1, CtaCard2, CtaCard3 } from '@/components/cards/cta';
 import { CollectionsCard, ExpertiseCard } from '@/components/cards';
 import ProductChart from '@/components/product/product-chart-feature';
 
-export default function ProductFeature({ params }: { params: { id: string } }) {
+export default function DashboardFeature() {
     const [slides, setSlides] = useState(Array.from({ length: 5 }));
     const [selected, setSelected] = useState(0);
     const categories = [
