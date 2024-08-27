@@ -1,5 +1,25 @@
-'use client';
+
+'use client'
+import { useState, Suspense, useEffect, use } from 'react';
+import { ChevronUpIcon, OpenInNewWindowIcon } from '@radix-ui/react-icons';
+import { Separator } from '@/components/ui/shadcn/separator-ui';
+import styles from '@/styles/components/Home.module.css';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/shadcn/select-ui"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/shadcn/card-ui"
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+  } from "@/components/ui/shadcn/collapsible-ui"  
+import Wrapper from '@/components/ui/ui-wrapper';
 import { Keypair, PublicKey, VersionedTransaction } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
 import { useMemo } from 'react';
@@ -12,6 +32,7 @@ import {
 } from './protocol-data-access';
 import { fetchObjectDetails } from './protocol-umi-access';
 import { useWallet , useConnection } from '@solana/wallet-adapter-react';
+import { list } from 'postcss';
 
 export function ListingList() {
   const { listings, watches, profiles, getProgramAccount } = useArtisanProgram();
@@ -21,16 +42,16 @@ export function ListingList() {
   }
   if (!getProgramAccount.data?.value) {
     return (
-      <div className="alert alert-info flex justify-center">
+      <Wrapper className="alert alert-info flex justify-center">
         <span>
           Program account not found. Make sure you have deployed the program and
           are on the correct cluster.
         </span>
-      </div>
+      </Wrapper>
     );
   }
   return (
-    <div className={'space-y-6'}>
+    <Wrapper className={'space-y-6'}>
       {listings.isLoading ? (
         <span className="loading loading-spinner loading-lg"></span>
       ) : listings.data?.length ? (
@@ -86,7 +107,7 @@ export function ListingList() {
         </div>
       )} */}
 
-    </div>
+    </Wrapper>
   );
 }
 
@@ -226,60 +247,64 @@ function ListingCard({ account }: { account: PublicKey }) {
 }
 
 
-async function ObjectCard({ account, listingId }: { account: PublicKey, listingId: BN }) {
+export async function ObjectCard({ account, listingId }: { account: PublicKey, listingId: BN }) {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const { buyListing } = useArtisanProgram();
-  const _obj = await fetchObjectDetails(account);
-  const uri = _obj?.uri;
-  const _objAssetDetails = _obj?.attributes?.attributeList;
-  const transactionToast = useTransactionToast();
-  async function handleBuyListing() {
-    if (!publicKey) {
-      alert('Wallet not connected');
-      return;
-    }
-    try {
-      console.log('buying listing');
-      const params = {
-        id: listingId.toNumber(),
-        reference: _objAssetDetails![2].value,
-        key: publicKey.toString(),
-        amount: 1,
-        uri: uri!
-      };
-      const transaction = await buyListing(params);
-      const tx = VersionedTransaction.deserialize(Buffer.from(transaction, "base64"));
-      if (!tx) {
-        return;
-      }
-      const signature = await sendTransaction(tx, connection, { skipPreflight: true });
-      transactionToast(signature);
-    } catch (error) {
-      console.error('Error buying listing:', error);
-    }
-  }
+  const { watchesQuery } = useArtisanProgramAccount({account});
+  console.log('watchesQuery', watchesQuery);
+  const _obj = watchesQuery.data;
+  // const uri = _obj?.uri;
+  const _objAssetDetails = _obj?.name;
+  
+  // const transactionToast = useTransactionToast();
+  // async function handleBuyListing() {
+  //   if (!publicKey) {
+  //     alert('Wallet not connected');
+  //     return;
+  //   }
+  //   try {
+  //     console.log('buying listing');
+  //     const params = {
+  //       id: listingId.toNumber(),
+  //       reference: _objAssetDetails![2].value,
+  //       key: publicKey.toString(),
+  //       amount: 1,
+  //       uri: uri!
+  //     };
+  //     const transaction = await buyListing(params);
+  //     const tx = VersionedTransaction.deserialize(Buffer.from(transaction, "base64"));
+  //     if (!tx) {
+  //       return;
+  //     }
+  //     const signature = await sendTransaction(tx, connection, { skipPreflight: true });
+  //     transactionToast(signature);
+  //   } catch (error) {
+  //     console.error('Error buying listing:', error);
+  //   }
+  // }
 
   if (!_objAssetDetails) {
     return <span className="loading loading-spinner loading-lg"></span>;
   }
-  const object = {
-    brand: _objAssetDetails[0].value ?? 'null',
-    model: _objAssetDetails[1].value ?? 'null',
-    reference: _objAssetDetails[2].value ?? 'null',
-    diameter: _objAssetDetails[3].value ?? 'null',
-    movement: _objAssetDetails[4].value ?? 'null',
-    dial_color: _objAssetDetails[5].value ?? 'null',
-    case_material: _objAssetDetails[6].value ?? 'null',
-    bracelet_material: _objAssetDetails[7].value ?? 'null',
-    year_of_production: _objAssetDetails[8].value ?? 'null'
-  }
+  // const object = {
+  //   brand: _objAssetDetails[0].value ?? 'null',
+  //   model: _objAssetDetails[1].value ?? 'null',
+  //   reference: _objAssetDetails[2].value ?? 'null',
+  //   diameter: _objAssetDetails[3].value ?? 'null',
+  //   movement: _objAssetDetails[4].value ?? 'null',
+  //   dial_color: _objAssetDetails[5].value ?? 'null',
+  //   case_material: _objAssetDetails[6].value ?? 'null',
+  //   bracelet_material: _objAssetDetails[7].value ?? 'null',
+  //   year_of_production: _objAssetDetails[8].value ?? 'null'
+  // }
 
   return (
     <div className="card card-bordered border-base-300 border-4 text-neutral-content">
       <div className="card-body items-center text-center">
         <div className="space-y-6">
-          <h2
+          { _objAssetDetails}
+          {/* <h2
             className="card-title justify-center text-3xl cursor-pointer"
           >
             {object?.brand}
@@ -308,7 +333,7 @@ async function ObjectCard({ account, listingId }: { account: PublicKey, listingI
               // disabled={buyListing.isPending}
             >
               Buy
-            </button>
+            </button> */}
         </div>
       </div>
     </div>
@@ -358,6 +383,37 @@ function ProfileCard({ account }: { account: PublicKey }) {
                 label={ellipsify(account.toString())}
               />
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CounterCard({ account }: { account: PublicKey }) {
+  const {
+    listingQuery,
+  } = useArtisanProgramAccount({ account });
+
+  const count = useMemo(
+    () => listingQuery.data?.id ?? 0,
+    [listingQuery.data?.id]
+  );
+
+  return listingQuery.isLoading ? (
+    <span className="loading loading-spinner loading-lg"></span>
+  ) : (
+    <div className="card card-bordered border-base-300 border-4 text-neutral-content">
+      <div className="card-body items-center text-center">
+        <div className="space-y-6">
+          <h2
+            className="card-title justify-center text-3xl cursor-pointer"
+            onClick={() => listingQuery.refetch()}
+          >
+            {count}
+          </h2>
+          <div className="card-actions justify-around">
+            
           </div>
         </div>
       </div>

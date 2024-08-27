@@ -19,7 +19,8 @@ import {
     ClusterUiSelect,
     ExplorerLink,
 } from '../cluster/cluster-ui';
-
+import { publicKey } from '@metaplex-foundation/umi';
+import { useWallet } from '@solana/wallet-adapter-react';
 /**
  * Hides the navbar while scrolling down
  * @param {Object} config
@@ -88,6 +89,7 @@ export default function NavbarFeature({
     const [activeLogo, setActiveLogo] = useState('logo_dark');
     const ANIMATION_DELAY = 0.2;
     const { cluster } = useCluster();
+    const { publicKey } = useWallet();
     useEffect(() => {
       hideNavWhileScrolling({ when: !navbarCollapsed });
     }, [navbarCollapsed]);
@@ -156,7 +158,7 @@ export default function NavbarFeature({
         </div>
         {navbarCollapsed && (
           <WalletButton style={{ width: 'fit-content' }}>
-            Connect Wallet
+            {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : 'Connect Wallet'}
           </WalletButton>
         )}
         <NavButton

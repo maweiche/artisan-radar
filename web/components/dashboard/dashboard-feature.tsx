@@ -1,6 +1,8 @@
 
 'use client'
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect, use } from 'react';
+import { ObjectCard } from '@/components/protocol/protocol-ui';
+import { PublicKey } from '@solana/web3.js';
 import { ChevronUpIcon, OpenInNewWindowIcon } from '@radix-ui/react-icons';
 import { Separator } from '@/components/ui/shadcn/separator-ui';
 import styles from '@/styles/components/Home.module.css';
@@ -16,31 +18,25 @@ import {
 } from "@/components/ui/shadcn/select-ui"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/shadcn/card-ui"
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/shadcn/carousel-ui"
-import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
   } from "@/components/ui/shadcn/collapsible-ui"  
-import { Badge } from "@/components/ui/shadcn/badge-ui"
-import { Progress } from "@/components/ui/shadcn/progress-ui"
 import Wrapper from '@/components/ui/ui-wrapper';
 import { Button } from '@/components/ui/shadcn/button-ui';
-import TransparentCard from '../ui/cards/TransparentCard';
-import { ChartA, ChartB, ChartC } from '@/components/charts';
-import { Card1, Card2, Card3 } from '@/components/cards/info';
-import { CtaCard1, CtaCard2, CtaCard3 } from '@/components/cards/cta';
-import { CollectionsCard, ExpertiseCard } from '@/components/cards';
-import ProductChart from '@/components/product/product-chart-feature';
-
+import { fetchAssets } from '@/components/protocol/protocol-umi-access';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { fetchAssetsByOwner, AssetV1, fetchCollectionV1, CollectionV1 } from '@metaplex-foundation/mpl-core'
+import { CtaCard3 } from '../cards/cta';
+import { useArtisanProgramAccount } from '../protocol/protocol-data-access';
+import { publicKey as publicKey2 } from '@metaplex-foundation/umi';
+import { set } from '@metaplex-foundation/umi/serializers';
 export default function DashboardFeature() {
+    const { publicKey } = useWallet();
+    const [userAssets, setUserAssets] = useState<AssetV1[]>([]);
     const [slides, setSlides] = useState(Array.from({ length: 5 }));
     const [selected, setSelected] = useState(0);
+    
     const categories = [
         'Watches',
         'Cars',
@@ -48,6 +44,36 @@ export default function DashboardFeature() {
         'Whisky'
     ]
 
+    async function fetchUserAssets(owner: string){
+      const assets = await fetchAssets(owner);   
+      console.log('user assets', assets);       
+        const listingArray: any = [];
+        for (let i = 0; i < assets.length; i++) {
+
+          // if the listing exists already in the listingArray with the same associatedId as the listing.listing, then increase the quantity by 1
+          // else just push the new listing to the listingArray
+          // if (listingArray.find((item: any) => item.associatedId === assets[i].listing)) {
+          //   const index = listingArray.findIndex((item: any) => item.associatedId === listing.listing);
+          //   listingArray[index].quantity += 1;
+          //   continue; 
+          // } 
+          // listingArray.push({
+          //   ...assets[i],
+          //   associatedId: listing.listing,
+          //   price: listing.price,
+          //   quantity: 1,
+          // });
+        }
+        console.log('all user assets', listingArray);
+        setUserAssets(assets);
+      
+    };
+
+    useEffect(() => {
+      if(publicKey) {
+        fetchUserAssets(publicKey.toBase58());
+      }
+    }, [publicKey])
     return (
       <Suspense fallback={<div />}>
         <div className='flex flex-col pt-20 gap-6 items-center w-full'>
@@ -198,6 +224,43 @@ export default function DashboardFeature() {
             <Wrapper className='border-solid border-2 border-slate-200 bg-secondary text-secondaryText w-11/12 rounded-3xl align-center items-left'>
                 <Collapsible className='w-full p-4'>
                     <CollapsibleTrigger className='flex flex-row w-full items-center justify-between'> 
+                        My Inventory
+                        <ChevronUpIcon />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className='mt-4'>
+                        <div className='flex flex-row items-center justify-between'>
+                            <p>
+                                Market Value
+                            </p>
+                            <p>
+                                $1,000
+                            </p>
+                        </div>
+                        <Separator className="my-2 bg-slate-400" />
+                        <div className='flex flex-row items-center justify-between'>
+                            <p>
+                                Market Value
+                            </p>
+                            <p>
+                                $1,000
+                            </p>
+                        </div>
+                        <Separator className="my-4 bg-slate-400" />
+                        <div className='flex flex-row items-center justify-between'>
+                            <p>
+                                Market Value
+                            </p>
+                            <p>
+                                $1,000
+                            </p>
+                        </div>
+                        <Separator className="my-4 bg-slate-400" />
+                    </CollapsibleContent>
+                </Collapsible>
+            </Wrapper>
+            <Wrapper className='border-solid border-2 border-slate-200 bg-secondary text-secondaryText w-11/12 rounded-3xl align-center items-left'>
+                <Collapsible className='w-full p-4'>
+                    <CollapsibleTrigger className='flex flex-row w-full items-center justify-between'> 
                         All orders
                         <ChevronUpIcon />
                     </CollapsibleTrigger>
@@ -232,6 +295,15 @@ export default function DashboardFeature() {
                     </CollapsibleContent>
                 </Collapsible>
             </Wrapper>
+            { userAssets.length > 0 && (
+              userAssets.map((asset, index) => {
+                return (
+                  <ObjectCard 
+                    account={new PublicKey(asset!.publicKey)} listingId={asset?.key} key={index}
+                  />
+                )}
+              ))
+            }
             <CtaCard3 />
         </div>
       </Suspense>
