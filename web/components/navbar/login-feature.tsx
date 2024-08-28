@@ -82,7 +82,7 @@ export default function LoginFeature({
     return (
         <Suspense fallback={<div />}>
             {LoginFeatureProps.isOpen && (
-                <nav className="bg-transparent flex flex-col justify-end pb-20 items-left absolute text-sm duration-200 z-50 w-full h-screen self-center left-1/2 -translate-x-1/2 top-full h-max shadow-xl p-6 md:blocks md:static md:w-auto md:left-auto md:transform-none md:top-auto md:rounded-none md:shadow-none  md:h-auto gap-12">
+                <nav className="bg-transparent flex flex-col justify-end pb-28 items-left absolute text-sm duration-200 z-50 w-full h-screen self-center left-1/2 -translate-x-1/2 top-full h-max shadow-xl p-6 md:blocks md:static md:w-auto md:left-auto md:transform-none md:top-auto md:rounded-none md:shadow-none  md:h-auto gap-12">
                     <ul className="flex flex-col items-stretch gap-6 list-style-none lg:gap-5 xl:gap-6 md:flex-row md:items-center">
                         {links2.map(({ label, path }, i) => (
                             <NavItem

@@ -5,14 +5,14 @@
 @layer base {
   :root {
     --bg-img: url('/patterns/bg-pattern.svg');
-    --color-bg: #B7C6E1;
-    --color-secondary: black;
-    --color-secondary-text: white;
+    --color-bg: #FAFAFA;
+    --color-secondary: #18181B;
+    --color-secondary-text: #FAFAFA;
     --color-accent: #DCE5E2;
-    --color-text: #1E293B;
-    --color-dark-1: #161E2E;
-    --color-dark-2: #3E4C59;
-    --color-dark-3: #6B7280;
+    --color-text: #FAFAFA;
+    --color-dark-1: #27272A;
+    --color-dark-2: #3F3F46;
+    --color-dark-3: #52525B;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -41,14 +41,14 @@
   }
 
   .dark {
-    --color-secondary: white;
-    --color-secondary-text: black;
-    --color-bg: #161E2E;
+    --color-secondary: #FAFAFA;
+    --color-secondary-text: #18181B;
+    --color-bg: #18181B;
     --color-accent: #3E4C59;
-    --color-text: #DCE5E2;
-    --color-dark-1: #1E293B;
-    --color-dark-2: #6B7280;
-    --color-dark-3: #3E4C59;
+    --color-text: #FAFAFA;
+    --color-dark-1: #f4f4f5;
+    --color-dark-2: #e4e4e7;
+    --color-dark-3: #d4d4d8;
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -135,15 +135,48 @@
 };
 
 /* TYPOGRAPHY */
+/* .h1 {
+  font-size: 48px;
+  line-height: 48px;
+  font-weight: 800;
+}
 
-.heading-secondary,
 .h2 {
-  @apply text-3xl sm:text-4xl capitalize font-medium mb-8 sm:mb-12 text-dark-2;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 600;
 }
-.heading-tertiary,q
+
 .h3 {
-  @apply text-xl sm:text-2xl tracking-wide capitalize font-medium text-dark-2;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
 }
+
+.h4 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+.p {
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 500;
+}
+
+.blockquote {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.li {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+} */
+
 
 html,
 body {
@@ -165,7 +198,7 @@ html {
 }
 
 body {
-  max-width: 100vw;
+  max-width: 96vw;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
