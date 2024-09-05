@@ -10,9 +10,17 @@ import {
 } from "@/components/ui/shadcn/card-ui"
 import { Button } from "@/components/ui/shadcn/button-ui"
 
-const Card2 = () => {
+interface DefaultProps {
+  className?: string;
+}
+
+const Card2 = (
+  props: DefaultProps
+) => {
   return (
-    <Card>
+    <Card
+      className={`${props.className}`}
+    >
       {/* <CardHeader>
         <CardTitle>
           TOTAL VALUE

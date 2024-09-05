@@ -23,7 +23,7 @@ export function UiLayout({
   
 
   return (
-    <div className="h-full flex flex-col bg-bg items-center w-screen overflow-none">
+    <div className="h-full flex flex-col bg-bg items-center w-full overflow-none">
       <NavbarFeature links={links}/>
       <ClusterChecker>
         <AccountChecker />

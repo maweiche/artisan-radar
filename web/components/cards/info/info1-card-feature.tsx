@@ -11,9 +11,17 @@ import {
   CardTitle,
 } from "@/components/ui/shadcn/card-ui"
 
-const Card1 = () => {
+interface DefaultProps {
+  className?: string;
+}
+
+const Card1 = (
+  props: DefaultProps
+) => {
   return (
-    <Card>
+    <Card
+      className={`${props.className}`}
+    >
       <CardHeader>
         <CardTitle className="text-secondary">
           TOTAL VALUE

@@ -10,9 +10,17 @@ import {
 } from "@/components/ui/shadcn/card-ui"
 import { Button } from "@/components/ui/shadcn/button-ui"
 import { EyeOpenIcon } from '@radix-ui/react-icons'
-const Card3 = () => {
+interface DefaultProps {
+  className?: string;
+}
+
+const Card3 = (
+  props: DefaultProps
+) => {
   return (
-    <Card>
+    <Card
+      className={`${props.className}`}
+    >
       {/* <CardHeader>
         <CardTitle>
           TOTAL VALUE

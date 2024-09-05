@@ -4,7 +4,14 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, ChartLe
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import { Card } from "@/components/ui/shadcn/card-ui"
 import Image from 'next/image';
-const ChartA = () => {
+
+interface DefaultProps {
+  className?: string;
+}
+
+const ChartA = (
+  props: DefaultProps
+) => {
   const chartData = [
     { month: "January", desktop: 186, mobile: 80 },
     { month: "February", desktop: 305, mobile: 200 },
@@ -25,7 +32,7 @@ const ChartA = () => {
     },
   } satisfies ChartConfig
   return (
-    <Card className={styles.container}>
+    <Card className={`${props.className}`}>
       <div className={styles.header}>
         <Image
           src={'/icons/watch-icon.svg'}

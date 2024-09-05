@@ -32,9 +32,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const ChartC = () => {
+interface DefaultProps {
+  className?: string;
+}
+
+const ChartC = (
+  props: DefaultProps
+) => {
   return (
-    <Card>
+    <Card
+      className={`${props.className}`}
+    >
       <CardHeader>
         <CardTitle>
           <div className="flex justify-between">

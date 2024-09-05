@@ -75,7 +75,7 @@ export default function HomeFeature() {
                         />
                     )}
                 </motion.picture>
-                <motion.hgroup className={styles.buttonContainer}>
+                <motion.hgroup className='flex flex-row w-11/12 justify-between items-center mx-auto'>
                     {categories.map((category, index) => (
                         <Button
                             key={index}
@@ -92,7 +92,7 @@ export default function HomeFeature() {
             </Wrapper>
             <Wrapper
                 // id="hero"
-                className='bg-bg'
+                className='bg-bg flex flex-col w-full items-center justify-between'
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <TransparentCard>
@@ -103,19 +103,19 @@ export default function HomeFeature() {
                         <span className='font-bold'>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
                     </div>
                 </TransparentCard>  
-                <Card1 /> 
-                <ChartA />
-                <ChartC />
+                <Card1 className='w-11/12 mx-2'/> 
+                <ChartA className='mx-2 w-11/12 px-4 py-4'/>
+                <ChartC className='mx-2 w-11/12 px-4 py-4'/>
             </Wrapper>
-            <TransparentCard>
-                <div className="text-secondary text-2xl">
+            <TransparentCard> 
+                <div className="mx-2 w-11/12 text-secondary text-2xl">
                     We offer the opportunity to access these markets through digitization with a starting investment of just $100. 
                     Luxury Markets and Vintage collections tend to appreciate over time, yet they often remain out of reach for 
                     the majority of individuals.
                 </div>
             </TransparentCard>
-            <Card2 />
-            <Card3 />
+            <Card2 className='mx-4'/>
+            <Card3 className='mx-4' />
             <CollectionsCard /> 
             <ExpertiseCard />
             <CtaCard1 />
