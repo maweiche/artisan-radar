@@ -38,6 +38,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --border: 1px solid #b8b8b8;
   }
 
   .dark {
@@ -211,20 +212,23 @@ body {
 /* Wallet Button  */
 
 .wallet-adapter-button-trigger {
-  background: var(--color-secondary) !important;
-  color: var(--color-secondary-text);
-  width: 116px;
+  background: var(--color-bg) !important;
+  color: var(--color-secondary);
+  width: 100%;
   height: 27px;
-  top: 10px;
-  left: 104px;
   padding: 14px;
-  gap: 21px;
   border-radius: 36px;
   border: 1px solid #000000;
-  font-weight: 200;
+  font-weight: 100;
+  font-size: calc(
+    0.5rem + 0.5vw
+  );
 }
 .wallet-adapter-dropdown-list,
 .wallet-adapter-button {
   justify-content: center !important;
   align-items: center !important;
+}
+.wallet-adapter-dropdown {
+  display: flex;
 }
