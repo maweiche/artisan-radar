@@ -177,7 +177,7 @@ export default function NavbarFeature({
             />
           </div>
           {navbarCollapsed && (
-            <WalletButton style={{ width: 'fit-content' }}>
+            <WalletButton style={{ width: 'fit-content' }} className='z-61'>
               {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : 'Connect Wallet'}
             </WalletButton>
           )}
@@ -260,7 +260,7 @@ export default function NavbarFeature({
           </div>
           
           {navbarCollapsed && (
-            <WalletButton style={{ width: 'fit-content' }}>
+            <WalletButton style={{ width: 'fit-content', zIndex: '61'}}>
               {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : 'Connect Wallet'}
             </WalletButton>
           )}

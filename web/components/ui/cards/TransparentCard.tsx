@@ -20,7 +20,7 @@ const TransparentCard = (props: Props & MotionProps) => {
   } = props;
 
   return (
-    <div className={styles.container} onClick={props.onClick}>
+    <div className={props.className} onClick={props.onClick}>
       {children}
     </div>
   );

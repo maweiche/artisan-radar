@@ -10,6 +10,8 @@ import { ChartA, ChartB, ChartC } from '@/components/charts';
 import { Card1, Card2, Card3 } from '@/components/cards/info';
 import { CtaCard1, CtaCard2, CtaCard3 } from '@/components/cards/cta';
 import { CollectionsCard, ExpertiseCard } from '@/components/cards';
+import { Badge } from '@/components/ui/shadcn/badge-ui';
+import PerformanceCard from '../cards/performance-card-feature';
 export default function HomeFeature() {
     const [selected, setSelected] = useState(0);
     const categories = [
@@ -20,90 +22,98 @@ export default function HomeFeature() {
     ]
 
     return (
-        <div className='bg-bg pt-20' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '32px'}}>
+        <div className='bg-bg pt-20 lg:pt-2 gap-32 lg:gap-0 flex flex-col justify-center' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <Wrapper
                 // id="hero"
-                className='bg-bg'
+                className='bg-bg relative flex flex-col w-full items-center justify-between lg:gap-6'
             >            
+                <div 
+                    className='absolute hidden lg:flex md:flex bg-top w-3/4 h-3/4 bg-[url(/assets/home/home-backdrop.svg)] bg-no-repeat bg-contain bg-center z-0'
+                    // style it so only the bottom half of the div is visible, the top half should be transparent
+                    // style={{
+                    //     maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1))',
+                    // }}
+                />
+                <p 
+                    className="absolute bottom-28 text-secondary z-10 hidden lg:flex md:flex"
+                    style={{ 
+                        fontFamily: 'Syne',
+                        fontSize: '15rem',
+                        fontWeight: '700',
+                        lineHeight: '477.4px',
+                    }}
+                >
+                    {
+                        selected == 0 ? 'Watches' :
+                        selected == 1 ? 'Cars' :
+                        selected == 2 ? 'Diamonds' :
+                        selected == 3 ? 'Whisky' : 'Watches'
+                    }
+                </p>
                 <motion.h1>
-                    <p className="flex flex-col text-secondary text-4xl text-center ">
+                    <p className="flex flex-col text-secondary top-0 text-4xl text-center z-20 ">
                         You collect shares of goods, <br />
                         we handle everything else
                     </p>
                 </motion.h1>
                 <motion.h4>
-                    <p className="flex flex-col text-secondary text-2xl text-center ">
+                    <p className="flex flex-col text-secondary text-2xl text-center z-20">
                         Collect & Trade luxury goods<br />
                         on-chain
                     </p>
                 </motion.h4>
-                <motion.picture className={styles.imageContainer}>
-                    {selected == 0 && (
-                        <Image 
-                            src={'/products/freak-watch.png'}
-                            width={293}
-                            height={293}
-                            className={styles.featuredImage}
-                            alt='freak watch'
-                        />
-                    )}
-                    {selected == 1 && (
-                        <Image 
-                            src={'/products/car2.svg'}
-                            width={293}
-                            height={293}
-                            className={styles.featuredImage}
-                            alt='freak watch'
-                        />
-                    )}
-                    {selected == 2 && (
-                        <Image 
-                            src={'/products/diamond.svg'}
-                            width={293}
-                            height={293}
-                            className={styles.featuredImage}
-                            alt='freak watch'
-                        />
-                    )}
-                    {selected == 3 && (
-                        <Image 
-                            src={'/products/whisky.svg'}
-                            width={293}
-                            height={293}
-                            className={styles.featuredImage}
-                            alt='freak watch'
-                        />
-                    )}
+                <motion.picture className='flex flex-row justify-center items-center' style={{ zIndex: '20'}}>
+                    <Image 
+                        src={
+                            selected == 0 ? '/products/freak-watch.png' :
+                            selected == 1 ? '/products/car2.svg' :
+                            selected == 2 ? '/products/diamond.svg' :
+                            selected == 3 ? '/products/whisky.svg' : '/products/freak.svg'
+                        }
+                        width={293}
+                        height={293}
+                        className={styles.featuredImage}
+                        alt='freak watch'
+                    />
                 </motion.picture>
-                <motion.hgroup className='flex flex-row w-11/12 justify-between items-center mx-auto'>
+                <motion.hgroup className='flex flex-row sm:w-11/12 justify-between items-center mx-auto lg:w-1/4 z-20'>
                     {categories.map((category, index) => (
                         <Button
                             key={index}
                             type='button'
                             onClick={() => setSelected(index)}
                             className={
-                                selected === index ? "bg-secondaryText text-secondary border-2 border-secondary rounded-full" : "bg-secondary text-secondaryText border-2 border-secondaryText rounded-full"
+                                selected === index ? "bg-secondaryText text-secondary border-2 border-secondary rounded-full" : "bg-secondary text-secondaryText border-2 border-secondaryText rounded-full z-20"
                             }
                         >
                             {category}
                         </Button>
                     ))}
                 </motion.hgroup>
+
+                
             </Wrapper>
+            <div
+                className='flex flex-col w-full relative items-center z-20'
+                style={{ gap: '12px'}}
+            >
+                <p className='text-slate-400'>
+                    Trusted by
+                </p>
+                <Image
+                    src='/assets/home/partners-row.svg'
+                    width={1000}
+                    height={1000}
+                    alt='partners'
+                />
+            </div>
             <Wrapper
                 // id="hero"
                 className='bg-bg flex flex-col w-full items-center justify-between'
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
-                <TransparentCard>
-                    <h2 className='text-secondary border-solid border-2 border-secondary'>
-                        Why Artisan?
-                    </h2>
-                    <div className='text-secondary text-2xl'>
-                        <span className='font-bold'>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
-                    </div>
-                </TransparentCard>  
-                <Card1 className='w-11/12 mx-2'/> 
+                <PerformanceCard />
+                
                 <ChartA className='mx-2 w-11/12 px-4 py-4'/>
                 <ChartC className='mx-2 w-11/12 px-4 py-4'/>
             </Wrapper>

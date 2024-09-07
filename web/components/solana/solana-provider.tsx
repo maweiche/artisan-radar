@@ -13,6 +13,7 @@ import {
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { ReactNode, useCallback, useMemo } from 'react';
 import { useCluster } from '../cluster/cluster-data-access';
+import { z } from 'zod';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 

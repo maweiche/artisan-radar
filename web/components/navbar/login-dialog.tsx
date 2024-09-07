@@ -102,7 +102,7 @@ export const Dialog1: React.FC<ModalProps> = ({ page, handleNext, handleBack }) 
                     <Button style={{ height: '27px' }} className='w-full rounded-full border-2 border-secondary border-x border-y'>
                         Sign in with Google
                     </Button>
-                    <WalletMultiButton style={{ width: '100%'}} className='flex flex-row w-full rounded-full border-2 border-secondary border-x border-y'>
+                    <WalletMultiButton style={{ width: '100%', zIndex: '51'}} className='flex flex-row w-full z-[60] rounded-full border-2 border-secondary border-x border-y'>
                         Connect your Wallet
                         <img
                             src='/login/phantom_icon.svg'
