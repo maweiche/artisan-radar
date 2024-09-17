@@ -29,9 +29,17 @@ const Card2 = (
       </CardHeader> */}
       <CardContent className='py-4 pb-12'>
         <p className='text-4xl font-semibold text-secondary'>
-          All Luxury Goods on our platform are authenticated
-          <span className="text-secondary">
-            , certified, and securely stored in a third-party vault.
+          Every asset {" "}
+          <span className="text-slate-400">
+            authenticated
+          </span>
+          , { " " }
+          <span className="text-slate-400">
+          certified
+          </span>
+          , and { " " } 
+          <span className="text-slate-400">
+          securely vaulted.
           </span>
         </p>
         

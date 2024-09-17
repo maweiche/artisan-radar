@@ -30,8 +30,14 @@ const formSchema = z.object({
   }),
 })
 
-const CtaCard3 = () => {
-    // 1. Define your form.
+interface DefaultProps {
+  className?: string;
+}
+
+const CtaCard3 = (
+  props: DefaultProps
+) => {
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,7 +54,7 @@ const CtaCard3 = () => {
   return (
     <Card
         style={{ width:'100vw', alignSelf: 'center' }}
-        className='rounded-none flex flex-col p-4 items-center bg-zinc-200'
+        className={`${props.className} rounded-none flex flex-col p-4 items-center bg-zinc-200`}
     >
       {/* <CardHeader>
         <CardTitle>
@@ -61,7 +67,7 @@ const CtaCard3 = () => {
             <span className='italic font-light'>Stay</span> updated
         </p>
         <p className='text-2xl text-slate-500'>
-            Stay aware of everythings happening in Artisan’s wolrd and all the newest features
+          Get the latest updates and features from Artisan
         </p>
       </CardContent>
       <CardFooter className="flex-col items-center gap-8 items-start">

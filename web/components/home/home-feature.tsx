@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/shadcn/button-ui';
 import TransparentCard from '../ui/cards/TransparentCard';
 import { ChartA, ChartB, ChartC } from '@/components/charts';
 import { Card1, Card2, Card3 } from '@/components/cards/info';
-import { CtaCard1, CtaCard2, CtaCard3 } from '@/components/cards/cta';
+import { CtaCard1, CtaCard2, CtaCard3, CtaCard4 } from '@/components/cards/cta';
 import { CollectionsCard, ExpertiseCard } from '@/components/cards';
 import { Badge } from '@/components/ui/shadcn/badge-ui';
 import PerformanceCard from '../cards/performance-card-feature';
@@ -113,24 +113,27 @@ export default function HomeFeature() {
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <PerformanceCard />
-                
-                <ChartA className='mx-2 w-11/12 px-4 py-4'/>
-                <ChartC className='mx-2 w-11/12 px-4 py-4'/>
-            </Wrapper>
-            <TransparentCard> 
-                <div className="mx-2 w-11/12 text-secondary text-2xl">
-                    We offer the opportunity to access these markets through digitization with a starting investment of just $100. 
-                    Luxury Markets and Vintage collections tend to appreciate over time, yet they often remain out of reach for 
-                    the majority of individuals.
+                <div className='flex flex-col w-full items-center justify-evenly md:flex-row lg:flex-row'>
+                    <ChartA className='mx-2 w-11/12 px-4 py-4 md:w-5/12'/>
+                    <ChartC className='mx-2 w-11/12 px-4 py-4 md:w-5/12'/>
                 </div>
+            </Wrapper>
+            <TransparentCard className="mx-2 flex flex-col w-9/12 items-center justify-center self-center text-secondary text-2xl"> 
+                <p className='text-2xl text-center my-2 md:text-4xl md:my-24'>
+                    <span className='text-slate-400 font-bold'>
+                        Invest in luxury assets for as little as $100. {" "}
+                    </span> 
+                    Own a piece of high-end watches, vintage collectibles, and more—previously inaccessible markets now open to all.
+                </p>
             </TransparentCard>
-            <Card2 className='mx-4'/>
-            <Card3 className='mx-4' />
-            <CollectionsCard /> 
+            <Card2 className='mx-4 md:w-8/12 md:self-center md:mb-12'/>
+            <Card3 className='mx-4 md:w-8/12 md:self-center md:mb-12'/>
+            <CollectionsCard  className='md:w-1/2' /> 
             <ExpertiseCard />
-            <CtaCard1 />
-            <CtaCard2 />
-            <CtaCard3 />
+            <CtaCard1 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
+            <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
+            <CtaCard3 className='mx-4 md:w-5/12 md:self-center md:mb-12'/>
+            {/* <CtaCard4 /> */}
         </div>
     )
 }

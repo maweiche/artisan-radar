@@ -1,40 +1,37 @@
 'use client';
-import Image from "next/image";
+import Link from 'next/link';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/shadcn/card-ui"
 import { Button } from "@/components/ui/shadcn/button-ui"
-import { EnvelopeClosedIcon, TwitterLogoIcon } from '@radix-ui/react-icons'
-const CtaCard1 = () => {
+import { TwitterLogoIcon } from '@radix-ui/react-icons'
+import WaitlistSignup from "@/components/waitlist/waitlist-ui";
+interface DefaultProps {
+  className?: string;
+}
+
+const CtaCard1 = (
+  props: DefaultProps
+) => {
   return (
-    <Card>
-      {/* <CardHeader>
-        <CardTitle>
-          TOTAL VALUE
-        </CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader> */}
-      <CardContent className='flex flex-col py-4 pb-12 gap-4'>
+    <Card className={`${props.className}`}>
+      <CardContent className='flex flex-col py-4 pb-12 gap-4 md:items-center'>
         <p className='text-2xl text-secondary'>
-            Gain <span className='italic font-light'>priority</span> access by joining the waitlist
+          Join the waitlist:
         </p>
-        <p className='text-2xl text-slate-500'>
-            Get Updated And Discover All The News in The Artisan
+        <p className='text-2xl text-secondary'>
+          <span className='italic text-slate-500 font-light'>Priority</span>  access & <span className='italic text-slate-500 font-light'>exclusive</span> updates
         </p>
       </CardContent>
-      <CardFooter className="flex-col gap-8 items-start">
-        <Button className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary'>
-            <EnvelopeClosedIcon className='w-6 h-6' />
-            Join Waitlist
-        </Button>
-        <Button className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary' variant='default'>
+      <CardFooter className="flex-col gap-8 items-start md:items-center">
+        <WaitlistSignup />
+        <Button asChild className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary' variant='default'>
+          <Link href={'https://x.com/ArtsnFi'} passHref target='_blank'>
             <TwitterLogoIcon className='w-6 h-6' />
             Follow on Twitter
+          </Link>
         </Button>
       </CardFooter>
     </Card>

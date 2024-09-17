@@ -12,11 +12,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/shadcn/carousel-ui"
 // import { motion, MotionProps } from 'framer-motion';
+interface DefaultProps {
+  className?: string;
+}
 
-const ExpertiseCard = () => {
+const ExpertiseCard = (
+  props: DefaultProps
+) => {
 
   return (
-    <div className={styles.container}>
+    <div className={`${props.className} ${styles.container}`}>
       <h2>Our Expertise</h2>
       <Carousel className={styles.carousel}>
         <CarouselContent>

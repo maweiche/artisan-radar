@@ -14,8 +14,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/shadcn/carousel-ui"
 // import { motion, MotionProps } from 'framer-motion';
+interface DefaultProps {
+  className?: string;
+}
 
-const CollectionsCard = () => {
+const CollectionsCard = (
+  props: DefaultProps
+) => {
   const [slides, setSlides] = useState(Array.from({ length: 5 }));
   const [progressAmount, setProgressAmount] = useState(0);
   useEffect(() => {
@@ -24,7 +29,7 @@ const CollectionsCard = () => {
     setProgressAmount(1 * 100 / slides.length);
   }, [CarouselItem]);
   return (
-    <div className={styles.container}>
+    <div className={`${props.className} ${styles.container}`}>
       <h2>The Collections</h2>
       <Carousel style={{ justifySelf: 'center'}} showProgress={true }>
         <CarouselContent>
