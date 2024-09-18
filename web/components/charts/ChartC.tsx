@@ -122,7 +122,7 @@ const ChartC = (
       <CardContent>
       <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[105px] md:h-[150px] w-full"
         >
           <AreaChart data={filteredData}>
             <defs>

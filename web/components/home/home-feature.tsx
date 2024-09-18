@@ -112,10 +112,6 @@ export default function HomeFeature() {
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <PerformanceCard />
-                <div className='flex flex-col w-full items-center justify-evenly md:hidden lg:hidden'>
-                    <ChartA className='mx-2 w-11/12 px-4 py-4 md:w-1/3'/>
-                    <ChartC className='mx-2 w-11/12 px-4 py-4 md:w-1/3'/>
-                </div>
             </Wrapper>
             <TransparentCard className="mx-2 flex flex-col w-9/12 items-center justify-center self-center text-secondary text-2xl"> 
                 <p className='text-2xl text-center my-2 md:text-4xl md:my-24'>
@@ -129,9 +125,9 @@ export default function HomeFeature() {
                 <Card2 className='mx-4 md:w-1/3 md:self-center md:mb-12'/>
                 <Card3 className='mx-4 md:w-1/3 md:self-center md:mb-12'/>
             </div>
-            <div className='flex flex-col justify-center w-full gap-12 md:flex-row '>
-                <CollectionsCard  className='flex flex-col self-center gap-12 md:gap-4 h-fit w-11/12 md:w-1/4 md:1/4' /> 
-                <ExpertiseCard className='flex flex-col self-center gap-12 md:gap-4 h-fit w-11/12 md:w-1/4  md:1/4'/>
+            <div className='flex flex-col md:items-start items-center md:flex-row justify-center gap-12 align-top'>
+                <CollectionsCard  className='flex flex-col gap-12 md:gap-4 h-fit w-11/12 md:w-1/3 md:1/4' /> 
+                <ExpertiseCard className='flex flex-col gap-12 md:gap-1 h-fit w-11/12 md:w-1/3  md:1/4'/>
             </div>
             <CtaCard1 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
             <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>

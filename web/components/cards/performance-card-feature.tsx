@@ -33,15 +33,15 @@ const PerformanceCard = () => {
             <span className='font-bold'>In the past decade</span>, certain Luxury Assets outperformed the S&P 500 .
         </div>
         <div className='flex flex-col w-full align-center items-center self-center gap-4'>
-            <div className='w-full self-center md:w-3/4'>
-                <Card1 className='w-11/12 md:1/2 min-h-max mx-2 justify-between flex flex-col'/> 
+            <div className='w-full self-center md:w-3/4 self-center'>
+                <Card1 className='w-11/12 md:2/3 min-h-max mx-auto self-center justify-between flex flex-col'/> 
             </div>
             <div className='flex self-center flex-col w-full sm:justify-center md:flex-row lg:flex-row'>
-                <TopPerformerCard className='w-11/12 md:w-1/3 lg:w-1/4 self-center min-h-max justify-between items-center flex flex-col mx-2'/>
-                <TopPerformer2Card className='w-11/12 md:w-1/3 lg:w-1/4 self-center min-h-max justify-between items-center flex flex-col mx-2'/>
+                <TopPerformerCard className='w-11/12 md:w-1/2 lg:w-1/3 self-center min-h-max justify-between items-center flex flex-col mx-2'/>
+                <TopPerformer2Card className='w-11/12 md:w-1/2 lg:w-1/3 self-center min-h-max justify-between items-center flex flex-col mx-2'/>
             </div>
         </div>
-        <ChartC className='sm:hidden md:block w-11/12 self-center h-80 overflow-hidden'/>
+        <ChartC className='w-11/12 md:w-8/12 self-center h-80 overflow-hidden'/>
     </TransparentCard>  
   );
 
