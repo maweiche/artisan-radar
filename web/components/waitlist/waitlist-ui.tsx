@@ -22,6 +22,10 @@ import {
     DialogTrigger,
 } from "@/components/ui/shadcn/dialog-ui"
 
+interface DefaultProps {
+    className?: string;
+}
+
 const FormSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     email: z.string().email({ message: "Invalid email address." }),
@@ -33,7 +37,9 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>;
 
-export default function WaitlistSignup() {
+const WaitlistSignup = (
+    props: DefaultProps
+) => {
     const { toast } = useToast();
     
     const form = useForm<FormValues>({
@@ -78,7 +84,7 @@ export default function WaitlistSignup() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary'>
+                <Button className={`${props.className}`}>
                     <EnvelopeClosedIcon className='w-6 h-6' />Join the waitlist!
                 </Button>
             </DialogTrigger>
@@ -216,3 +222,5 @@ export default function WaitlistSignup() {
         </Dialog>
       );
     }
+
+export default WaitlistSignup;

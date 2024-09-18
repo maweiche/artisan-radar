@@ -26,7 +26,7 @@ const CtaCard1 = (
         </p>
       </CardContent>
       <CardFooter className="flex-col gap-8 items-start md:items-center">
-        <WaitlistSignup />
+        <WaitlistSignup className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary'/>
         <Button asChild className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary' variant='default'>
           <Link href={'https://x.com/ArtsnFi'} passHref target='_blank'>
             <TwitterLogoIcon className='w-6 h-6' />

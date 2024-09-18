@@ -22,7 +22,7 @@ export default function HomeFeature() {
     ]
 
     return (
-        <div className='bg-bg pt-20 lg:pt-2 gap-32 lg:gap-0 flex flex-col justify-center' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+        <div className='bg-bg w-screen pt-20 lg:pt-2 gap-12 lg:gap-0 flex flex-col justify-center' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <Wrapper
                 // id="hero"
                 className='bg-bg relative flex flex-col w-full items-center justify-between lg:gap-6'
@@ -51,15 +51,14 @@ export default function HomeFeature() {
                     }
                 </p>
                 <motion.h1>
-                    <p className="flex flex-col text-secondary top-0 text-4xl text-center z-20 ">
-                        You collect shares of goods, <br />
-                        we handle everything else
+                    <p className="flex flex-col text-secondary top-0 text-4xl md:text-6xl text-center z-20 ">
+                        You invest, <br />
+                        we manage.
                     </p>
                 </motion.h1>
                 <motion.h4>
                     <p className="flex flex-col text-secondary text-2xl text-center z-20">
-                        Collect & Trade luxury goods<br />
-                        on-chain
+                        Fractional ownership made easy
                     </p>
                 </motion.h4>
                 <motion.picture className='flex flex-row justify-center items-center' style={{ zIndex: '20'}}>
@@ -109,13 +108,13 @@ export default function HomeFeature() {
             </div>
             <Wrapper
                 // id="hero"
-                className='bg-bg flex flex-col w-full items-center justify-between'
+                className='bg-bg flex flex-col items-center justify-between'
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
                 <PerformanceCard />
-                <div className='flex flex-col w-full items-center justify-evenly md:flex-row lg:flex-row'>
-                    <ChartA className='mx-2 w-11/12 px-4 py-4 md:w-5/12'/>
-                    <ChartC className='mx-2 w-11/12 px-4 py-4 md:w-5/12'/>
+                <div className='flex flex-col w-full items-center justify-evenly md:hidden lg:hidden'>
+                    <ChartA className='mx-2 w-11/12 px-4 py-4 md:w-1/3'/>
+                    <ChartC className='mx-2 w-11/12 px-4 py-4 md:w-1/3'/>
                 </div>
             </Wrapper>
             <TransparentCard className="mx-2 flex flex-col w-9/12 items-center justify-center self-center text-secondary text-2xl"> 
@@ -126,10 +125,14 @@ export default function HomeFeature() {
                     Own a piece of high-end watches, vintage collectibles, and more—previously inaccessible markets now open to all.
                 </p>
             </TransparentCard>
-            <Card2 className='mx-4 md:w-8/12 md:self-center md:mb-12'/>
-            <Card3 className='mx-4 md:w-8/12 md:self-center md:mb-12'/>
-            <CollectionsCard  className='md:w-1/2' /> 
-            <ExpertiseCard />
+            <div className='flex flex-col w-full mb-12 items-top justify-center gap-12 align-top md:flex-row lg:flex-row'>
+                <Card2 className='mx-4 md:w-1/3 md:self-center md:mb-12'/>
+                <Card3 className='mx-4 md:w-1/3 md:self-center md:mb-12'/>
+            </div>
+            <div className='flex flex-col justify-center w-full gap-12 md:flex-row '>
+                <CollectionsCard  className='flex flex-col self-center gap-12 md:gap-4 h-fit w-11/12 md:w-1/4 md:1/4' /> 
+                <ExpertiseCard className='flex flex-col self-center gap-12 md:gap-4 h-fit w-11/12 md:w-1/4  md:1/4'/>
+            </div>
             <CtaCard1 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
             <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
             <CtaCard3 className='mx-4 md:w-5/12 md:self-center md:mb-12'/>

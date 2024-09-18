@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/shadcn/carousel-ui"
+import { Badge } from "@/components/ui/shadcn/badge-ui"
 // import { motion, MotionProps } from 'framer-motion';
 interface DefaultProps {
   className?: string;
@@ -21,8 +22,8 @@ const ExpertiseCard = (
 ) => {
 
   return (
-    <div className={`${props.className} ${styles.container}`}>
-      <h2>Our Expertise</h2>
+    <div className={`${props.className}`}>
+      <Badge variant="outline" className="w-fit px-4 items-center flex flex-row self-center text-2xl rounded-full">Our Expertise</Badge>
       <Carousel className={styles.carousel}>
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, index) => (

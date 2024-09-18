@@ -23,6 +23,7 @@ import { z } from "zod"
   FormMessage,
 } from "@/components/ui/shadcn/form-ui"
 import { Input } from "@/components/ui/shadcn/input-ui"
+import WaitlistSignup from "@/components/waitlist/waitlist-ui";
  
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -70,28 +71,8 @@ const CtaCard3 = (
           Get the latest updates and features from Artisan
         </p>
       </CardContent>
-      <CardFooter className="flex-col items-center gap-8 items-start">
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 px-6 flex-col items-center flex">
-                <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                    <FormItem>
-                    {/* <FormLabel>Username</FormLabel> */}
-                    <FormControl>
-                        <Input className="w-80 rounded-3xl bg-white h-16"  placeholder="Your email address" {...field} />
-                    </FormControl>
-                    {/* <FormDescription>
-                        This is your public display name.
-                    </FormDescription> */}
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                <Button className="w-80 bg-black text-white rounded-xl h-16 text-lg" type="submit">Submit</Button>
-            </form>
-        </Form>
+      <CardFooter className="flex-col w-full items-center gap-8 items-start">
+        <WaitlistSignup className='bg-secondary w-1/3 min-w-fit text-bgSecondaryText text-2xl gap-8 rounded-full self-center'/>
       </CardFooter>
     </Card>
   )

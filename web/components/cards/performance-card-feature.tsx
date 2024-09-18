@@ -25,19 +25,23 @@ interface DefaultProps {
 const PerformanceCard = () => {
 
   return (
-    <TransparentCard className='text-secondary text-2xl w-full md:w-3/4 lg:w-3/4 items-center justify-center flex flex-col text-center gap-4'>
+    <TransparentCard className='text-secondary text-2xl w-full items-center justify-center flex flex-col text-center gap-4'>
         <Badge>
             <span className='text-secondary'>The Artisan</span>
         </Badge>
         <div className='text-secondary text-2xl w-full md:w-3/4 lg:w-3/4'>
-            <span className='font-bold'>In the past decade</span>, certain Luxury Assets have demonstrated superior performance compared to the S&P 500.
+            <span className='font-bold'>In the past decade</span>, certain Luxury Assets outperformed the S&P 500 .
         </div>
-        <div className='flex flex-col w-full md:flex-row lg:flex-row'>
-            <Card1 className='w-1/2 mx-2 justify-between flex flex-col'/> 
-            <TopPerformerCard className='w-1/4 min-h-full justify-between items-center flex flex-col mx-2'/>
-            <TopPerformer2Card className='w-1/4 min-h-full justify-between items-center flex flex-col mx-2'/>
+        <div className='flex flex-col w-full align-center items-center self-center gap-4'>
+            <div className='w-full self-center md:w-3/4'>
+                <Card1 className='w-11/12 md:1/2 min-h-max mx-2 justify-between flex flex-col'/> 
+            </div>
+            <div className='flex self-center flex-col w-full sm:justify-center md:flex-row lg:flex-row'>
+                <TopPerformerCard className='w-11/12 md:w-1/3 lg:w-1/4 self-center min-h-max justify-between items-center flex flex-col mx-2'/>
+                <TopPerformer2Card className='w-11/12 md:w-1/3 lg:w-1/4 self-center min-h-max justify-between items-center flex flex-col mx-2'/>
+            </div>
         </div>
-        <ChartC className='w-full h-80 overflow-hidden'/>
+        <ChartC className='sm:hidden md:block w-11/12 self-center h-80 overflow-hidden'/>
     </TransparentCard>  
   );
 

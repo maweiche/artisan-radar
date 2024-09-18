@@ -28,11 +28,10 @@ const Card3 = (
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader> */}
       <CardContent className='py-4 pb-12'>
-        <p className='text-4xl font-semibold text-secondary'>
-          We carefully{" "}
+        <p className='text-4xl font-semibold text-slate-400'>
+          Expert-curated {" "}
           <span className="text-secondary">
-            curate assets, selecting only those identified by our expert team 
-            as having potential for value appreciation.
+            assets with growth potential
           </span>
         </p>
         

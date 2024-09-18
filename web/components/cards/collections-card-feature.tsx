@@ -5,6 +5,7 @@ import { Button }from '@/components/ui/shadcn/button-ui'
 import { ChevronRightIcon } from "@radix-ui/react-icons"
 import Image from 'next/image';
 import { Card, CardContent } from "@/components/ui/shadcn/card-ui"
+import { Badge } from "@/components/ui/shadcn/badge-ui"
 import { Progress } from "@/components/ui/shadcn/progress-ui"
 import {
   Carousel,
@@ -29,9 +30,9 @@ const CollectionsCard = (
     setProgressAmount(1 * 100 / slides.length);
   }, [CarouselItem]);
   return (
-    <div className={`${props.className} ${styles.container}`}>
-      <h2>The Collections</h2>
-      <Carousel style={{ justifySelf: 'center'}} showProgress={true }>
+    <div className={`${props.className}`}>
+      <Badge variant="outline" className="w-fit px-4 items-center flex flex-row self-center text-2xl rounded-full">The Collections</Badge>
+       <Carousel style={{ justifySelf: 'center'}} showProgress={true }>
         <CarouselContent>
           {slides.map((_, index) => (
               <CarouselItem key={index}>
