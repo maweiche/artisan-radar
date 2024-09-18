@@ -11,7 +11,7 @@ const Breadcrumb = () => {
         </div>
   
         {/* Text Content */}
-        <div className="relative z-10 flex flex-col justify-center h-full max-w-screen-xl mx-auto px-6">
+        <div className="relative z-10 flex flex-col justify-end h-full max-w-screen-xl mx-auto px-6 pb-6">
           {/* Title */}
           <h1 className="text-5xl font-bold text-white">Marketplace</h1>
   

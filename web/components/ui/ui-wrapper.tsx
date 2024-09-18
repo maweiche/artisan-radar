@@ -21,7 +21,7 @@ const Wrapper = ({
     const MotionTag = motion(as);
 
     return (
-      <MotionTag id={id} className={`flex flex-col justify-center md:py-32 ${className}`} {...rest}>
+      <MotionTag id={id} className={`flex flex-col justify-center md:py-16 ${className}`} {...rest}>
         {children}
       </MotionTag>
     );

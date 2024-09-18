@@ -25,20 +25,20 @@ export default function HomeFeature() {
         <div className='bg-bg w-screen pt-20 lg:pt-2 gap-12 lg:gap-0 flex flex-col justify-center' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <Wrapper
                 // id="hero"
-                className='bg-bg relative flex flex-col w-full items-center justify-between lg:gap-6'
+                className='bg-bg relative flex flex-col w-full items-center justify-between lg:gap-12'
             >            
                 <div 
-                    className='absolute hidden lg:flex md:flex bg-top w-3/4 h-3/4 bg-[url(/assets/home/home-backdrop.svg)] bg-no-repeat bg-contain bg-center z-0'
+                    className='absolute hidden lg:flex md:flex bg-top w-9/12 h-full bg-[url(/assets/home/home-backdrop.svg)] bg-no-repeat bg-contain bg-center z-0'
                     // style it so only the bottom half of the div is visible, the top half should be transparent
                     // style={{
                     //     maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,1))',
                     // }}
                 />
                 <p 
-                    className="absolute bottom-28 text-secondary z-10 hidden lg:flex md:flex"
+                    className="font-syne absolute bottom-28 text-secondary z-10 hidden lg:flex md:flex"
                     style={{ 
                         fontFamily: 'Syne',
-                        fontSize: '15rem',
+                        fontSize: '220px',
                         fontWeight: '700',
                         lineHeight: '477.4px',
                     }}
@@ -51,14 +51,14 @@ export default function HomeFeature() {
                     }
                 </p>
                 <motion.h1>
-                    <p className="flex flex-col text-secondary top-0 text-4xl md:text-6xl text-center z-20 ">
-                        You invest, <br />
+                    <p className="flex flex-col font-semibold font-urbanist text-secondary top-0 text-4xl md:text-6xl text-center z-20 ">
+                        You collect, <br />
                         we manage.
                     </p>
                 </motion.h1>
                 <motion.h4>
                     <p className="flex flex-col text-secondary text-2xl text-center z-20">
-                        Fractional ownership made easy
+                        Collect & Trade luxury goods on-chain
                     </p>
                 </motion.h4>
                 <motion.picture className='flex flex-row justify-center items-center' style={{ zIndex: '20'}}>
@@ -92,10 +92,7 @@ export default function HomeFeature() {
 
                 
             </Wrapper>
-            <div
-                className='flex flex-col w-full relative items-center z-20'
-                style={{ gap: '12px'}}
-            >
+            <div className='flex flex-col w-full relative items-center z-20' style={{ gap: '12px'}}>
                 <p className='text-slate-400'>
                     Trusted by
                 </p>
@@ -113,22 +110,15 @@ export default function HomeFeature() {
             >  
                 <PerformanceCard />
             </Wrapper>
-            <TransparentCard className="mx-2 flex flex-col w-9/12 items-center justify-center self-center text-secondary text-2xl"> 
-                <p className='text-2xl text-center my-2 md:text-4xl md:my-24'>
-                    <span className='text-slate-400 font-bold'>
-                        Invest in luxury assets for as little as $100. {" "}
-                    </span> 
-                    Own a piece of high-end watches, vintage collectibles, and more—previously inaccessible markets now open to all.
-                </p>
-            </TransparentCard>
+            
             <div className='flex flex-col w-full mb-12 items-top justify-center gap-12 align-top md:flex-row lg:flex-row'>
-                <Card2 className='mx-4 md:w-1/3 md:self-center md:mb-12'/>
-                <Card3 className='mx-4 md:w-1/3 md:self-center md:mb-12'/>
+                <Card2 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
+                <Card3 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
             </div>
-            <div className='flex flex-col md:items-start items-center md:flex-row justify-center gap-12 align-top'>
-                <CollectionsCard  className='flex flex-col gap-12 md:gap-4 h-fit w-11/12 md:w-1/3 md:1/4' /> 
-                <ExpertiseCard className='flex flex-col gap-12 md:gap-1 h-fit w-11/12 md:w-1/3  md:1/4'/>
-            </div>
+            {/* <div className='flex flex-col md:items-start items-center md:flex-row justify-center gap-12 align-top'> */}
+                <CollectionsCard  className='flex flex-col w-full' /> 
+                <ExpertiseCard className='flex flex-col w-full'/>
+            {/* </div> */}
             <CtaCard1 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
             <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
             <CtaCard3 className='mx-4 md:w-5/12 md:self-center md:mb-12'/>

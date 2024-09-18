@@ -71,7 +71,7 @@ const related_products = [
   },
 ];
 
-export default function Home() {
+export default function MarketplaceFeature() {
   return (
     <div className="">
       <Breadcrumb />

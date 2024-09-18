@@ -15,6 +15,8 @@ module.exports = {
         signature: ['agustina', 'sans-serif'],
         sans: ['Urbanist', 'sans-serif'],
         mono: ['Roboto Mono', 'monospace'],
+        syne: ['Syne', 'sans-serif'],
+        urbanist: ['Urbanist', 'sans-serif'],
       },
       screens: {
         xs: '375px',

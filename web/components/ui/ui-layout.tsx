@@ -24,7 +24,7 @@ export function UiLayout({
 
   return (
     <div className="h-full flex flex-col bg-bg items-center w-full overflow-none">
-      <NavbarFeature links={links}/>
+      <NavbarFeature links={links} scrollThreshold={1} blurAmount={400}/>
       <ClusterChecker>
         <AccountChecker />
       </ClusterChecker>

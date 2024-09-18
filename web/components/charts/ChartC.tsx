@@ -121,9 +121,9 @@ const ChartC = (
       </CardHeader>
       <CardContent>
       <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[105px] md:h-[150px] w-full"
-        >
+        config={chartConfig}
+        className="aspect-auto h-[105px] md:h-[220px] w-full"
+      >
           <AreaChart data={filteredData}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
@@ -205,14 +205,14 @@ const ChartC = (
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-lg">
+      {/* <CardFooter className="flex-col items-start gap-2 text-lg">
         <div className="flex gap-2 font-medium leading-none text-secondary">
           Watches
         </div>
         <div className="flex gap-2 leading-none text-muted-foreground text-5xl text-secondary">
           +60%
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   )
 }

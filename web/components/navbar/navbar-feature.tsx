@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import { fadeIn, slideIn } from '@/styles/animations';
 import useWindowWidth from '@/lib/hooks/use-window-width';
 import { getBreakpointsWidth } from '@/lib/utils/helper';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useScroll } from 'framer-motion';
 import DarkModeButton from '@/components/ui/buttons/DarkModeButton';
 import { Button } from '@/components/ui/shadcn/button-ui';
 import NavButton from '@/components/ui/buttons/NavButton';
@@ -34,6 +34,11 @@ import {
 import { publicKey } from '@metaplex-foundation/umi';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { SearchIcon } from 'lucide-react';
+
+interface NavbarProps {
+  scrollThreshold?: number;
+  blurAmount?: number;
+}
 /**
  * Hides the navbar while scrolling down
  * @param {Object} config
@@ -63,6 +68,13 @@ const hideNavWhileScrolling = ({
         }
     };
 };
+
+interface NavbarProps {
+  links: { label: string; path: string }[];
+  scrollThreshold?: number;
+  blurAmount?: number;
+}
+
 type NavItemsProps = {
     href?: string;
     children: React.ReactNode;
@@ -77,7 +89,7 @@ const links2 = [
   { label: 'About Us', path: '/about' },
 ];
 
-const NavItem = ({ href, children, onClick, index, delay }: NavItemsProps) => {
+  const NavItem = ({ href, children, onClick, index, delay }: NavItemsProps) => {
     return (
       <motion.li
         className="group"
@@ -96,26 +108,39 @@ const NavItem = ({ href, children, onClick, index, delay }: NavItemsProps) => {
       </motion.li>
     );
   };
-
-export default function NavbarFeature({
-    links,
-  }: {
-    links: { label: string; path: string }[];
-  })  {
-    const { isDarkMode, toggle } = useTheme();
-    const [navbarCollapsed, setNavbarCollapsed] = useState(false);
-    const [clusterSelectCollapsed, setClusterSelectCollapsed] = useState(true);
-    const [activeLogo, setActiveLogo] = useState('logo_dark');
-    const ANIMATION_DELAY = 0.2;
-    const { cluster } = useCluster();
-    const { publicKey } = useWallet();
-    useEffect(() => {
-      hideNavWhileScrolling({ when: !navbarCollapsed });
-    }, [navbarCollapsed]);
   
-    useEffect(() => {
-    //   setActiveLogo(isDarkMode ? logo_dark : logo_bright);
-    }, [isDarkMode]); 
+  
+const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, blurAmount = 10 }) => {
+  const { isDarkMode } = useTheme();
+  const [navbarCollapsed, setNavbarCollapsed] = useState(false);
+  const { publicKey } = useWallet();
+
+
+  useEffect(() => {
+    const hideNavWhileScrolling = () => {
+      const nav = document.getElementById('navbar');
+      if (!nav) return;
+
+      let prevScrollPos = window.pageYOffset;
+
+      window.onscroll = () => {
+        if (!navbarCollapsed) {
+          const curScrollPos = window.pageYOffset;
+          if (prevScrollPos < curScrollPos) nav.style.top = `-100px`;
+          else nav.style.top = '0';
+          prevScrollPos = curScrollPos;
+        }
+      };
+    };
+
+    hideNavWhileScrolling();
+  }, [navbarCollapsed]);
+    
+  useEffect(() => {
+    hideNavWhileScrolling({ when: !navbarCollapsed });
+  }, [navbarCollapsed]);
+
+
   
     return (
       <Suspense fallback={<div />}>
@@ -153,29 +178,20 @@ export default function NavbarFeature({
           
           
           <div className="dark:hidden relative text-2xl capitalize font-signature text-accent group top-1">
-            <Image
-              src='/logos/artisan-small-logo-black.svg'
-              alt="Logo"
-              width={25}
-              height={25}
-              className="cursor-pointer"
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
+            <Link href="/">
+              <Image
+                src={ isDarkMode ? '/logos/artisan-small-logo-white.svg' : '/logos/artisan-small-logo-black.svg'}
+                alt="Logo"
+                width={25}
+                height={25}
+                className="cursor-pointer"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </Link>
           </div>
-          <div className="hidden dark:flex relative text-2xl capitalize font-signature text-accent group top-1">
-            <Image
-              src='/logos/artisan-small-logo-white.svg'
-              alt="Logo"
-              width={32}
-              height={32}
-              className="cursor-pointer"
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
-          </div>
+          
           {navbarCollapsed && (
             <WalletButton style={{ width: 'fit-content' }} className='z-61'>
               {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : 'Connect Wallet'}
@@ -207,45 +223,29 @@ export default function NavbarFeature({
           initial="hidden"
           animate="show"
           id="navbar"
-          // style={{ backgroundColor: 'red'}}
-          className="hidden md:flex lg:flex 
-            fixed inset-x-0 top-5 right-0 z-50 
-            flex items-end align-center justify-between 
-            px-8 py-4 duration-500 md:px-6 xl:px-12
-            w-10/12 mx-auto          "
+          className="hidden md:flex lg:flex fixed inset-x-0 top-0 right-0 z-50 items-center justify-between px-8 py-4 duration-500 md:px-6 xl:px-12 backdrop-blur-lg w-full"
+          style={{ backgroundColor: '#ffffff0e' }}
         >
-          <div className="flex flex-row gap-3">
-            <div className="dark:hidden relative text-2xl capitalize font-signature text-accent group top-1">
-              <Image
-                src='/logos/artisan-small-logo-black.svg'
-                alt="Logo"
-                width={25}
-                height={25}
-                className="cursor-pointer"
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
+          
+          <div className="flex flex-row gap-6">
+            <div className={`relative text-2xl capitalize font-signature text-accent group top-1 ${isDarkMode ? 'hidden dark:flex' : 'dark:hidden'}`}>
+              <Link href="/">
+                <Image
+                  src={isDarkMode ? '/logos/artisan-small-logo-white.svg' : '/logos/artisan-small-logo-black.svg'}
+                  alt="Logo"
+                  width={32}
+                  height={32}
+                  className="cursor-pointer"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                />
+              </Link>
             </div>
-
-            <div className="hidden dark:flex relative text-2xl capitalize font-signature text-accent group top-1">
-              <Image
-                src='/logos/artisan-small-logo-white.svg'
-                alt="Logo"
-                width={32}
-                height={32}
-                className="cursor-pointer"
-                onClick={() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-              />
-            </div>
-            <div
+            {/* <div
               className={`flex flex-row items-center justify-start px-2 border-2  rounded-xl bg-bg w-1/2`}
             >
               <SearchIcon className="text-slate-400" />
               <Input type="text" placeholder={`Search any fraction, product...`} className="bg-bg text-slate-400 border-none shadow-none" />
-            </div>
+            </div> */}
             
             <div className="flex flex-row  items-center gap-1 text-nowrap">
               <Image
@@ -268,69 +268,22 @@ export default function NavbarFeature({
           {/* Map Links in separate div */}
           <ul className="flex flex-row items-stretch gap-6 list-style-none lg:gap-5 xl:gap-6 md:flex-row md:items-center">
             <Button variant={'ghost'} asChild>
-              <Link className="text-secondary text-nowrap w-full " href='/'>
+              <Link className="text-secondary text-nowrap w-full " href='/about'>
                 About Us
               </Link>
             </Button>
             
             <Button className="bg-bg text-dark-1 border-dark-1 border-2 w-3/4 rounded-xl border-y border-x" asChild>
-              <Link className="text-dark-1 text-nowrap w-full " href='/'>
+              <Link className="text-dark-1 text-nowrap w-full " href='/marketplace'>
                 Explore the Marketplace <ChevronRightIcon />
               </Link>
             </Button>
 
             <LoginDialog />
-            {/* {!clusterSelectCollapsed && (
-                <ClusterUiSelect /> 
-            )} */}
-            {/* <div className="flex flex-col items-center justify-between gap-5 xl:gap-6">
-                <div className="flex flex-row items-center gap-5">
-                    <p className="text-bgSecondary">Current RPC:</p>            
-                    <Button className='bg-secondary text-bgSecondaryText' onClick={()=> setClusterSelectCollapsed(!clusterSelectCollapsed)}>
-                        {cluster.name}
-                    </Button>
-                </div>
-            </div> */}
           </ul>
-          {/* <Button variant={'ghost'}>
-            
-          </Button> */}
-          {/* <DropdownMenu>
-            <DropdownMenuTrigger><GearIcon style={{ width: '30px', height:'30px'}} className="text-secondary" /></DropdownMenuTrigger>
-            <DropdownMenuContent className='bg-bg text-secondary flex flex-col w-full items-center justify-center'> */}
-              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-              {/* <DropdownMenuSeparator /> */}
-              {/* <DropdownMenuItem> */}
-                {/* <div className="flex flex-row items-center gap-5">
-                  <p className="text-bgSecondary">Current RPC:</p>            
-                  <Button className='bg-secondary text-bgSecondaryText' onClick={()=> setClusterSelectCollapsed(!clusterSelectCollapsed)}>
-                      {cluster.name}
-                  </Button>
-                </div> */}
-              {/* </DropdownMenuItem> */}
-              {/* <DropdownMenuItem>
-                <p className="dark:hidden">Light Mode:</p>
-                <p className="hidden dark:flex">Dark Mode:</p>
-                <DarkModeButton
-                  //   onClick={() => (console.log('click'))}
-                  variants={slideIn({
-                      delay: ANIMATION_DELAY + (links.length + 1) / 10,
-                      direction: 'down',
-                  })}
-                  initial="hidden"
-                  animate="show"
-                />
-              </DropdownMenuItem> */}
-              {/* <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem> */}
-              {/* <DropdownMenuItem className='flex flex-col'>
-                {!clusterSelectCollapsed && (
-                  <ClusterUiSelect /> 
-                )}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu> */}
         </motion.header>
       </Suspense>
     );
   };
+
+export default NavbarFeature;

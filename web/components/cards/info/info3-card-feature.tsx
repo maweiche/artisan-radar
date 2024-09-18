@@ -27,7 +27,7 @@ const Card3 = (
         </CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader> */}
-      <CardContent className='py-4 pb-12'>
+      <CardContent className='py-4 pb-12 h-3/4'>
         <p className='text-4xl font-semibold text-slate-400'>
           Expert-curated {" "}
           <span className="text-secondary">
