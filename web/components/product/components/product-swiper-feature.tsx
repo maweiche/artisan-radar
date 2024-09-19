@@ -24,7 +24,7 @@ const ProductSwiper = () => {
   const nextButtonRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="swiper-container relative mb-5">
+    <div className="swiper-container relative mb-5 ">
       {/* Main Swiper */}
       <Swiper
         modules={[Navigation, Thumbs]} // Use navigation and thumbs modules

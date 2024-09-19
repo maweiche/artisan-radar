@@ -322,8 +322,8 @@ const related_products = [
 
 export default function ProductFeature({ params }: { params: { id: string } }) {
   return (
-    <div className="main">
-      <div className="bg-gray-light min-h-screen px-6 py-5 border border-b-gray">
+    <div className="main mt-24 border-red-500 border-red">
+      <div className="bg-gray-light min-h-screen px-6 py-5">
         <div className="max-w-screen-xl mx-auto flex flex-wrap">
           <div className="relative w-full md:px-16 md:w-1/2">
             <ProductSwiper />
