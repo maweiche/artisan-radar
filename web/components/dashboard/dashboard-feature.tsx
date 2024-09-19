@@ -312,7 +312,8 @@
 
 'use client';
 
-import { Suspense, useState, useEffect, useMemo } from 'react';
+import { Suspense, useState, useEffect, useMemo, use } from 'react';
+import { Binoculars } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/shadcn/button-ui';
@@ -330,6 +331,7 @@ const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
 export default function DashboardFeature() {
   const [runTour, setRunTour] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [joyrideStatus, setJoyrideStatus] = useState('idle');
   const { publicKey } = useWallet();
   // useMemo to create a User object we can update as info comes in from our db
   const user = useMemo(() => {
@@ -346,12 +348,6 @@ export default function DashboardFeature() {
     };
   }, []);
 
-  useEffect(() => {
-    setIsMounted(true);
-    // Optional: Set runTour to true after a short delay
-    const timer = setTimeout(() => setRunTour(true), 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const steps = [
     {
@@ -382,7 +378,43 @@ export default function DashboardFeature() {
     if (['finished', 'skipped'].includes(status)) {
       setRunTour(false);
     }
+    if (status === 'finished') {
+      localStorage.setItem('artisanTour', JSON.stringify({ completed: true, date: new Date().toISOString() }));
+    }
+    if(status === 'skipped') {
+      localStorage.setItem('artisanTour', JSON.stringify({ completed: true, date: new Date().toISOString() }));
+    }
+    setJoyrideStatus(status);
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+    
+    // create a localStorage item to track if the user has completed the tour, it needs to be structured as boolean:DateIsoString
+    const artisanTour = localStorage.getItem('artisanTour');
+    if (!artisanTour) {
+      localStorage.setItem('artisanTour', JSON.stringify({ completed: false, date: new Date().toISOString() }));
+      setRunTour(true)
+    } else {
+      const { completed, date } = JSON.parse(artisanTour);
+      if (!completed) {
+        setRunTour(true);
+      }
+
+      // If the tour was completed more than 1 week ago, reset the tour
+      if (completed && new Date(date) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
+        localStorage.setItem('artisanTour', JSON.stringify({ completed: false, date: new Date().toISOString() }));
+        setRunTour(true);
+      }
+
+      // If the tour was completed, set the status to 'finished'
+      if (completed) {
+        setJoyrideStatus('finished');
+        setRunTour(false);
+      }
+    }
+  }
+  , []);
 
   return (
     <Suspense fallback={<div />}>
@@ -414,6 +446,13 @@ export default function DashboardFeature() {
             <CrossCircledIcon />
             <span>Unverified</span>
           </div>
+          {/* Button to activate tour */}
+          <Button
+            onClick={() => setRunTour(true)}
+            className="bg-bg text-secondary rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm md:text-base"
+          >
+            <Binoculars className='w-6 h-6 mr-2' /> Tour
+          </Button>
         </div>
 
         {/* Cards Section */}
