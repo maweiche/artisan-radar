@@ -12,7 +12,7 @@ import {
   ExplorerLink,
 } from '../cluster/cluster-ui';
 import toast, { Toaster } from 'react-hot-toast';
-
+import DashboardNav from '@/components/dashboard/dashboardComponents/DashboardNav';
 export function UiLayout({
   children,
   links,
