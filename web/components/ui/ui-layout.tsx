@@ -20,15 +20,13 @@ export function UiLayout({
   children: ReactNode;
   links: { label: string; path: string }[];
 }) {
-  
-
   return (
     <div className="h-full flex flex-col bg-bg items-center w-full overflow-none">
-      <NavbarFeature links={links} scrollThreshold={1} blurAmount={400}/>
+      <NavbarFeature links={links} scrollThreshold={1} blurAmount={400} />
       <ClusterChecker>
         <AccountChecker />
       </ClusterChecker>
-      <div className="flex-grow mx-4 lg:mx-auto">
+      <div className="flex-grow mx-4 lg:mx-auto w-full">
         <Suspense
           fallback={
             <div className="text-center my-32">

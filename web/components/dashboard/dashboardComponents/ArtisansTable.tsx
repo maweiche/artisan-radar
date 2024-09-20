@@ -89,7 +89,7 @@ const ArtisansTable = () => {
                   <TableCell>
                     <div>${artisan.value.toLocaleString()}</div>
                     <div className="text-sm text-gray-500 flex items-center gap-1">
-                      <span> 1 fraction</span>
+                      <span className="text-nowrap"> 1 fraction</span>
                       <Flame className="w-4" />
                     </div>
                   </TableCell>
