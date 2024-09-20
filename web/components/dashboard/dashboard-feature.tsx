@@ -11,7 +11,7 @@
 //     const [userAssets, setUserAssets] = useState<AssetV1[]>([]);
 //     const [slides, setSlides] = useState(Array.from({ length: 5 }));
 //     const [selected, setSelected] = useState(0);
-    
+
 //     const categories = [
 //         'Watches',
 //         'Cars',
@@ -21,13 +21,12 @@
 //             { userAssets.length > 0 && (
 //               userAssets.map((asset, index) => {
 //                 return (
-//                   <ObjectCard 
+//                   <ObjectCard
 //                     account={new PublicKey(asset!.publicKey)} listingId={asset?.key} key={index}
 //                   />
 //                 )}
 //               ))
 //             }
-
 
 'use client';
 
@@ -38,7 +37,12 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/shadcn/button-ui';
 import { fetchAssets } from '@/components/protocol/protocol-umi-access';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { fetchAssetsByOwner, AssetV1, fetchCollectionV1, CollectionV1 } from '@metaplex-foundation/mpl-core'
+import {
+  fetchAssetsByOwner,
+  AssetV1,
+  fetchCollectionV1,
+  CollectionV1,
+} from '@metaplex-foundation/mpl-core';
 import { Card, CardContent } from '@/components/ui/shadcn/card-ui';
 import { IconCurrencySolana } from '@tabler/icons-react';
 import { CrossCircledIcon, Share1Icon } from '@radix-ui/react-icons';
@@ -71,7 +75,6 @@ export default function DashboardFeature() {
     };
   }, []);
 
-
   const steps = [
     {
       target: '.portfolio-card-1',
@@ -102,27 +105,32 @@ export default function DashboardFeature() {
       setRunTour(false);
     }
     if (status === 'finished') {
-      localStorage.setItem('artisanTour', JSON.stringify({ completed: true, date: new Date().toISOString() }));
+      localStorage.setItem(
+        'artisanTour',
+        JSON.stringify({ completed: true, date: new Date().toISOString() })
+      );
     }
-    if(status === 'skipped') {
-      localStorage.setItem('artisanTour', JSON.stringify({ completed: true, date: new Date().toISOString() }));
+    if (status === 'skipped') {
+      localStorage.setItem(
+        'artisanTour',
+        JSON.stringify({ completed: true, date: new Date().toISOString() })
+      );
     }
     setJoyrideStatus(status);
   };
 
-  async function fetchUserAssets(owner: string){
-    const assets = await fetchAssets(owner);   
-    console.log('user assets', assets);       
+  async function fetchUserAssets(owner: string) {
+    const assets = await fetchAssets(owner);
+    console.log('user assets', assets);
     const listingArray: any = [];
     for (let i = 0; i < assets.length; i++) {
-
       // // if the listing exists already in the listingArray with the same associatedId as the listing.listing, then increase the quantity by 1
       // // else just push the new listing to the listingArray
       // if (listingArray.find((item: any) => item.associatedId === assets[i].listing)) {
       //   const index = listingArray.findIndex((item: any) => item.associatedId === listing.listing);
       //   listingArray[index].quantity += 1;
-      //   continue; 
-      // } 
+      //   continue;
+      // }
       // listingArray.push({
       //   ...assets[i],
       //   associatedId: listing.listing,
@@ -132,17 +140,19 @@ export default function DashboardFeature() {
     }
     console.log('all user assets', listingArray);
     setUserAssets(assets);
-    
-  };
+  }
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     // create a localStorage item to track if the user has completed the tour, it needs to be structured as boolean:DateIsoString
     const artisanTour = localStorage.getItem('artisanTour');
     if (!artisanTour) {
-      localStorage.setItem('artisanTour', JSON.stringify({ completed: false, date: new Date().toISOString() }));
-      setRunTour(true)
+      localStorage.setItem(
+        'artisanTour',
+        JSON.stringify({ completed: false, date: new Date().toISOString() })
+      );
+      setRunTour(true);
     } else {
       const { completed, date } = JSON.parse(artisanTour);
       if (!completed) {
@@ -150,8 +160,14 @@ export default function DashboardFeature() {
       }
 
       // If the tour was completed more than 1 week ago, reset the tour
-      if (completed && new Date(date) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)) {
-        localStorage.setItem('artisanTour', JSON.stringify({ completed: false, date: new Date().toISOString() }));
+      if (
+        completed &&
+        new Date(date) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+      ) {
+        localStorage.setItem(
+          'artisanTour',
+          JSON.stringify({ completed: false, date: new Date().toISOString() })
+        );
         setRunTour(true);
       }
 
@@ -161,14 +177,13 @@ export default function DashboardFeature() {
         setRunTour(false);
       }
     }
-  }
-  , []);
+  }, []);
 
   useEffect(() => {
-    if(publicKey) {
+    if (publicKey) {
       fetchUserAssets(publicKey.toBase58());
     }
-  }, [publicKey])
+  }, [publicKey]);
 
   return (
     <Suspense fallback={<div />}>
@@ -191,22 +206,23 @@ export default function DashboardFeature() {
         {/* Header Section */}
         <div className="flex flex-row  md:flex-row items-start md:items-center text-secondary gap-2 md:gap-4 w-full md:w-11/12">
           <motion.h1 className="text-3xl md:text-5xl font-semibold">
-            Welcome back 
-            <span className="opacity-[.4]">
-              {user.name}
-            </span>
+            Welcome back
+            <span className="opacity-[.4]">{user.name}</span>
           </motion.h1>
-          <div className="flex items-center gap-2 text-[#fff] bg-[#3F3F46] rounded-lg px-3 py-[6px] text-sm md:text-base">
-            <CrossCircledIcon />
-            <span>Unverified</span>
+          <div className="flex flex-col-reverse items-start md:flex-row md:items-center gap-2">
+            {' '}
+            <div className="flex items-center gap-2 text-[#fff] bg-[#3F3F46] rounded-lg px-3 py-[6px] text-sm md:text-base">
+              <CrossCircledIcon />
+              <span>Unverified</span>
+            </div>
+            {/* Button to activate tour */}
+            <Button
+              onClick={() => setRunTour(true)}
+              className="bg-bg text-secondary rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm md:text-base"
+            >
+              <Binoculars className="w-6 h-6 mr-2" /> Tour
+            </Button>
           </div>
-          {/* Button to activate tour */}
-          <Button
-            onClick={() => setRunTour(true)}
-            className="bg-bg text-secondary rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm md:text-base"
-          >
-            <Binoculars className='w-6 h-6 mr-2' /> Tour
-          </Button>
         </div>
 
         {/* Cards Section */}
@@ -228,7 +244,7 @@ export default function DashboardFeature() {
                     $1000
                   </motion.h1>
                 </div>
-                <motion.p className="text-xs md:text-md text-secondary text-zinc-700 dark:text-zinc-300">
+                <motion.p className="text-xs md:text-md text-secondary text-zinc-700 dark:text-zinc-300 mb-1">
                   $100 USDC
                 </motion.p>
               </div>
