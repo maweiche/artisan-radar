@@ -113,13 +113,20 @@ export default function HomeFeature() {
             >  
                 <PerformanceCard />
                 <OfferCard />
-                <DesignedCard />
             </Wrapper>
             
             <div className='flex flex-col w-full mb-12 items-top justify-center align-top md:flex-row lg:flex-row'>
                 <Card2 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
                 <Card3 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
             </div>
+            
+            <Wrapper
+                // id="hero"
+                className='bg-bg flex flex-col items-center justify-between'
+                style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
+            > 
+                <DesignedCard />
+            </Wrapper>
             
             {/* <div className='flex flex-col md:items-start items-center md:flex-row justify-center gap-12 align-top'> */}
                 <CollectionsCard  className='flex flex-col w-full' /> 
