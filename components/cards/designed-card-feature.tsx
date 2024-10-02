@@ -49,9 +49,9 @@ const DesignedCard = () => {
         </div>
         <div className="mt-48 space-y-2">
           <h2 className="text-xl font-bold">Designed for everyone.</h2>
-          <p className="text-primary text-sm">
-            Connect with your email, pay with your card. It's that simple.
-          </p>
+            <p className="text-primary text-sm">
+            Connect with your email, pay with your card. It&apos;s that simple.
+            </p>
         </div>
       </CardContent>
       <CardFooter className="bg-gray-800 p-4">
