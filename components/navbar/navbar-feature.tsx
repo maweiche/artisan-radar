@@ -181,10 +181,16 @@ const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, bl
             />
           </div>
           <div
-            className={`bg-bg opacity-50 fixed -z-100 inset-0 bg-opacity-50 duration-500 h-screen ${
+            className={`bg-white fixed -z-100 inset-0 duration-500 h-screen ${
               !navbarCollapsed ? 'hidden' : ''
             }`}
-          ></div>
+          >
+            <div
+              className={`bg-[url(/logos/logo-blur.svg)] bg-no-repeat bg-cover w-full opacity-25 fixed -z-100 inset-0 duration-500 h-screen ${
+                !navbarCollapsed ? 'hidden' : ''
+              }`}
+            ></div>
+          </div>
           
           
           <div className="dark:hidden relative text-2xl capitalize font-signature text-accent group top-1">
@@ -208,7 +214,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, bl
               setNavbarCollapsed((prev) => !prev);
             }}
             navbarCollapsed={navbarCollapsed}
-            className="text-secondary"
+            className="text-primary"
           />
     
           {navbarCollapsed && (

@@ -98,10 +98,10 @@ export default function LoginFeature({
                         <Button className="bg-transparent w-3/4 text-secondary rounded-full border-2 border-secondary">
                             Read the white paper 
                         </Button>
-                        <Button className="bg-secondary text-bgsecondary w-3/4 rounded-full">
+                        <Button className="bg-secondary text-primary w-3/4 rounded-full">
                             Explore the Marketplace
                         </Button>
-                        {!clusterSelectCollapsed && (
+                        {/* {!clusterSelectCollapsed && (
                             <ClusterUiSelect /> 
                         )}
                         <div className="flex flex-col items-center justify-between gap-5 xl:gap-6">
@@ -111,7 +111,7 @@ export default function LoginFeature({
                                     {cluster.name}
                                 </Button>
                             </div>
-                        </div>
+                        </div> */}
                     </ul>
                     <CardFooter className="flex flex-row w-full items-center gap-8 items-center justify-between ">
                         <DarkModeButton

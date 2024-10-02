@@ -62,7 +62,7 @@ const CollectionsCard = (
                       />
                     </Button>
                     <div className={styles.badges}>
-                      <p className="bg-secondary px-2 rounded-full text-secondary text-md">
+                      <p className="bg-secondary px-2 rounded-full text-primary text-md">
                         3 assets available
                       </p>
                       <Image
@@ -82,7 +82,7 @@ const CollectionsCard = (
                     />
                   </div>
                   <div className={styles.footer}>
-                    <Button className='bg-secondary text-secondary' variant="default">Check the whole car collection</Button>
+                    <Button className='bg-secondary text-primary' variant="default">Check the whole car collection</Button>
                     <Progress value={33} className="w-[60%]" />
                   </div>
                 </CardContent>
@@ -113,7 +113,7 @@ const CollectionsCard = (
                       />
                     </Button>
                     <div className={styles.badges}>
-                      <p className="bg-secondary px-2 rounded-full text-secondary text-md">
+                      <p className="bg-secondary px-2 rounded-full text-primary text-md">
                         3 assets available
                       </p>
                       <Image
@@ -133,7 +133,7 @@ const CollectionsCard = (
                     />
                   </div>
                   <div className={styles.footer}>
-                    <Button className='bg-secondary text-secondary' variant="default">Check the whole car collection</Button>
+                    <Button className='bg-secondary text-primary' variant="default">Check the whole car collection</Button>
                     <Progress value={33} className="w-[60%]" />
                   </div>
                 </CardContent>

@@ -95,7 +95,7 @@ export default function DashboardNav() {
       {isMobile && (
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="text-secondary md:hidden"
+          className="text-primary md:hidden"
         >
           {mobileMenuOpen ? (
             <X className="h-6 w-6" />

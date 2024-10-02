@@ -13,6 +13,7 @@ import { CollectionsCard, ExpertiseCard } from '@/components/cards';
 import { Badge } from '@/components/ui/shadcn/badge-ui';
 import PerformanceCard from '../cards/performance-card-feature';
 import OfferCard from '../cards/offer-card-feature';
+import DesignedCard from '../cards/designed-card-feature';
 export default function HomeFeature() {
     const [selected, setSelected] = useState(0);
     const categories = [
@@ -83,7 +84,7 @@ export default function HomeFeature() {
                             type='button'
                             onClick={() => setSelected(index)}
                             className={
-                                selected === index ? "bg-secondary text-secondary border-2 border-secondary rounded-full" : "bg-secondary text-secondary border-2 border-secondary rounded-full z-20"
+                                selected === index ? "bg-primary text-secondary border-2 border-secondary rounded-full" : "bg-secondary text-primary border-2 border-secondary rounded-full z-20"
                             }
                         >
                             {category}
@@ -112,12 +113,14 @@ export default function HomeFeature() {
             >  
                 <PerformanceCard />
                 <OfferCard />
+                <DesignedCard />
             </Wrapper>
             
             <div className='flex flex-col w-full mb-12 items-top justify-center align-top md:flex-row lg:flex-row'>
                 <Card2 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
                 <Card3 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
             </div>
+            
             {/* <div className='flex flex-col md:items-start items-center md:flex-row justify-center gap-12 align-top'> */}
                 <CollectionsCard  className='flex flex-col w-full' /> 
                 <ExpertiseCard className='flex flex-col w-full'/>

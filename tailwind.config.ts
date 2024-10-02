@@ -47,7 +47,7 @@ const config: Config = {
           'dark-foreground': '#FFFFFF'
         },
         secondary: {
-          DEFAULT: '#00000',
+          DEFAULT: '#000000',
           foreground: '#4A4A4A',
           dark: '#3A3633',
           'dark-foreground': '#E0D8D0'

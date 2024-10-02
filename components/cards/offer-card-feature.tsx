@@ -19,12 +19,10 @@ const OfferCard = () => {
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
           <h2 className="text-2xl font-bold mb-2">
-            We offer the opportunity to access these markets through
-            digitization with a starting investment of just $100.
+            Access exclusive luxury markets digitally, starting at just $100. 
           </h2>
           <p className="text-gray-300 mb-4">
-            Luxury Markets and Vintage collections tend to appreciate over time, yet they
-            often remain out of reach for the majority of individuals.
+            Invest in elite assets that appreciate over time, now within your reach.
           </p>
         </div>
       </CardContent>
