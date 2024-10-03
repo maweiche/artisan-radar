@@ -13,24 +13,25 @@ const InvitationCTA = () => {
             <h2 className="text-2xl font-bold mb-4">
               Invite your friends & earn your reward!
             </h2>
-            <p className="text-zinc-400 text-sm mb-6">
-              You and your friend will both receive $10 when your friend invests
+            <p className="text-primary text-md mb-6 w-3/4">
+              Receive $10 when a friend invests
               in their first Artisan offering.
             </p>
             <Button className="mb-6 rounded-xl bg-zinc-900 text-[#fff] dark:bg-zinc-700">
               Join the Artisan Referral Program
             </Button>
-            <p className="text-zinc-500 text-xs mt-auto">
+            <p className="text-primary text-xs mt-auto">
               Learn more about the Referral program
             </p>
           </div>
-
+          {/* overlay div so text is readable */}
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-secondary -z-10 opacity-50" />
           <Image
-            src="/assets/dashboard/invitation-card-bg.svg"
+            src="/products/car2.svg"
             alt="Referral program illustration"
             width={100}
             height={300}
-            className="absolute top-0 right-[-40%] h-full w-full "
+            className="absolute top-0 right-[-60%] -z-20 h-full w-full "
           />
         </div>
       </CardContent>

@@ -23,7 +23,7 @@ import Link from 'next/link';
 import DarkModeButton from '@/components/ui/buttons/DarkModeButton';
 import { Button } from '@/components/ui/shadcn/button-ui';
 import toast from 'react-hot-toast';
-import { useTheme } from '@/lib/hooks/use-theme';
+import { useTheme } from '@/hooks/use-theme';
 import { fadeIn, slideIn } from '@/styles/animations';
 import { motion } from 'framer-motion';
 import { Label } from '@/components/ui/shadcn/label-ui';

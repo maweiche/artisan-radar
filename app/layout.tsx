@@ -3,8 +3,10 @@ import { UiLayout } from '@/components/ui/ui-layout';
 import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
 import { ReactQueryProvider } from './react-query-provider';
-import ThemeProvider from '@/lib/hooks/use-theme';
-import fontVariables from '@/lib/utils/fonts';
+import ApolloWrapper from "@/components/apollo/apollo-provider";
+import { AuthProvider } from '@/components/apollo/auth-context-provider';
+import ThemeProvider from '@/hooks/use-theme';
+import fontVariables from '@/utils/fonts';
 
 export const metadata = {
   title: 'artsn-ui',
@@ -32,13 +34,17 @@ export default function RootLayout({
       </head>
       <body className={`${fontVariables} bg-bg`}>
         <ReactQueryProvider>
-          <ClusterProvider>
-            <SolanaProvider>
-              <ThemeProvider>
-                <UiLayout links={links}>{children}</UiLayout>
-              </ThemeProvider>
-            </SolanaProvider>
-          </ClusterProvider>
+          <ApolloWrapper>
+            <AuthProvider>
+              <ClusterProvider>
+                <SolanaProvider>
+                  <ThemeProvider>
+                    <UiLayout links={links}>{children}</UiLayout>
+                  </ThemeProvider>
+                </SolanaProvider>
+              </ClusterProvider>
+            </AuthProvider>
+          </ApolloWrapper>
         </ReactQueryProvider>
       </body>
     </html>

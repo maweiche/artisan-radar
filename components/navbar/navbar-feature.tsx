@@ -1,6 +1,6 @@
 'use client'
 import { Suspense, useEffect, useState } from 'react';
-import { useTheme } from '@/lib/hooks/use-theme';
+import { useTheme } from '@/hooks/use-theme';
 import { WalletButton } from '../solana/solana-provider';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
@@ -8,8 +8,8 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/shadcn/input-ui';
 import { usePathname } from 'next/navigation';
 import { fadeIn, slideIn } from '@/styles/animations';
-import useWindowWidth from '@/lib/hooks/use-window-width';
-import { getBreakpointsWidth } from '@/lib/utils/helper';
+import useWindowWidth from '@/hooks/use-window-width';
+import { getBreakpointsWidth } from '@/utils/helper';
 import { motion, useMotionValue, useTransform, useScroll } from 'framer-motion';
 import DarkModeButton from '@/components/ui/buttons/DarkModeButton';
 import { Button } from '@/components/ui/shadcn/button-ui';

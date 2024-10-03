@@ -29,7 +29,7 @@ const PortfolioGraph = () => {
   return (
     <Card className=" rounded-3xl w-full bg-bg text-secondary border-zinc-300 dark:border-zinc-700">
       <CardContent className="p-6">
-        <div className="flex justify-between gap-10 items-center mb-6">
+        <div className="flex flex-col-reverse md:flex-row justify-between gap-4 md:gap-10 items-start md:items-center mb-6">
           <h2 className="text-xl font-semibold text-secondary ">
             Wallet Value
           </h2>
