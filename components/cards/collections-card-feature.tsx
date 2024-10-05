@@ -38,7 +38,7 @@ const CollectionsCard = (
   }, [CarouselItem]);
   return (
     <div className={`${props.className}`}>
-      <Badge variant="outline" className="w-fit px-4 items-center flex flex-row self-center text-2xl rounded-full">The Collections</Badge>
+      <Badge variant="outline" className="w-fit px-4 items-center flex flex-row self-center text-lg rounded-full">The Collections</Badge>
       <div className="swiper-container hidden md:block relative mb-5">
         <Swiper
           onSwiper={setThumbsSwiper} // Store the instance of the thumbs swiper in the state
