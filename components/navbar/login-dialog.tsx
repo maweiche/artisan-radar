@@ -15,6 +15,7 @@ import { countries } from '@/data/countries';
 import { UPDATE_USER } from '@/graphql/mutations';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/navigation';
+import { useWallet } from '@solana/wallet-adapter-react';
 // import { EmailInputForm, ProfileInitForm, SelectLikesForm } from '@/components/ui/shadcn/form-ui';
 
 interface DialogProps {
@@ -30,55 +31,13 @@ let defaultSolanaAdapters: IAdapter<unknown>[] = [];
 const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
     const [slide, setSlide] = useState(_isOpen ? 2 : 1);
     const [isOpen, setIsOpen] = useState(_isOpen || false);
+    const [userWallet, setUserWallet] = useState<string | null>(null);
     const { user, checkAuth, loginExistingUser } = useAuth();
     const [updateUser] = useMutation(UPDATE_USER);
     const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
     const [provider, setProvider] = useState<IProvider | null>(null);
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
-    const handleNext = () => setSlide(prev => Math.min(prev + 1, 4));
-    const handleBack = () => setSlide(prev => Math.max(prev - 1, 1));
-    const router = useRouter();
-    const dialogProps: DialogProps = { handleNext, handleBack, handleClose };
-
-    const [loginData, setLoginData] = useState({
-        _id: '',
-        email: '',
-        publicKey: '',
-        profilePictureUrl: '',
-        authProvider: '',
-    });
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        country: 'CH',
-        acceptTerms: '',
-        plan: ''
-    });
-
-    const getLocalStorage = () => {
-        if (typeof window !== 'undefined') {
-            return window.localStorage;
-        }
-        return null;
-    };
-      
-    const handleInputChange = (e: any) => {
-        const { name, value, type, checked } = e.target;
-        setFormData(( prevData: any )=> {
-            const newData = {
-                ...prevData,
-                [name]: type === 'checkbox' ? Date.now() : value
-            };
-            // Save to localStorage (client-side only)
-            const storage = getLocalStorage();
-            if (storage) {
-                storage.setItem('signupFormData', JSON.stringify(newData));
-            }
-            return newData;
-        });
-    };
-
     const handleUpdateUser = async() => {
         try {
             console.log('user ->', user);
@@ -117,6 +76,53 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
             }
         }
     };
+    const handleNext = () => { 
+        handleUpdateUser();
+        setSlide(prev => Math.min(prev + 1, 4))
+    };
+    const handleBack = () => setSlide(prev => Math.max(prev - 1, 1));
+    const router = useRouter();
+    const dialogProps: DialogProps = { handleNext, handleBack, handleClose };
+    const { publicKey } = useWallet();
+    const [loginData, setLoginData] = useState({
+        _id: '',
+        email: '',
+        publicKey: '',
+        profilePictureUrl: '',
+        authProvider: '',
+    });
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        country: 'CH',
+        acceptTerms: '',
+        plan: ''
+    });
+
+    const getLocalStorage = () => {
+        if (typeof window !== 'undefined') {
+            return window.localStorage;
+        }
+        return null;
+    };
+      
+    const handleInputChange = (e: any) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(( prevData: any )=> {
+            const newData = {
+                ...prevData,
+                [name]: type === 'checkbox' ? Date.now() : value
+            };
+            // Save to localStorage (client-side only)
+            const storage = getLocalStorage();
+            if (storage) {
+                storage.setItem('signupFormData', JSON.stringify(newData));
+            }
+            return newData;
+        });
+    };
+
+   
     const init = async () => {
         try {
           const chainConfig = {
@@ -156,6 +162,16 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
   
           await web3auth.init();
           setProvider(web3auth.provider);
+
+          if (web3auth.provider && web3auth.connected) {
+            console.log('Connected to web3auth');
+            console.log('info:', web3auth);
+            const rpc = new RPC(web3auth.provider);
+            const accounts = await rpc.getAccounts();
+            const publicKey = accounts[0];
+            console.log('publicKey:', publicKey);
+            setUserWallet(publicKey);
+          }
           
         } catch (error) {
           console.error(error);
@@ -165,13 +181,35 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
     
 
     const loginWithGoogle = async () => {
-        
-        await init();
+        if(!web3auth){
+            await init();
+        }
         const web3authProvider = await web3auth!.connectTo(WALLET_ADAPTERS.AUTH, {
           loginProvider: "google",
         });
 
     };
+
+
+    useEffect(() => {
+        const storage = getLocalStorage();
+        if (storage) {
+            const data = storage.getItem('signupFormData');
+            if (data) {
+                setFormData(JSON.parse(data));
+            }
+        }
+        if (!web3auth && !publicKey) {
+            init()
+        }
+        if (publicKey && !web3auth) {
+            setUserWallet(publicKey.toBase58());
+        }
+
+        if (publicKey && web3auth) {
+            alert('two login methods detected, please refresh page and only choose one');
+        }
+    }, [web3auth, publicKey]);
 
 
     const Dialog1: React.FC<DialogProps> = ({ handleNext, handleBack }) => (
@@ -200,7 +238,7 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
                         <span className='px-4 text-gray-500'>OR</span>
                         <div className='flex-grow h-px bg-gray-300'></div>
                     </div>
-                    <Button onClick={handleNext} variant={'secondary'} className='w-full rounded-full'>Create account</Button>
+                    <Button onClick={handleNext} variant={'secondary'} className='w-full rounded-full hover:bg-primary hover:text-secondary hover:border-solid hover:border-2 hover:border-secondary hover:animate-pulse'>Create account</Button>
                 </CardContent>
                 <CardFooter className='bg-bg flex flex-col gap-2 rounded-b-xl'>
                     By continuing to use the Artisan you accept terms and condition
@@ -252,8 +290,8 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
                             <input type='checkbox' name='acceptTerms' onChange={handleInputChange} />
                             <p className='text-sm'>I accept the terms and conditions</p>
                         </div>
-                        <Button onClick={handleBack} className='rounded-full'>Previous</Button>
-                        <Button onClick={handleNext} className='rounded-full'>Continue</Button>
+                        <Button onClick={handleBack} className='rounded-full hover:bg-secondary hover:text-primary'>Previous</Button>
+                        <Button onClick={handleNext} className='rounded-full hover:bg-secondary hover:text-primary'>Continue</Button>
                     </form>
                 </CardContent>                
             </Card>      
@@ -288,13 +326,14 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
                             </WalletMultiButton>
                             <Button
                                 onClick={handleNext}
-                                className='w-full rounded-full border border-secondary'
+                                className='w-full rounded-full border-none hover:bg-secondary hover:text-primary'
+                                style={{ boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}
                             >
                                 Sign in with Google
                             </Button>
                         </div>
-                        <Button onClick={handleBack} className='rounded-full'>Previous</Button>
-                        <Button onClick={handleNext} className='rounded-full'>Continue</Button>
+                        <Button onClick={handleBack} className='rounded-full hover:bg-secondary hover:text-primary'>Previous</Button>
+                        <Button onClick={handleNext} className='rounded-full hover:bg-secondary hover:text-primary'>Continue</Button>
                     </form>
                 </CardContent>
             </Card>      
@@ -317,8 +356,8 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
                 </CardHeader>
                 <CardContent className='bg-bg flex flex-col gap-2 rounded-b-xl'>
                     <div className='flex flex-row gap-4 w-full justify-center items-center'>
-                        <Button onClick={handleBack} className='text-secondary w-1/4 rounded-lg'><ChevronLeftIcon width={150} height={150} /> Return</Button>
-                        <Button onClick={()=>{router.push('/dashboard'), setSlide(1), setIsOpen(false)}} variant={'secondary'} className='text-primary w-3/4 rounded-lg'>Enter the App</Button>
+                        <Button onClick={handleBack} className='text-secondary w-1/4 rounded-lg hover:bg-secondary hover:text-primary'><ChevronLeftIcon width={150} height={150} /> Return</Button>
+                        <Button onClick={()=>{router.push('/dashboard'), setSlide(1), setIsOpen(false)}} variant={'secondary'} className='text-primary w-3/4 rounded-lg hover:bg-secondary hover:text-primary'>Enter the App</Button>
                     </div>
                 </CardContent>                
             </Card>      

@@ -240,6 +240,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
           const _isRegistered = await checkRegistration({ variables: { email: user.email } });
           
           console.log('is registered ->', _isRegistered.data.isUserRegistered);
+          router.push('/?register=true');
           if (_isRegistered.data.isUserRegistered) {
               console.log('user is registered logging in with userObject', userObject);
               await loginExistingUser({ email: userObject.email, publicKey: userObject.publicKey });
