@@ -84,8 +84,8 @@ const WaitlistSignup = (
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className={`${props.className} text-primary`}>
-                    <EnvelopeClosedIcon className='w-6 h-6' />Join the waitlist!
+                <Button className='w-full sm:w-auto px-6 py-2 rounded-lg border border-1-solid border-black' variant='default'>
+                    <EnvelopeClosedIcon className='w-6 h-6 mr-2' />Join the waitlist!
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[screen] bg-bg">

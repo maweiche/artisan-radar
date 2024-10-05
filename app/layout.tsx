@@ -25,12 +25,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="w-full h-full">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"></link>
       </head>
       <body className={`${fontVariables} bg-bg`}>
         <ReactQueryProvider>
@@ -39,7 +40,9 @@ export default function RootLayout({
               <ClusterProvider>
                 <SolanaProvider>
                   <ThemeProvider>
-                    <UiLayout links={links}>{children}</UiLayout>
+                    <div className="max-w-full overflow-x-hidden">
+                      <UiLayout links={links}>{children}</UiLayout>
+                    </div>
                   </ThemeProvider>
                 </SolanaProvider>
               </ClusterProvider>

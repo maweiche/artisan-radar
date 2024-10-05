@@ -12,26 +12,25 @@ interface DefaultProps {
   className?: string;
 }
 
-const CtaCard1 = (
-  props: DefaultProps
-) => {
+const CtaCard1 = (props: DefaultProps) => {
   return (
-    <Card className={`${props.className}`}>
-      <CardContent className='flex flex-col py-4 pb-12 gap-4 md:items-center'>
-        <p className='text-2xl text-secondary'>
-          Join the waitlist:
-        </p>
-        <p className='text-2xl text-secondary'>
-          <span className='italic text-slate-500 font-light'>Priority</span>  access & <span className='italic text-slate-500 font-light'>exclusive</span> updates
+    <Card className={`relative overflow-hidden ${props.className}`}>
+      <div className="absolute inset-0 bg-[url('/assets/home/logo-vector.svg')] bg-contain bg-no-repeat bg-right opacity-100" />
+      <CardContent className='relative z-10 flex flex-col py-8 gap-4'>
+        <h2 className='text-3xl font-bold'>
+          Gain <span className='italic'>priority</span> access by<br />joining the waitlist
+        </h2>
+        <p className='text-sm text-gray-600'>
+          Get Updated And Discover All<br />The News in The Artisan
         </p>
       </CardContent>
-      <CardFooter className="flex-col gap-8 items-start md:items-center">
-        <WaitlistSignup className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary'/>
-        <Button asChild className='w-3/4 gap-6 rounded-xl text-secondary border-solid border-2 border-secondary' variant='default'>
-          <Link href={'https://x.com/ArtsnFi'} passHref target='_blank'>
-            <TwitterLogoIcon className='w-6 h-6' />
-            Follow on Twitter
-          </Link>
+      <CardFooter className="relative z-10 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        {/* <Button className='w-full sm:w-auto px-6 py-2 rounded-full bg-black text-white hover:bg-gray-800' variant='default'>
+          Join the waitlist now
+        </Button> */}
+        <WaitlistSignup />
+        <Button className='w-full sm:w-auto py-2 rounded-lg bg-white text-black border border-black hover:bg-gray-100' variant='outline'>
+          Join Discord Community
         </Button>
       </CardFooter>
     </Card>

@@ -1,79 +1,48 @@
 'use client';
-import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/shadcn/card-ui"
+import { Card, CardContent } from "@/components/ui/shadcn/card-ui"
 import { Button } from "@/components/ui/shadcn/button-ui"
-import { EnvelopeClosedIcon, TwitterLogoIcon } from '@radix-ui/react-icons'
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
- import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/shadcn/form-ui"
 import { Input } from "@/components/ui/shadcn/input-ui"
-import WaitlistSignup from "@/components/waitlist/waitlist-ui";
- 
-const formSchema = z.object({
-  username: z.string().min(3, {
-    message: "Must be a valid email.",
-  }),
-})
+import { useState } from 'react';
 
 interface DefaultProps {
   className?: string;
 }
 
-const CtaCard3 = (
-  props: DefaultProps
-) => {
+const CtaCard3 = (props: DefaultProps) => {
+  const [email, setEmail] = useState('');
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  })
- 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
-  }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Submitted email:', email);
+    setEmail('');
+  };
+
   return (
-    <Card
-        style={{ width:'100vw', alignSelf: 'center' }}
-        className={`${props.className} rounded-none flex flex-col p-4 items-center bg-zinc-200`}
-    >
-      {/* <CardHeader>
-        <CardTitle>
-          TOTAL VALUE
-        </CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader> */}
-      <CardContent className='flex flex-col py-4 pb-12 gap-8 items-center'>
-        <p className='text-6xl text-center'>
-            <span className='italic font-light'>Stay</span> updated
-        </p>
-        <p className='text-2xl text-slate-500'>
-          Get the latest updates and features from Artisan
-        </p>
+    <Card className={`${props.className} w-full flex flex-col h-72 rounded-none bg-bg justify-center align-center border-none shadow-none px-12`} style={{ borderTop: 'solid 1px gray', borderBottom: 'solid 1px gray'}}>
+      <CardContent className='w-full flex flex-col md:flex-row items-center justify-between px-12'>
+          <div className="flex flex-col w-2/5 text-wrap">
+            <h2 className="text-5xl lg:text-6xl font-cormorant mb-4">
+              <span className="italic" style={{ fontWeight: '100' }}>Stay</span> updated
+            </h2>
+            <p className="text-base text-gray-600">
+              Stay aware of everything happening in Artisan's world and all the newest features
+            </p>
+          </div>
+          <form onSubmit={handleSubmit} className="flex flex-col w-2/5">
+            <div className="flex">
+              <Input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-grow rounded-l-full border-r-0 bg-gray-100 focus:ring-0 focus:border-gray-300"
+              />
+              <Button type="submit" className="rounded-r-full bg-black text-white hover:bg-gray-800 px-8">
+                Submit
+              </Button>
+            </div>
+          </form>
       </CardContent>
-      <CardFooter className="flex-col w-full items-center gap-8 items-start">
-        <WaitlistSignup className='bg-secondary w-1/3 min-w-fit text-bgsecondary text-2xl gap-8 rounded-full self-center'/>
-      </CardFooter>
     </Card>
   )
 }

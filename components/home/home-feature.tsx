@@ -133,8 +133,8 @@ export default function HomeFeature() {
                 <ExpertiseCard className='flex flex-col w-full'/>
             {/* </div> */}
             <CtaCard1 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
-            <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
-            <CtaCard3 className='mx-4 md:w-5/12 md:self-center md:mb-12'/>
+            {/* <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/> */}
+            <CtaCard3 className='md:self-center'/>
             {/* <CtaCard4 /> */}
         </div>
     )

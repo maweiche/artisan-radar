@@ -25,11 +25,16 @@ const config: Config = {
         syne: ['Syne', 'sans-serif'],
         urbanist: ['Urbanist', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
+        cormorant: ['Cormorant Infant', 'serif'],
       },
      
       colors: {
+        bg: {
+          DEFAULT: '#F9F9FA',
+          dark: '#1E1B19'
+        },
         background: {
-          DEFAULT: '#FCF8F2',
+          DEFAULT: '#F9F9FA',
           dark: '#1E1B19'
         },
         footerBackground: {
