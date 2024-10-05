@@ -2,93 +2,82 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import * as z from 'zod';
 import { Button } from "@/components/ui/shadcn/button-ui";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/shadcn/form-ui";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/shadcn/form-ui";
 import { Input } from "@/components/ui/shadcn/input-ui";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/shadcn/radio-group-ui";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/shadcn/select-ui";
-import { Checkbox } from "@/components/ui/shadcn/checkbox-ui";
 import { useToast } from '@/hooks/use-toast';
-import { addToWaitlist } from "@/hooks/add-to-waitlist";
+import { useAddToWaitlist } from "@/hooks/add-to-waitlist";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/shadcn/dialog-ui"
 
-interface DefaultProps {
-    className?: string;
-}
-
 const FormSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters." }),
     email: z.string().email({ message: "Invalid email address." }),
-    interest: z.enum(["Watches", "Jewelry", "Cars", "Antiques", "All"]),
-    vipAccess: z.boolean(),
-    referOthers: z.boolean(),
+    userType: z.enum(["Seller", "Investor", "Both"]),
+    interest: z.enum(["watches", "cars", "diamonds", "other"]),
+    vipAccess: z.enum(["Yes", "No"]),
+    referOthers: z.enum(["Yes", "No"]),
     updatePreference: z.enum(["Updates", "Launch"]),
+    blockchainFamiliarity: z.enum(["Beginner", "Intermediate", "Expert"])
 });
 
 type FormValues = z.infer<typeof FormSchema>;
 
-const WaitlistSignup = (
-    props: DefaultProps
-) => {
+export default function WaitlistSignup() {
     const { toast } = useToast();
-    
+    const { addToWaitlist, isLoading, error } = useAddToWaitlist();
     const form = useForm<FormValues>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
           name: "",
           email: "",
-          interest: "Watches",
-          vipAccess: false,
-          referOthers: false,
+          userType: "Investor",
+          interest: "watches",
+          vipAccess: "No",
+          referOthers: "No",
           updatePreference: "Updates",
+          blockchainFamiliarity: "Beginner"
         },
     });
 
     const onSubmit = async (_data: z.infer<typeof FormSchema>) => {
-    const { name, email,  interest, vipAccess, referOthers, updatePreference,  } = _data;
-    const res = await addToWaitlist(
-        name,
-        email,
-        interest,
-        vipAccess,
-        referOthers,
-        updatePreference,
-    );
-    if (res.status === 200) {
-        toast({
-            title: "Success!",
-            description: "You've been added to the waitlist",
-            // action: (
-            //   <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
-            // ),
-        })
+        const transformedData = {
+            ..._data,
+            vipAccess: _data.vipAccess === "Yes",
+            referOthers: _data.referOthers === "Yes"
+        };
+        const res = await addToWaitlist(transformedData);
+        if (res.status === 200) {
+            console.log('Waitlist response SUCC:', res);
+            toast({
+                title: "Success!",
+                description: "You've been added to the waitlist",
+            })
+            form.reset();
         } else {
-        toast({
-            title: "Error",
-            description: "There was an error adding you to the waitlist",
-        })
+            toast({
+                title: "Error",
+                description: "There was an error adding you to the waitlist",
+            })
         }
     } 
 
-
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <Button className='w-full sm:w-auto px-6 py-2 rounded-lg border border-1-solid border-black' variant='default'>
-                    <EnvelopeClosedIcon className='w-6 h-6 mr-2' />Join the waitlist!
+            <DialogTrigger>
+                <Button variant={'outline'} className='p-4 border-black'>
+                    Join the Waitlist
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[screen] bg-bg">
+            <DialogContent className="sm:max-w-[screen]">
                 <DialogHeader>
                 <DialogTitle>Join the Waitlist!</DialogTitle>
                 <DialogDescription>
@@ -96,30 +85,52 @@ const WaitlistSignup = (
                 </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Your name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Your name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
                         <FormField
                             control={form.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="your@email.com" {...field} />
-                                </FormControl>
-                                <FormMessage />
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="your@email.com" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="userType"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>What kind of user are you?</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select user type" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Seller">Seller</SelectItem>
+                                            <SelectItem value="Investor">Investor</SelectItem>
+                                            <SelectItem value="Both">Both</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -128,22 +139,21 @@ const WaitlistSignup = (
                             name="interest"
                             render={({ field }) => (
                                 <FormItem>
-                                <FormLabel>What are you most interested in?</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select your main interest" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                    <SelectItem value="Registering IP">Registering IP</SelectItem>
-                                    <SelectItem value="Monetizing artwork">Monetizing artwork</SelectItem>
-                                    <SelectItem value="Discovering creators">Discovering creators</SelectItem>
-                                    <SelectItem value="Supporting artists">Supporting artists</SelectItem>
-                                    <SelectItem value="Collaborating">Collaborating</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
+                                    <FormLabel>What are you most interested in?</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your main interest" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="watches">Watches</SelectItem>
+                                            <SelectItem value="cars">Cars</SelectItem>
+                                            <SelectItem value="diamonds">Diamonds</SelectItem>
+                                            <SelectItem value="other">Other</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -151,18 +161,20 @@ const WaitlistSignup = (
                             control={form.control}
                             name="vipAccess"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                    <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                    <FormLabel>
-                                    Join VIP group for early access
-                                    </FormLabel>
-                                </div>
+                                <FormItem>
+                                    <FormLabel>Join VIP group for early access?</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select option" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Yes">Yes</SelectItem>
+                                            <SelectItem value="No">No</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -170,18 +182,20 @@ const WaitlistSignup = (
                             control={form.control}
                             name="referOthers"
                             render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                    <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                    <FormLabel>
-                                    Refer others to join the waitlist for special rewards
-                                    </FormLabel>
-                                </div>
+                                <FormItem>
+                                    <FormLabel>Refer others to join the waitlist for special rewards?</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select option" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Yes">Yes</SelectItem>
+                                            <SelectItem value="No">No</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -189,38 +203,51 @@ const WaitlistSignup = (
                             control={form.control}
                             name="updatePreference"
                             render={({ field }) => (
-                                <FormItem className="space-y-3">
-                                <FormLabel>Update Preference</FormLabel>
-                                <FormControl>
-                                    <RadioGroup
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                    className="flex flex-col space-y-1"
-                                    >
-                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormItem>
+                                    <FormLabel>Update Preference</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                         <FormControl>
-                                        <RadioGroupItem value="Updates" />
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select update preference" />
+                                            </SelectTrigger>
                                         </FormControl>
-                                        <FormLabel className="font-normal">Receive platform updates</FormLabel>
-                                    </FormItem>
-                                    <FormItem className="flex items-center space-x-3 space-y-0">
-                                        <FormControl>
-                                        <RadioGroupItem value="Launch" />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">{"Just notify me when it's live"}</FormLabel>
-                                    </FormItem>
-                                    </RadioGroup>
-                                </FormControl>
-                                <FormMessage />
+                                        <SelectContent>
+                                            <SelectItem value="Updates">Receive platform updates</SelectItem>
+                                            <SelectItem value="Launch">Just notify me when it's live</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full">Join Waitlist</Button>
+                        <FormField
+                            control={form.control}
+                            name="blockchainFamiliarity"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>How familiar are you with blockchain tech?</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select your familiarity level" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Beginner">Beginner</SelectItem>
+                                            <SelectItem value="Intermediate">Intermediate</SelectItem>
+                                            <SelectItem value="Expert">Expert</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="submit" className="w-full bg-secondary text-primary hover:bg-slate-400">
+                            {isLoading ? 'Submitting...' : 'Join Waitlist'}
+                        </Button>
                     </form>
                 </Form>
-          </DialogContent>
+            </DialogContent>
         </Dialog>
-      );
-    }
-
-export default WaitlistSignup;
+    );
+}

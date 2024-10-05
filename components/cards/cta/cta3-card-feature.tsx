@@ -2,17 +2,28 @@
 import { Card, CardContent } from "@/components/ui/shadcn/card-ui"
 import { Button } from "@/components/ui/shadcn/button-ui"
 import { Input } from "@/components/ui/shadcn/input-ui"
-import { useState } from 'react';
-
+import { use, useState } from 'react';
+import { useAddToWaitlist } from "@/hooks/add-to-waitlist";
 interface DefaultProps {
   className?: string;
 }
 
 const CtaCard3 = (props: DefaultProps) => {
   const [email, setEmail] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const { addToWaitlist, isLoading, error } = useAddToWaitlist();
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
+
+    await addToWaitlist({
+      name: '',
+      email,
+      userType: 'Investor',
+      interest: '',
+      vipAccess: false,
+      referOthers: false,
+      updatePreference: '',
+      blockchainFamiliarity: ''
+    });
     console.log('Submitted email:', email);
     setEmail('');
   };
