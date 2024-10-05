@@ -4,7 +4,15 @@ import { useTheme } from '@/hooks/use-theme';
 import { WalletButton } from '../solana/solana-provider';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
+import { Web3AuthNoModal } from "@web3auth/no-modal";
 import Image from 'next/image';
+import { IS_USER_REGISTERED } from '@/graphql/queries';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { AuthAdapter } from "@web3auth/auth-adapter";
+import { SolanaPrivateKeyProvider } from "@web3auth/solana-provider";
+import { getDefaultExternalAdapters } from "@web3auth/default-solana-adapter";
+import { CHAIN_NAMESPACES, IProvider, UX_MODE, WALLET_ADAPTERS, WEB3AUTH_NETWORK, IWeb3AuthCoreOptions, IAdapter } from "@web3auth/base";
+import RPC from "@/components/solana/web3auth/solana-rpc";
 import { Input } from '@/components/ui/shadcn/input-ui';
 import { usePathname } from 'next/navigation';
 import { fadeIn, slideIn } from '@/styles/animations';
@@ -44,6 +52,7 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react';
 import { SearchIcon } from 'lucide-react';
 import { PublicKey } from '@solana/web3.js';
+import { useAuth } from '../apollo/auth-context-provider';
 
 interface NavbarProps {
   scrollThreshold?: number;
@@ -119,10 +128,17 @@ const links2 = [
     );
   };
   
-  
+  const clientId = "BI8MhAUT4vK4cfQZRQ_NEUYOHE3dhD4ouJif9SUgbgBeeZwP6wBlXast2pZsQJlney3nPBDb-PcMl9oF6lV67P0"; // get from https://dashboard.web3auth.io
+  let defaultSolanaAdapters: IAdapter<unknown>[] = [];
 const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, blurAmount = 10 }) => {
   const { isDarkMode } = useTheme();
+  const [loading, setLoading] = useState(true);
   const [navbarCollapsed, setNavbarCollapsed] = useState(false);
+  const [userWallet, setUserWallet] = useState<string | null>(null);
+  const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
+  const [provider, setProvider] = useState<IProvider | null>(null);
+  const { loginExistingUser } = useAuth();
+  const [checkRegistration, { loading: registrationLoading, data, error: registrationError }] = useLazyQuery(IS_USER_REGISTERED);
   const { publicKey } = useWallet();
   const router = useRouter();
 
@@ -150,7 +166,92 @@ const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, bl
     hideNavWhileScrolling({ when: !navbarCollapsed });
   }, [navbarCollapsed]);
 
+  useEffect(() => {
+    if(publicKey) {
+        setUserWallet(publicKey.toBase58());
+    }
+  }, [publicKey]);
 
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const chainConfig = {
+          chainNamespace: CHAIN_NAMESPACES.SOLANA,
+          chainId: "0x3", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
+          rpcTarget: "https://api.devnet.solana.com",
+          displayName: "Solana Devnet",
+          blockExplorerUrl: "https://explorer.solana.com",
+          ticker: "SOL",
+          tickerName: "Solana Token",
+          logo: "",
+        };
+
+        const privateKeyProvider = new SolanaPrivateKeyProvider({ config: { chainConfig } });
+
+        const web3authOptions: IWeb3AuthCoreOptions = {
+          clientId,
+          privateKeyProvider,
+          web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+        };
+        const web3auth = new Web3AuthNoModal(web3authOptions);
+
+        setWeb3auth(web3auth);
+
+        const authAdapter = new AuthAdapter({
+          privateKeyProvider,
+          adapterSettings: {
+            uxMode: UX_MODE.REDIRECT,
+          },
+        });
+        web3auth.configureAdapter(authAdapter);
+        // @ts-ignore
+        defaultSolanaAdapters = await getDefaultExternalAdapters({ options: web3authOptions });
+        defaultSolanaAdapters.forEach((adapter) => {
+          web3auth.configureAdapter(adapter);
+        });
+
+        await web3auth.init();
+        setProvider(web3auth.provider);
+        if (web3auth.connected) {
+  
+
+          const rpc = new RPC(web3auth.provider!);
+          const accounts = await rpc?.getAccounts();
+          console.log('accounts', accounts);
+          const publicKey = accounts![0];
+          console.log('publicKey', publicKey);
+  
+          const user = await web3auth.getUserInfo();
+  
+          console.log('user', user);
+  
+          const userObject= {
+              email: user.email || '',
+              publicKey: publicKey,
+              username: user.name || '',
+              profilePictureUrl: user.profileImage || '',
+          };  
+          console.log('logging in with userObject', userObject);
+          console.log('user object', userObject);
+  
+          const _isRegistered = await checkRegistration({ variables: { email: user.email } });
+          
+          console.log('is registered ->', _isRegistered.data.isUserRegistered);
+          if (_isRegistered.data.isUserRegistered) {
+              console.log('user is registered logging in with userObject', userObject);
+              await loginExistingUser({ email: userObject.email, publicKey: userObject.publicKey });
+              // router.push('/dashboard');
+          }
+  
+          setUserWallet(userObject.publicKey);
+        }
+      } catch (error) {
+        console.error(error);
+      } 
+    };
+
+    init().then(() => setLoading(false));
+  }, []);
   
     return (
       <Suspense fallback={<div />}>
@@ -286,8 +387,8 @@ const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, bl
                 Explore the Marketplace <ChevronRightIcon />
               </Link>
             </Button>
-
-            { publicKey ? <UserDropdown publicKey={publicKey}/> : <LoginDialog /> }
+              { loading && <div className="animate-pulse bg-bg text-black w-20 h-8 rounded-xl">Loading...</div> }
+              { !loading && (userWallet ? <UserDropdown publicKey={new PublicKey(userWallet!)}/> : <LoginDialog />) }
           </ul>
         </motion.header>
       </Suspense>

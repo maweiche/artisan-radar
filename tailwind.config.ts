@@ -119,7 +119,18 @@ const config: Config = {
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        'spin-slow': 'spin 3s linear infinite',
+        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        bounce: 'bounce 1s infinite',
+        spin: 'spin 1s linear infinite',
+        ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'fade-in': 'fadeIn 0.5s ease-out',
+        'slide-in': 'slideIn 0.5s ease-out',
+        wiggle: 'wiggle 1s ease-in-out infinite',
+        shake: 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+        heartbeat: 'heartbeat 1.5s ease-in-out infinite both',
+        flip: 'flip 1s ease-in-out infinite'
       }
     }
   },

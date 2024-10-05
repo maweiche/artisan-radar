@@ -1,10 +1,16 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Progress } from '@/components/ui/shadcn/progress-ui';
 import { Card, CardTitle, CardHeader, CardDescription, CardContent, CardFooter } from '@/components/ui/shadcn/card-ui';
 import { Button } from "@/components/ui/shadcn/button-ui"
+import { Web3AuthNoModal } from "@web3auth/no-modal";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { AuthAdapter } from "@web3auth/auth-adapter";
+import { SolanaPrivateKeyProvider } from "@web3auth/solana-provider";
+import { getDefaultExternalAdapters } from "@web3auth/default-solana-adapter";
+import { CHAIN_NAMESPACES, IProvider, UX_MODE, WALLET_ADAPTERS, WEB3AUTH_NETWORK, IWeb3AuthCoreOptions, IAdapter } from "@web3auth/base";
 import { ChevronLeftIcon } from '@radix-ui/react-icons';
 import { useAuth } from '@/components/apollo/auth-context-provider';
+import RPC from "@/components/solana/web3auth/solana-rpc";
 import { countries } from '@/data/countries';
 import { UPDATE_USER } from '@/graphql/mutations';
 import { useLazyQuery, useMutation } from '@apollo/client';
@@ -18,12 +24,15 @@ interface DialogProps {
 }
 
 
-
+const clientId = "BI8MhAUT4vK4cfQZRQ_NEUYOHE3dhD4ouJif9SUgbgBeeZwP6wBlXast2pZsQJlney3nPBDb-PcMl9oF6lV67P0"; // get from https://dashboard.web3auth.io
+let defaultSolanaAdapters: IAdapter<unknown>[] = [];
 const LoginDialog: React.FC = () => {
     const [slide, setSlide] = useState(1);
     const [isOpen, setIsOpen] = useState(false);
     const { user, checkAuth, loginExistingUser } = useAuth();
     const [updateUser] = useMutation(UPDATE_USER);
+    const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
+    const [provider, setProvider] = useState<IProvider | null>(null);
     const handleOpen = () => setIsOpen(true);
     const handleClose = () => setIsOpen(false);
     const handleNext = () => setSlide(prev => Math.min(prev + 1, 4));
@@ -107,6 +116,61 @@ const LoginDialog: React.FC = () => {
             }
         }
     };
+    const init = async () => {
+        try {
+          const chainConfig = {
+            chainNamespace: CHAIN_NAMESPACES.SOLANA,
+            chainId: "0x3", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
+            rpcTarget: "https://api.devnet.solana.com",
+            displayName: "Solana Devnet",
+            blockExplorerUrl: "https://explorer.solana.com",
+            ticker: "SOL",
+            tickerName: "Solana Token",
+            logo: "",
+          };
+  
+          const privateKeyProvider = new SolanaPrivateKeyProvider({ config: { chainConfig } });
+  
+          const web3authOptions: IWeb3AuthCoreOptions = {
+            clientId,
+            privateKeyProvider,
+            web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+          };
+          const web3auth = new Web3AuthNoModal(web3authOptions);
+  
+          setWeb3auth(web3auth);
+  
+          const authAdapter = new AuthAdapter({
+            privateKeyProvider,
+            adapterSettings: {
+              uxMode: UX_MODE.REDIRECT,
+            },
+          });
+          web3auth.configureAdapter(authAdapter);
+          // @ts-ignore
+          defaultSolanaAdapters = await getDefaultExternalAdapters({ options: web3authOptions });
+          defaultSolanaAdapters.forEach((adapter) => {
+            web3auth.configureAdapter(adapter);
+          });
+  
+          await web3auth.init();
+          setProvider(web3auth.provider);
+          
+        } catch (error) {
+          console.error(error);
+        } 
+      };
+  
+    
+
+    const loginWithGoogle = async () => {
+        
+        await init();
+        const web3authProvider = await web3auth!.connectTo(WALLET_ADAPTERS.AUTH, {
+          loginProvider: "google",
+        });
+
+    };
 
 
     const Dialog1: React.FC<DialogProps> = ({ handleNext, handleBack }) => (
@@ -117,14 +181,14 @@ const LoginDialog: React.FC = () => {
                     <CardDescription>Connect your buyer profile to access the marketplace and begin collecting</CardDescription>
                 </CardHeader>
                 <CardContent className='bg-bg flex flex-col gap-2'>
-                    <form className='flex flex-col gap-2'>
+                    {/* <form className='flex flex-col gap-2'>
                         <input type='email' placeholder='Email' className='rounded-full p-2 border-2 border-gray-300' />
                         <Button onClick={handleNext} className='rounded-full'>Continue</Button>
-                    </form>
-                    <Button className='w-full rounded-full border-secondary'>
+                    </form> */}
+                    <Button className='w-full rounded-full border-secondary font-urbanist text-lg hover:bg-secondary hover:text-primary' onClick={()=> loginWithGoogle()}>
                         Sign in with Google
                     </Button>
-                    <WalletMultiButton style={{ width: '100%', zIndex: '51'}} className='flex flex-row w-full z-[60] rounded-full border-2 border-secondary'>
+                    <WalletMultiButton>
                         Connect 
                         {['phantom', 'solflare', 'backpack', 'ledger'].map(icon => (
                             <img key={icon} src={`/login/${icon}_icon.svg`} alt={icon} className='ml-2' style={{ width: '20px', height: '20px'}} />
