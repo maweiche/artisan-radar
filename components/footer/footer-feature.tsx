@@ -21,10 +21,10 @@ export default function FooterFeature() {
         <Suspense fallback={<div />}>
             <Card
                 style={{ width:'100vw', alignSelf: 'center' }}
-                className='rounded-none flex flex-col py-14 items-start w-full bg-transparent'
+                className='rounded-none flex flex-row justify-between py-14 items-start w-full bg-transparent px-12'
             >
                 <CardContent className='flex flex-col py-4 gap-4 items-center'>
-                    <div className={styles.headline}>
+                    <div className='flex flex-row gap-6'>
                         <Image
                             src='/logos/artisan-small-logo-black.svg'
                             alt="Logo"
@@ -50,7 +50,7 @@ export default function FooterFeature() {
                     {/* <span className={styles.subText}>
                         Baseline
                     </span> */}
-                    <div className={styles.logoContainer}>
+                    <div className='flex flex-row gap-14 items-center justify-center align-center'>
                         <Image
                             src='/assets/footer/solana-icon.webp'
                             alt="Logo"
@@ -73,8 +73,8 @@ export default function FooterFeature() {
                         />
                     </div>
                 </CardContent>
-                <CardFooter className="flex-row items-center gap-8 items-start">
-                    <div className={styles.linkContainerCol}>
+                <CardFooter className="flex-row items-center w-3/4 gap-16 justify-evenly items-start">
+                    <div className='flex flex-col justify-start mt-4'>
                         <h2 className='font-bold text-secondary'>Site</h2>
                         <ul className={styles.linkList}>
                             <li>
