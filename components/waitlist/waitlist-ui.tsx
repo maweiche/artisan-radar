@@ -213,7 +213,7 @@ export default function WaitlistSignup() {
                                         </FormControl>
                                         <SelectContent>
                                             <SelectItem value="Updates">Receive platform updates</SelectItem>
-                                            <SelectItem value="Launch">Just notify me when it's live</SelectItem>
+                                            <SelectItem value="Launch">{"Just notify me when it's live"}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />

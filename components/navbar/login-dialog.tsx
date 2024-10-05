@@ -247,7 +247,7 @@ const LoginDialog: React.FC = () => {
         <div className='flex flex-row gap-6'>
             <Card className='bg-transparent w-1/2 flex flex-col text-secondary border-none'>
                 <CardHeader className='bg-bg rounded-t-xl'>
-                    <CardTitle className='font-bold'>You're all set! 🎉</CardTitle>
+                    <CardTitle className='font-bold'>{"You're all set! 🎉"}</CardTitle>
                     <CardDescription>Continue and enter into the world of RWA with The Artisan</CardDescription>
                 </CardHeader>
                 <CardContent className='bg-bg flex flex-col gap-2 rounded-b-xl'>

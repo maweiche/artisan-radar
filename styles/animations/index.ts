@@ -1,4 +1,4 @@
-import { Direction } from '@/lib/types';
+import { Direction } from '@/types';
 
 import { Variants } from 'framer-motion';
 

@@ -13,15 +13,14 @@ const server = new ApolloServer({
 });
 
 const handler = startServerAndCreateNextHandler(server, {
-  // @ts-ignore - TODO()
   context: async (req: NextRequest) => {
     const token = req.headers.get('authorization') || '';
     const { db } = await connectToDatabase();
 
     if (token) {
       try {
-        const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET as string) as { _id: string };
-        return { user: { _id: decoded._id }, db };
+        const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_SECRET as string) as { _id: string, email: string, publicKey: string };
+        return { user: { _id: decoded._id, email: decoded.email, publicKey: decoded.publicKey }, db };
       } catch (err) {
         console.error('Error decoding token:', err);
       }
@@ -29,7 +28,7 @@ const handler = startServerAndCreateNextHandler(server, {
       console.log('No authorization token provided');
     }
 
-    return { user: null, db };
+    return { user: null as any, db };
   },
 });
 

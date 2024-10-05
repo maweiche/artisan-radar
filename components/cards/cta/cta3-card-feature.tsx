@@ -36,7 +36,7 @@ const CtaCard3 = (props: DefaultProps) => {
               <span className="italic" style={{ fontWeight: '100' }}>Stay</span>updated
             </h2>
             <p className="text-base text-gray-600">
-              Stay aware of everything happening in Artisan's world and all the newest features
+              {"Stay aware of everything happening in Artisan's world and all the newest features"}
             </p>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col w-full md:w-2/5">
