@@ -135,7 +135,7 @@ export default function HomeFeature() {
                 <OfferCard />
             </Wrapper>
             
-            <div className='flex flex-col w-full items-top justify-center align-top md:flex-row lg:flex-row'>
+            <div className='flex flex-col gap-4 w-full items-top justify-center align-top md:gap-0 md:flex-row lg:flex-row'>
                 <Card2 className='mx-4 h-60 justify-between md:w-1/3 md:self-center'/>
                 <Card3 className='mx-4 h-60 justify-between md:w-1/3 md:self-center'/>
             </div>

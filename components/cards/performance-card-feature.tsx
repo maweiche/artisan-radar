@@ -40,7 +40,7 @@ const PerformanceCard = () => {
         {/* <div className='text-secondary text-2xl w-full md:w-3/4 lg:w-3/4'>
             <span className='font-bold'>In the past decade</span>, certain Luxury Assets outperformed the S&P 500 .
         </div> */}
-        <div className='flex flex-col w-11/12 md:w-8/12 self-center items-center md:flex-row'>
+        <div className='flex flex-col w-full gap-12 md:gap-0 md:w-8/12 self-center items-center md:flex-row'>
             
             <Card1 className='sm:w-11/12 md:w-1/2 h-96 mx-auto self-center justify-between flex flex-col'/> 
 
