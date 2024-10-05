@@ -18,17 +18,18 @@ import { useRouter } from 'next/navigation';
 // import { EmailInputForm, ProfileInitForm, SelectLikesForm } from '@/components/ui/shadcn/form-ui';
 
 interface DialogProps {
-    handleNext: () => void;
-    handleBack: () => void;
-    handleClose: () => void;
+    _isOpen?: boolean;
+    handleNext?: () => void;
+    handleBack?: () => void;
+    handleClose?: () => void;
 }
 
 
 const clientId = "BI8MhAUT4vK4cfQZRQ_NEUYOHE3dhD4ouJif9SUgbgBeeZwP6wBlXast2pZsQJlney3nPBDb-PcMl9oF6lV67P0"; // get from https://dashboard.web3auth.io
 let defaultSolanaAdapters: IAdapter<unknown>[] = [];
-const LoginDialog: React.FC = () => {
-    const [slide, setSlide] = useState(1);
-    const [isOpen, setIsOpen] = useState(false);
+const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
+    const [slide, setSlide] = useState(_isOpen ? 2 : 1);
+    const [isOpen, setIsOpen] = useState(_isOpen || false);
     const { user, checkAuth, loginExistingUser } = useAuth();
     const [updateUser] = useMutation(UPDATE_USER);
     const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);

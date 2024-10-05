@@ -3,7 +3,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { WalletButton } from '../solana/solana-provider';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'
+import { ReadonlyURLSearchParams, useRouter } from 'next/navigation'
 import { Web3AuthNoModal } from "@web3auth/no-modal";
 import Image from 'next/image';
 import { IS_USER_REGISTERED } from '@/graphql/queries';
@@ -55,6 +55,7 @@ import { PublicKey } from '@solana/web3.js';
 import { useAuth } from '../apollo/auth-context-provider';
 
 interface NavbarProps {
+  searchParams?: ReadonlyURLSearchParams;
   scrollThreshold?: number;
   blurAmount?: number;
 }
@@ -130,7 +131,9 @@ const links2 = [
   
   const clientId = "BI8MhAUT4vK4cfQZRQ_NEUYOHE3dhD4ouJif9SUgbgBeeZwP6wBlXast2pZsQJlney3nPBDb-PcMl9oF6lV67P0"; // get from https://dashboard.web3auth.io
   let defaultSolanaAdapters: IAdapter<unknown>[] = [];
-const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, blurAmount = 10 }) => {
+const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThreshold = 100, blurAmount = 10 }) => {
+  const _params = searchParams?.get('register') === 'true' ? true : false;
+  console.log('params', _params);
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(true);
   const [navbarCollapsed, setNavbarCollapsed] = useState(false);
@@ -388,7 +391,8 @@ const NavbarFeature: React.FC<NavbarProps> = ({ links, scrollThreshold = 100, bl
               </Link>
             </Button>
               { loading && <div className="animate-pulse bg-bg text-black w-20 h-8 rounded-xl">Loading...</div> }
-              { !loading && (userWallet ? <UserDropdown publicKey={new PublicKey(userWallet!)}/> : <LoginDialog />) }
+              {/* <LoginDialog _isOpen={true} /> */}
+              { !loading && (userWallet && !_params ? <UserDropdown publicKey={new PublicKey(userWallet!)}/> : <LoginDialog _isOpen={_params} />) }
           </ul>
         </motion.header>
       </Suspense>

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { ReactNode, Suspense, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import NavbarFeature from '@/components/navbar/navbar-feature';
 import FooterFeature from '@/components/footer/footer-feature';
 import { AccountChecker } from '../account/account-ui';
@@ -21,10 +21,10 @@ export function UiLayout({
   links: { label: string; path: string }[];
 }) {
   
-
+  const searchParams = useSearchParams();
   return (
     <div className="h-full flex flex-col bg-bg items-center w-full overflow-none">
-      <NavbarFeature links={links} scrollThreshold={1} blurAmount={400} />
+      <NavbarFeature searchParams={searchParams} links={links} scrollThreshold={1} blurAmount={400} />
       <ClusterChecker>
         <AccountChecker />
       </ClusterChecker>
