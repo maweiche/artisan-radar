@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '@/styles/components/Home.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -14,8 +14,10 @@ import { Badge } from '@/components/ui/shadcn/badge-ui';
 import PerformanceCard from '../cards/performance-card-feature';
 import OfferCard from '../cards/offer-card-feature';
 import DesignedCard from '../cards/designed-card-feature';
+import { useHorizontalScroll } from '@/hooks/use-horizontal-scroll';
 export default function HomeFeature() {
     const [selected, setSelected] = useState(0);
+    const canScrollVertically = useHorizontalScroll();
     const categories = [
         'Watches',
         'Cars',
@@ -23,10 +25,28 @@ export default function HomeFeature() {
         'Whisky'
     ]
 
+    useEffect(() => {
+        function preventScroll(e : any) {
+
+            if (!canScrollVertically) {
+                window.scrollTo(0, window.scrollY);
+            }
+        }
+
+        if (!canScrollVertically) {
+            window.addEventListener('scroll', preventScroll);
+        }
+
+        return () => {
+            window.removeEventListener('scroll', preventScroll);
+        };
+    }, [canScrollVertically]);
+
+
     return (
         <div className='bg-bg w-screen pt-20 lg:pt-2 gap-12 lg:gap-0 flex flex-col justify-center' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <Wrapper
-                // id="hero"
+                id="hero"
                 className='bg-bg relative flex flex-col w-full items-center justify-between lg:gap-12'
             >            
                 <div 
@@ -107,7 +127,7 @@ export default function HomeFeature() {
             </div>
             
             <Wrapper
-                // id="hero"
+                id="performance"
                 className='bg-bg flex flex-col items-center justify-between'
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             >  
@@ -115,23 +135,22 @@ export default function HomeFeature() {
                 <OfferCard />
             </Wrapper>
             
-            <div className='flex flex-col w-full mb-12 items-top justify-center align-top md:flex-row lg:flex-row'>
-                <Card2 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
-                <Card3 className='mx-4 h-60 justify-between md:w-1/3 md:self-center md:mb-12'/>
+            <div className='flex flex-col w-full items-top justify-center align-top md:flex-row lg:flex-row'>
+                <Card2 className='mx-4 h-60 justify-between md:w-1/3 md:self-center'/>
+                <Card3 className='mx-4 h-60 justify-between md:w-1/3 md:self-center'/>
             </div>
             
             <Wrapper
-                // id="hero"
+                id="design"
                 className='bg-bg flex flex-col items-center justify-between'
                 style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '24px' }}
             > 
-                <DesignedCard />
+                <DesignedCard className='flex flex-col w-full' />
             </Wrapper>
             
-            {/* <div className='flex flex-col md:items-start items-center md:flex-row justify-center gap-12 align-top'> */}
-                <CollectionsCard  className='flex flex-col w-full' /> 
-                <ExpertiseCard className='flex flex-col w-full'/>
-            {/* </div> */}
+            <CollectionsCard id="collectionsCard" className='flex flex-col w-full overflow-x-auto' /> 
+            <ExpertiseCard id="expertiseCard" className='flex flex-col w-full overflow-x-auto'/>
+
             <CtaCard1 className='mx-6 md:w-8/12 md:self-center md:mb-12'/>
             {/* <CtaCard2 className='mx-6 md:w-8/12 md:self-center md:mb-12'/> */}
             <CtaCard3 className='md:self-center'/>

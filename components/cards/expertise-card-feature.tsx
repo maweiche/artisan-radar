@@ -17,6 +17,7 @@ import {
 import { Badge } from "@/components/ui/shadcn/badge-ui"
 // import { motion, MotionProps } from 'framer-motion';
 interface DefaultProps {
+  id?: string;
   className?: string;
 }
 
@@ -51,7 +52,9 @@ const ExpertiseCard = (
 
   return (
     <div className={`${props.className}`}>
-      <Badge variant="outline" className="w-fit px-4 items-center flex flex-row self-center text-lg rounded-full">How it works</Badge>
+      <Badge className="w-fit self-center border-zinc-200">
+        <span className='text-secondary'>How it Works</span>
+      </Badge>
       <div className="swiper-container hidden md:block relative mb-5">
         <Swiper
           onSwiper={setThumbsSwiper} // Store the instance of the thumbs swiper in the state

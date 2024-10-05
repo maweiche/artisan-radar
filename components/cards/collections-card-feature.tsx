@@ -21,6 +21,7 @@ import { Swiper as SwiperType } from "swiper"; // Import the Swiper type
 import { Swiper, SwiperSlide } from "swiper/react";
 // import { motion, MotionProps } from 'framer-motion';
 interface DefaultProps {
+  id?: string;
   className?: string;
 }
 
@@ -38,7 +39,9 @@ const CollectionsCard = (
   }, [CarouselItem]);
   return (
     <div className={`${props.className}`}>
-      <Badge variant="outline" className="w-fit px-4 items-center flex flex-row self-center text-lg rounded-full">The Collections</Badge>
+      <Badge className="w-fit self-center border-zinc-200">
+        <span className='text-secondary'>The Collections</span>
+      </Badge>
       <div className="swiper-container hidden md:block relative mb-5">
         <Swiper
           onSwiper={setThumbsSwiper} // Store the instance of the thumbs swiper in the state

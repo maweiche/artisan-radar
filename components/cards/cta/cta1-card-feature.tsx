@@ -17,8 +17,8 @@ const CtaCard1 = (props: DefaultProps) => {
     <Card className={`relative overflow-hidden ${props.className}`}>
       <div className="absolute inset-0 bg-[url('/assets/home/logo-vector.svg')] bg-contain bg-no-repeat bg-right opacity-100" />
       <CardContent className='relative z-10 flex flex-col py-8 gap-4'>
-        <h2 className='text-3xl font-bold'>
-          Gain <span className='italic'>priority</span> access by<br />joining the waitlist
+        <h2 className='text-3xl font-urbanist'>
+          Gain <span className='italic' style={{ fontWeight: '300' }}>priority</span> access by<br />joining the waitlist
         </h2>
         <p className='text-sm text-gray-600'>
           Get Updated And Discover All<br />The News in The Artisan

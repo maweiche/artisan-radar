@@ -110,7 +110,7 @@ const LoginDialog: React.FC = () => {
 
 
     const Dialog1: React.FC<DialogProps> = ({ handleNext, handleBack }) => (
-        <div className='flex flex-row'>
+        <div className='flex flex-row gap-6'>
             <Card className='bg-transparent flex flex-col text-secondary border-none w-1/2'>
                 <CardHeader className='bg-bg rounded-t-xl'>
                     <CardTitle className='font-bold'>Welcome to the Artisan</CardTitle>
@@ -121,7 +121,7 @@ const LoginDialog: React.FC = () => {
                         <input type='email' placeholder='Email' className='rounded-full p-2 border-2 border-gray-300' />
                         <Button onClick={handleNext} className='rounded-full'>Continue</Button>
                     </form>
-                    <Button className='w-full rounded-full border-2 border-secondary'>
+                    <Button className='w-full rounded-full border-secondary'>
                         Sign in with Google
                     </Button>
                     <WalletMultiButton style={{ width: '100%', zIndex: '51'}} className='flex flex-row w-full z-[60] rounded-full border-2 border-secondary'>
@@ -152,7 +152,7 @@ const LoginDialog: React.FC = () => {
     );
 
     const Dialog2: React.FC<DialogProps> = ({ handleNext, handleBack }) => (
-        <div className='flex flex-row'>
+        <div className='flex flex-row gap-6'>
             <Card className='bg-transparent w-1/2 flex flex-col text-secondary border-none'>
                 <CardHeader className='bg-bg rounded-t-xl'>
                     <CardTitle className='font-bold'>Create a Buyer Profile</CardTitle>
@@ -205,7 +205,7 @@ const LoginDialog: React.FC = () => {
     );
 
     const Dialog3: React.FC<DialogProps> = ({ handleNext, handleBack }) => (
-        <div className='flex flex-row'>
+        <div className='flex flex-row gap-6'>
             <Card className='bg-transparent w-1/2 flex flex-col text-secondary border-none'>
                 <CardHeader className='bg-bg rounded-t-xl'>
                     <CardTitle className='font-bold'>Create an Artisan Wallet</CardTitle>
@@ -215,7 +215,7 @@ const LoginDialog: React.FC = () => {
                     <form className='flex flex-col gap-2'>
                     <div className='flex flex-col gap-2'>
                             <label htmlFor='plan'>Connect a Wallet</label>
-                            <WalletMultiButton style={{ width: '100%'}} className='flex flex-row w-full rounded-full border-2 border-secondary'>
+                            <WalletMultiButton style={{ width: '100%'}} className='flex flex-row w-full shadow-sm'>
                                 Connect 
                                 {['phantom', 'solflare', 'backpack', 'ledger'].map(icon => (
                                     <img key={icon} src={`/login/${icon}_icon.svg`} alt={icon} className='ml-2' style={{ width: '20px', height: '20px'}} />
@@ -244,7 +244,7 @@ const LoginDialog: React.FC = () => {
     );
 
     const Dialog4: React.FC<DialogProps> = ({ handleNext, handleBack }) => (
-        <div className='flex flex-row'>
+        <div className='flex flex-row gap-6'>
             <Card className='bg-transparent w-1/2 flex flex-col text-secondary border-none'>
                 <CardHeader className='bg-bg rounded-t-xl'>
                     <CardTitle className='font-bold'>You're all set! 🎉</CardTitle>
@@ -273,9 +273,9 @@ const LoginDialog: React.FC = () => {
                     <div className="fixed h-screen inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" onClick={()=> setIsOpen(false)}>
                     </div>
                     {/* dialog div */}
-                    <div className="bg-white rounded-lg p-6 w-full max-w-4xl relative z-20">
+                    <div className="bg-transparent rounded-lg p-6 w-full max-w-4xl relative z-20">
                         <Button onClick={handleClose} className="absolute top-2 right-2 z-10">Close</Button>
-                        <Progress className='w-full my-6' value={slide * 25} max={100} />
+                        <Progress className='w-full my-6 shadow-sm rounded-full bg-gradient-to-r from-primary to-secondary' value={slide * 25} max={100} />
                         {slide === 1 && <Dialog1 {...dialogProps} />}
                         {slide === 2 && <Dialog2 {...dialogProps} />}
                         {slide === 3 && <Dialog3 {...dialogProps} />}
