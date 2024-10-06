@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useWeb3Auth } from '@/hooks/use-web3-auth';
 import { useSolanaRPC } from '@/hooks/use-web3-rpc';
 import { useToast } from "@/hooks/use-toast";
+import { useWallet } from '@solana/wallet-adapter-react';
 
 const ME_QUERY = gql`
   query Me {
@@ -137,7 +138,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: any;
-  login: () => Promise<any>;
+  login: (userObject: {email: string; publicKey: string}) => Promise<any>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   loginExistingUser: (userObject: {email: string; publicKey: string}) => Promise<void>;
@@ -155,7 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const { provider, login: web3Login, logout: web3Logout, getUserInfo } = useWeb3Auth();
   const { getAccounts } = useSolanaRPC(provider);
-
+  const { publicKey } = useWallet();
   const [loginUserMutation] = useMutation(LOGIN_USER);
 
   const checkAuth = useCallback(async () => {
@@ -234,27 +235,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [client, toast]);
 
-  const login = useCallback(async () => {
+  const login = useCallback(async (_userObject?: {email: string}) => {
     setLoading(true);
     setError(null);
     try {
-      const connected = await web3Login();
-      if (!connected) throw new Error('Failed to connect to web3 provider');
-      
-      const userInfo = await getUserInfo();
-      if (!userInfo) throw new Error('Failed to get user info');
-      
-      const accounts = await getAccounts();
-      const publicKey = accounts![0];
+      let _publicKey;
+      let _email;
+      if (!publicKey) {
+        const connected = await web3Login();
+        console.log('Connected:', connected);
+        if (!connected) throw new Error('Failed to connect to web3 provider');
+        
+        const userInfo = await getUserInfo();
+        if (!userInfo) throw new Error('Failed to get user info');
+        
+        const accounts = await getAccounts();
+        _publicKey = accounts![0];
+        _email = userInfo.email || 'error';
+      } else {
+        _publicKey = publicKey.toBase58();
+        _email = _userObject?.email || 'error';
+      }
 
-      const userObject = {
-        email: userInfo.email || '',
-        publicKey,
+      const userObject: { email: string; publicKey: string } = {
+        email: _email,
+        publicKey: _publicKey,
       };
 
-      const isRegistered = await checkUserRegistration(userObject.email);
+      const isRegistered = await checkUserRegistration(_email!);
 
-      if (isRegistered) {
+      if (isRegistered && userObject.email && userObject.publicKey) {
         await loginExistingUser(userObject);
       } else {
         // Handle new user registration

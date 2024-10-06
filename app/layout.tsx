@@ -34,21 +34,23 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"></link>
       </head>
       <body className={`${fontVariables} bg-bg`}>
-        <ReactQueryProvider>
-          <ApolloWrapper>
-            <AuthProvider>
-              <ClusterProvider>
-                <SolanaProvider>
-                  <ThemeProvider>
-                    <div className="max-w-full overflow-x-hidden">
-                      <UiLayout links={links}>{children}</UiLayout>
-                    </div>
-                  </ThemeProvider>
-                </SolanaProvider>
-              </ClusterProvider>
-            </AuthProvider>
-          </ApolloWrapper>
-        </ReactQueryProvider>
+        <ClusterProvider>
+          <SolanaProvider>
+            <ReactQueryProvider>
+              <ApolloWrapper>
+                <AuthProvider>
+                  
+                      <ThemeProvider>
+                        <div className="max-w-full overflow-x-hidden">
+                          <UiLayout links={links}>{children}</UiLayout>
+                        </div>
+                      </ThemeProvider>
+                  
+                </AuthProvider>
+              </ApolloWrapper>
+            </ReactQueryProvider>
+          </SolanaProvider>
+        </ClusterProvider>
       </body>
     </html>
   );
