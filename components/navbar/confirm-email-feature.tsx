@@ -94,7 +94,7 @@ const ConfirmEmailDialog: React.FC<DialogProps> = ({ _isOpen }) => {
                                         ))}
                                     </>
                                 ) : (
-                                   <>'Disconnect' {publicKey.toBase58().slice(0, 4)}...{publicKey.toBase58().slice(-4)}</>
+                                   <>{'Disconnect'} {publicKey.toBase58().slice(0, 4)}...{publicKey.toBase58().slice(-4)}</>
                                 )}
                             </WalletMultiButton>
                         </CardContent>
