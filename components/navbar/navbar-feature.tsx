@@ -52,7 +52,7 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react';
 import { SearchIcon } from 'lucide-react';
 import { PublicKey } from '@solana/web3.js';
-import { useAuth } from '../apollo/auth-context-provider';
+import { useAuth } from '@/components/apollo/auth-context-provider'
 
 interface NavbarProps {
   searchParams?: ReadonlyURLSearchParams;
@@ -140,7 +140,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
   const [userWallet, setUserWallet] = useState<string | null>(null);
   const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
   const [provider, setProvider] = useState<IProvider | null>(null);
-  const { loginExistingUser } = useAuth();
+  const { loginExistingUser, logout } = useAuth();
   const [checkRegistration, { loading: registrationLoading, data, error: registrationError }] = useLazyQuery(IS_USER_REGISTERED);
   const { publicKey } = useWallet();
   const router = useRouter();
@@ -256,6 +256,97 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
 
     init().then(() => setLoading(false));
   }, []);
+
+  const UserDropdown = ({ publicKey }: { publicKey?: PublicKey }) => {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const router = useRouter();
+    const copyToClipboard = (text: any) => {
+      navigator.clipboard.writeText(text);
+      // You might want to add a toast notification here
+    };
+  
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            <Avatar>
+              <AvatarImage src="/api/placeholder/64x64" alt="Profile picture" />
+              <AvatarFallback>
+                <div className="w-16 h-16 rounded-3xl dark:bg-white bg-black"></div>
+              </AvatarFallback>
+            </Avatar>
+            <ChevronDown className="text-secondary" />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="w-72 p-4 bg-white dark:bg-zinc-800 rounded-3xl border border-zinc-300 dark:border-zinc-700"
+        >
+          <div className="flex items-center space-x-4 mb-4">
+            <Avatar className="w-16 h-16">
+              <AvatarImage src="/api/placeholder/64x64" alt="Profile picture" />
+              <AvatarFallback>
+                <div className="w-16 h-16 rounded-3xl dark:bg-white bg-black"></div>
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="text-3xl text-secondary font-semibold">Username</h2>
+              <div className="text-gray-500 flex items-center">
+                <span className="truncate mr-1">
+                  {publicKey?.toBase58().slice(0, 4)}...{publicKey?.toBase58().slice(-4)}
+                </span>
+                <Copy
+                  className="cursor-pointer"
+                  onClick={() => copyToClipboard('Full wallet address here')}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mb-4 p-4 bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-3xl">
+            <div className="flex justify-between items-center">
+              <div className="text-secondary">Buying power</div>
+              <div className="text-xl text-secondary font-bold">$128.42</div>
+            </div>
+            <div className="mt-2 flex items-center">
+              <div className="flex-1 flex items-center gap-2 text-secondary">
+                <div className="w-4 h-4 rounded-full bg-bg border border-solid border-[#D4D4D8]">
+                  <IconCurrencySolana className="w-4 h-4" />
+                </div>
+                <span>0.1 SOL</span>
+              </div>
+              <div className="text-zinc-500">=$3.42</div>
+            </div>
+            <div className="mt-2 flex items-center">
+              <div className="flex-1 flex items-center gap-2 text-secondary">
+                <div className="w-4 h-4 rounded-full bg-bg border border-solid border-[#D4D4D8]"></div>
+                <span>124 USDC</span>
+              </div>
+              <div className="text-zinc-500">=$124</div>
+            </div>
+          </div>
+          <DropdownMenuItem className="cursor-pointer text-secondary mt-4">
+            <Settings2 className="mr-2 h-4 w-4" />
+            <span className="text-sm font-semibold">Edit profile</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer text-secondary" onClick={()=> router.push('/dashboard')}>
+              <ListOrdered className="mr-2 h-4 w-4" />
+              <span className="text-sm font-semibold">My orders</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer text-secondary">
+            <EggFried className="mr-2 h-4 w-4" />
+            <span className="text-sm font-semibold">Refer your friends</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer text-secondary" onClick={()=>{setUserWallet(null), logout()}}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span className="text-sm font-semibold">Logout</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
   
     return (
       <Suspense fallback={<div />}>
@@ -402,93 +493,3 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
 
 export default NavbarFeature;
 
-function UserDropdown({ publicKey }: { publicKey?: PublicKey }) {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const router = useRouter();
-  const copyToClipboard = (text: any) => {
-    navigator.clipboard.writeText(text);
-    // You might want to add a toast notification here
-  };
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-        >
-          <Avatar>
-            <AvatarImage src="/api/placeholder/64x64" alt="Profile picture" />
-            <AvatarFallback>
-              <div className="w-16 h-16 rounded-3xl dark:bg-white bg-black"></div>
-            </AvatarFallback>
-          </Avatar>
-          <ChevronDown className="text-secondary" />
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="w-72 p-4 bg-white dark:bg-zinc-800 rounded-3xl border border-zinc-300 dark:border-zinc-700"
-      >
-        <div className="flex items-center space-x-4 mb-4">
-          <Avatar className="w-16 h-16">
-            <AvatarImage src="/api/placeholder/64x64" alt="Profile picture" />
-            <AvatarFallback>
-              <div className="w-16 h-16 rounded-3xl dark:bg-white bg-black"></div>
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className="text-3xl text-secondary font-semibold">Username</h2>
-            <div className="text-gray-500 flex items-center">
-              <span className="truncate mr-1">
-                {publicKey?.toBase58().slice(0, 4)}...{publicKey?.toBase58().slice(-4)}
-              </span>
-              <Copy
-                className="cursor-pointer"
-                onClick={() => copyToClipboard('Full wallet address here')}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="mb-4 p-4 bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-3xl">
-          <div className="flex justify-between items-center">
-            <div className="text-secondary">Buying power</div>
-            <div className="text-xl text-secondary font-bold">$128.42</div>
-          </div>
-          <div className="mt-2 flex items-center">
-            <div className="flex-1 flex items-center gap-2 text-secondary">
-              <div className="w-4 h-4 rounded-full bg-bg border border-solid border-[#D4D4D8]">
-                <IconCurrencySolana className="w-4 h-4" />
-              </div>
-              <span>0.1 SOL</span>
-            </div>
-            <div className="text-zinc-500">=$3.42</div>
-          </div>
-          <div className="mt-2 flex items-center">
-            <div className="flex-1 flex items-center gap-2 text-secondary">
-              <div className="w-4 h-4 rounded-full bg-bg border border-solid border-[#D4D4D8]"></div>
-              <span>124 USDC</span>
-            </div>
-            <div className="text-zinc-500">=$124</div>
-          </div>
-        </div>
-        <DropdownMenuItem className="cursor-pointer text-secondary mt-4">
-          <Settings2 className="mr-2 h-4 w-4" />
-          <span className="text-sm font-semibold">Edit profile</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer text-secondary" onClick={()=> router.push('/dashboard')}>
-            <ListOrdered className="mr-2 h-4 w-4" />
-            <span className="text-sm font-semibold">My orders</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer text-secondary">
-          <EggFried className="mr-2 h-4 w-4" />
-          <span className="text-sm font-semibold">Refer your friends</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer text-secondary" onClick={useWallet().disconnect}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span className="text-sm font-semibold">Logout</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}

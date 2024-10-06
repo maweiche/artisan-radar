@@ -156,7 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const { provider, login: web3Login, logout: web3Logout, getUserInfo } = useWeb3Auth();
   const { getAccounts } = useSolanaRPC(provider);
-  const { publicKey } = useWallet();
+  const { publicKey, disconnect } = useWallet();
   const [loginUserMutation] = useMutation(LOGIN_USER);
 
   const checkAuth = useCallback(async () => {
@@ -301,10 +301,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(async () => {
     try {
+      console.log('Logging out...');
       try {
         await web3Logout();
       } catch (error) {
         console.error('Web3 logout error:', error);
+      }
+      if(publicKey) {
+        disconnect();
       }
       localStorage.removeItem('token');
       await client.resetStore();

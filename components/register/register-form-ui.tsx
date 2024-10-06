@@ -9,14 +9,14 @@ import {
 import { IS_USER_REGISTERED } from '@/graphql/queries';
 
 import * as z from 'zod';
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
-import { useProfileCompletion } from '@/hooks/use-profile-completition';
+import { Button } from "@/components/ui/shadcn/button-ui";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/shadcn/form-ui";
+import { Input } from "@/components/ui/shadcn/input-ui";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/shadcn/select-ui";
+import { Textarea } from "@/components/ui/shadcn/textarea-ui";
+import { Checkbox } from "@/components/ui/shadcn/checkbox-ui";
+import { Progress } from "@/components/ui/shadcn/progress-ui";
+import { useProfileCompletion } from '@/hooks/use-profile-completion';
 
 type RegisterFormProps = {
     _id?: string;
