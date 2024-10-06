@@ -1,16 +1,15 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import styles from '@/styles/components/Home.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Wrapper from '@/components/ui/ui-wrapper';
 import { Button } from '@/components/ui/shadcn/button-ui';
-import TransparentCard from '../ui/cards/TransparentCard';
-import { ChartA, ChartB, ChartC } from '@/components/charts';
+// import TransparentCard from '../ui/cards/TransparentCard';
+// import { ChartA, ChartB, ChartC } from '@/components/charts';
 import { Card1, Card2, Card3 } from '@/components/cards/info';
 import { CtaCard1, CtaCard2, CtaCard3, CtaCard4 } from '@/components/cards/cta';
 import { CollectionsCard, ExpertiseCard } from '@/components/cards';
-import { Badge } from '@/components/ui/shadcn/badge-ui';
 import PerformanceCard from '../cards/performance-card-feature';
 import OfferCard from '../cards/offer-card-feature';
 import DesignedCard from '../cards/designed-card-feature';
@@ -44,6 +43,7 @@ export default function HomeFeature() {
 
 
     return (
+        <Suspense fallback={<div>Loading...</div>}>
         <div className='bg-bg w-screen pt-20 lg:pt-2 gap-12 lg:gap-0 flex flex-col justify-center' style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
             <Wrapper
                 id="hero"
@@ -156,5 +156,6 @@ export default function HomeFeature() {
             <CtaCard3 className='md:self-center'/>
             {/* <CtaCard4 /> */}
         </div>
+        </Suspense>
     )
 }

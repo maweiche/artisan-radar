@@ -1,14 +1,14 @@
 'use client'
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/shadcn/button-ui"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+} from "@/components/ui/shadcn/dialog-ui"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/shadcn/card-ui";
 import RegisterFormUI from './register-form-ui';
 
 type RegisterFormProps = {

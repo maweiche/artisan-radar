@@ -1,4 +1,4 @@
-import WalletFeature from "@/components/dashboard/wallet/wallet-feature";
+import WalletFeature from "@/components/wallet/wallet-feature";
 export default function UserWalletPage() {
   return <WalletFeature/>;
 }

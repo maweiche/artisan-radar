@@ -1,5 +1,9 @@
-import SettingsFeature from "@/components/dashboard/settings/settings-feature";
-
+import SettingsFeature from "@/components/settings/settings-feature";
+import { Suspense } from 'react';
 export default function SettingsPage() {
-    return <SettingsFeature />;
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SettingsFeature />
+        </Suspense>
+    );
 }

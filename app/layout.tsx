@@ -1,4 +1,5 @@
 import './global.css';
+import { Suspense } from 'react';
 import { UiLayout } from '@/components/ui/ui-layout';
 import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
@@ -34,23 +35,23 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"></link>
       </head>
       <body className={`${fontVariables} bg-bg`}>
-        <ClusterProvider>
-          <SolanaProvider>
-            <ReactQueryProvider>
-              <ApolloWrapper>
-                <AuthProvider>
-                  
-                      <ThemeProvider>
-                        <div className="max-w-full overflow-x-hidden">
-                          <UiLayout links={links}>{children}</UiLayout>
-                        </div>
-                      </ThemeProvider>
-                  
-                </AuthProvider>
-              </ApolloWrapper>
-            </ReactQueryProvider>
-          </SolanaProvider>
-        </ClusterProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ReactQueryProvider>
+            <ClusterProvider>
+              <SolanaProvider>
+                <ApolloWrapper>
+                  <AuthProvider>
+                    <ThemeProvider>
+                      <div className="max-w-full overflow-x-hidden">
+                        <UiLayout links={links}>{children}</UiLayout>
+                      </div>
+                    </ThemeProvider>
+                  </AuthProvider>
+                </ApolloWrapper>
+              </SolanaProvider>
+            </ClusterProvider>
+          </ReactQueryProvider>
+        </Suspense>
       </body>
     </html>
   );

@@ -1,33 +1,3 @@
-// import { ObjectCard } from '@/components/protocol/protocol-ui';
-// import { fetchAssets } from '@/components/protocol/protocol-umi-access';
-// import { useWallet } from '@solana/wallet-adapter-react';
-// import { fetchAssetsByOwner, AssetV1, fetchCollectionV1, CollectionV1 } from '@metaplex-foundation/mpl-core'
-// import { CtaCard3 } from '../cards/cta';
-// import { useArtisanProgramAccount } from '../protocol/protocol-data-access';
-// import { publicKey as publicKey2 } from '@metaplex-foundation/umi';
-// import { set } from '@metaplex-foundation/umi/serializers';
-// export default function DashboardFeature() {
-//     const { publicKey } = useWallet();
-//     const [userAssets, setUserAssets] = useState<AssetV1[]>([]);
-//     const [slides, setSlides] = useState(Array.from({ length: 5 }));
-//     const [selected, setSelected] = useState(0);
-
-//     const categories = [
-//         'Watches',
-//         'Cars',
-//         'Diamonds',
-//         'Whisky'
-//     ]
-//             { userAssets.length > 0 && (
-//               userAssets.map((asset, index) => {
-//                 return (
-//                   <ObjectCard
-//                     account={new PublicKey(asset!.publicKey)} listingId={asset?.key} key={index}
-//                   />
-//                 )}
-//               ))
-//             }
-
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, use } from 'react';
@@ -46,10 +16,10 @@ import {
 import { Card, CardContent } from '@/components/ui/shadcn/card-ui';
 import { IconCurrencySolana } from '@tabler/icons-react';
 import { CrossCircledIcon, Share1Icon } from '@radix-ui/react-icons';
-import PortfolioGraph from './dashboardComponents/PortfolioGraph';
-import TopGainer from './dashboardComponents/TopGainer';
-import ArtisansTable from './dashboardComponents/ArtisansTable';
-import InvitationCTA from './dashboardComponents/InvitationCTA';
+import PortfolioGraph from './PortfolioGraph';
+import TopGainer from './TopGainer';
+import ArtisansTable from './ArtisansTable';
+import InvitationCTA from './InvitationCTA';
 
 // Dynamically import Joyride with ssr disabled
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
