@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, use, useEffect, useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { WalletButton } from '../solana/solana-provider';
 import Link from 'next/link';
@@ -28,6 +28,7 @@ import LoginDialog from './login-dialog'
 import { ChevronDown, Copy, Menu, X } from 'lucide-react'; // Changed to lucide-react icons
 import { LogOut, Settings2, ListOrdered, EggFried } from 'lucide-react';
 import { IconCurrencySolana } from '@tabler/icons-react';
+import ConfirmEmailDialog from './confirm-email-feature';
 import {
   Avatar,
   AvatarFallback,
@@ -133,13 +134,13 @@ const links2 = [
   let defaultSolanaAdapters: IAdapter<unknown>[] = [];
 const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThreshold = 100, blurAmount = 10 }) => {
   const _params = searchParams?.get('register') === 'true' ? true : false;
-  console.log('params', _params);
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(true);
   const [navbarCollapsed, setNavbarCollapsed] = useState(false);
   const [userWallet, setUserWallet] = useState<string | null>(null);
   const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
   const [provider, setProvider] = useState<IProvider | null>(null);
+  const [showConfirmEmail, setShowConfirmEmail] = useState(false);
   const { loginExistingUser, logout } = useAuth();
   const [checkRegistration, { loading: registrationLoading, data, error: registrationError }] = useLazyQuery(IS_USER_REGISTERED);
   const { publicKey } = useWallet();
@@ -237,7 +238,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
           console.log('logging in with userObject', userObject);
           console.log('user object', userObject);
   
-          const _isRegistered = await checkRegistration({ variables: { email: user.email } });
+          const _isRegistered = await checkRegistration({ variables: { publicKey: publicKey } });
           
           console.log('is registered ->', _isRegistered.data.isUserRegistered);
           // router.push('/register');
@@ -256,6 +257,25 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
 
     init().then(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const checkUser = async (_publicKey: PublicKey) => {
+        console.log('checking user registration ->', _publicKey.toString());
+        const _isRegistered = await checkRegistration({ variables: { publicKey: _publicKey.toString() } });
+        console.log('is registered ->', _isRegistered.data);
+        if (!_isRegistered.data.isUserRegistered) {
+          router.push('/register');
+        } else {
+          console.log('user is registered');
+          setShowConfirmEmail(true);
+        }
+      
+    }
+    if(publicKey) {
+      console.log('checking user registration ->', publicKey.toString());
+        checkUser(publicKey);
+    }
+  }, [publicKey]);
 
   const UserDropdown = ({ publicKey }: { publicKey?: PublicKey }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -487,6 +507,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
               { !loading && (userWallet && !_params ? <UserDropdown publicKey={new PublicKey(userWallet!)}/> : <LoginDialog _isOpen={_params} />) }
           </ul>
         </motion.header>
+        <ConfirmEmailDialog _isOpen={showConfirmEmail} />
       </Suspense>
     );
   };

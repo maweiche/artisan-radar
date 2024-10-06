@@ -31,6 +31,7 @@ export async function POST(_req: Request) {
 
       // Check if user already exists
       const existingUser = await collection.findOne({ email });
+      console.log('existing user ->', existingUser)
       if (existingUser) {
         return new Response(JSON.stringify({ error: 'User already exists.' }), {
           status: 400,
@@ -41,7 +42,7 @@ export async function POST(_req: Request) {
       // Hash the password
       const hashedPassword = await hash(password, 10);
       console.log('hashed password ->', hashedPassword)
-   
+      console.log('inserting user ->', email, hashedPassword, uuidv4(), publicKey)
       const _user = await collection.insertOne({ 
         email, 
         password: hashedPassword, 

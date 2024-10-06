@@ -159,8 +159,20 @@ export const GET_USER_DASHBOARD = gql`
 
 
 // takes in an email address, checks if it's in system and returns true or false
+// export const IS_USER_REGISTERED = gql`
+//   query IsUserRegistered($email: String!) {
+//     isUserRegistered(email: $email)
+//   }
+// `;
+
 export const IS_USER_REGISTERED = gql`
-  query IsUserRegistered($email: String!) {
-    isUserRegistered(email: $email)
+  query IsUserRegistered($publicKey: String!) {
+    isUserRegistered(publicKey: $publicKey)
+  }
+`;
+
+export const CHECK_EMAIL = gql`
+  mutation CheckEmail($publicKey: String!, $input: CheckEmailInput!) {
+    checkEmail(publicKey: $publicKey, input: $input)
   }
 `;

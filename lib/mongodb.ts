@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'development') {
 export async function connectToDatabase(): Promise<{ client: MongoClient; db: Db }> {
   try {
     const client = await clientPromise;
-    const db = client.db('monaco');
+    const db = client.db('Artisan');
     
     // Ping the database to ensure the connection is alive
     await db.command({ ping: 1 });

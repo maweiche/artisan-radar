@@ -89,9 +89,15 @@ const ME_QUERY = gql`
   }
 `;
 
+// const IS_USER_REGISTERED = gql`
+//   query IsUserRegistered($email: String!) {
+//     isUserRegistered(email: $email)
+//   }
+// `;
+
 const IS_USER_REGISTERED = gql`
-  query IsUserRegistered($email: String!) {
-    isUserRegistered(email: $email)
+  query IsUserRegistered($publicKey: String!) {
+    isUserRegistered(publicKey: $publicKey)
   }
 `;
 
@@ -262,7 +268,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         publicKey: _publicKey,
       };
 
-      const isRegistered = await checkUserRegistration(_email!);
+      const isRegistered = await checkUserRegistration(_publicKey!);
 
       if (isRegistered && userObject.email && userObject.publicKey) {
         await loginExistingUser(userObject);

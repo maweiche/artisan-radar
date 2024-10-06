@@ -73,7 +73,7 @@ export default function WaitlistSignup() {
     return (
         <Dialog>
             <DialogTrigger className='w-full md:w-fit'>
-                <Button variant={'outline'} className='p-4 border-black w-full'>
+                <Button variant={'outline'} className='p-4 border-black w-full' asChild>
                     Join the Waitlist
                 </Button>
             </DialogTrigger>

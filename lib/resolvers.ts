@@ -24,8 +24,8 @@ export const resolvers: IResolvers<any, Context> = {
         throw new Error('Failed to fetch user');
       }
     },
-    isUserRegistered: async (_parent, { email }, { db }): Promise<boolean> => {
-      const user = await db.collection('users').findOne({ email });
+    isUserRegistered: async (_parent, { publicKey }, { db }): Promise<boolean> => {
+      const user = await db.collection('users').findOne({ publicKey });
       return !!user;
     }
   },

@@ -332,7 +332,8 @@ export const typeDefs = gql`
     me: User
     getIP(uuid: String!): IPAsset
     getAllIPs: [IPAsset!]!
-    isUserRegistered(email: String!): Boolean!
+    isUserRegistered(publicKey: String!): Boolean!
+    checkEmail(email: String!): User
   }
 
   type Mutation {

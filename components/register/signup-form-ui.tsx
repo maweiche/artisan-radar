@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { X, Check } from 'lucide-react';
 import { countries } from '@/data/countries';
@@ -19,6 +20,9 @@ import { Button } from '../ui/shadcn/button-ui';
 import { web3 } from '@coral-xyz/anchor';
 import { Progress } from '../ui/shadcn/progress-ui';
 import { Card, CardHeader, CardTitle, CardDescription } from '../ui/shadcn/card-ui';
+import { useWallet } from '@solana/wallet-adapter-react';
+
+const WalletMultiButton = dynamic(() => import('@solana/wallet-adapter-react-ui').then((mod) => mod.WalletMultiButton), { ssr: false });
 type SignupFormProps = {
     onClose: () => void;
 };
@@ -29,6 +33,7 @@ let defaultSolanaAdapters: IAdapter<unknown>[] = [];
 export function SignupForm({ onClose }: SignupFormProps) {
     const router = useRouter();
     const { user, checkAuth, loginExistingUser } = useAuth();
+    const { publicKey, wallet } = useWallet();
     const [error, setError] = useState<string | null>(null);
     // const { user, login, logout, loading, checkAuth, connected } = useAuth();
     // const { provider, loggedIn: web3AuthConnected, login: web3AuthLogin, logout: Web3AuthLogout, getUserInfo } = useWeb3Auth();
@@ -92,7 +97,7 @@ export function SignupForm({ onClose }: SignupFormProps) {
                 variables: {
                     _id: user!._id,
                     input: {
-                        ...formData,
+                        acceptTerms: formData.acceptTerms,
                     },
                 }
             });
@@ -193,6 +198,61 @@ export function SignupForm({ onClose }: SignupFormProps) {
             if (_isRegistered.data.isUserRegistered) {
                 setIsRegistered(true);
                 await loginExistingUser({ email: userObject.email, publicKey: userObject.publicKey });
+                setConnected(true);
+            }
+            const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+            console.log('baseUrl ->', baseUrl);
+            const response = await fetch(`${baseUrl}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    country: formData.country,
+                    profilePictureUrl: userObject.profilePictureUrl,
+                    email: userObject.email,
+                    password: userObject.publicKey,
+                    publicKey: userObject.publicKey
+                }),
+              });
+              const data = await response.json();
+              console.log('data ->', data);
+              // If registration is successful, log the user in
+              await loginExistingUser({ 
+                email: userObject.email,
+                publicKey: userObject.publicKey,
+              });
+        
+    
+            setLoginData(userObject);
+            setIsRegistered(_isRegistered.data.isUserRegistered);
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+            setError("Failed to fetch user information. Please try logging in again.");
+        }
+    };
+
+    const fetchPubkeyInfo = async () => {
+        try {
+            
+            let userObject = {
+                _id: '',
+                email: loginData.email || '',
+                publicKey: publicKey!.toString(),
+                username: '',
+                profilePictureUrl: '',
+                authProvider: 'web3wallet',
+            };  
+            console.log('user object', userObject);
+
+            const _isRegistered = await checkRegistration({ variables: { publicKey: userObject.publicKey } });
+            
+            console.log('is registered ->', _isRegistered.data.isUserRegistered);
+            if (_isRegistered.data.isUserRegistered) {
+                setIsRegistered(true);
+                await loginExistingUser({ email: loginData.email, publicKey: publicKey!.toString() });
                 setConnected(true);
             }
             const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
@@ -332,6 +392,20 @@ export function SignupForm({ onClose }: SignupFormProps) {
         }
     }, []);
 
+    useEffect(() => {
+        if(publicKey) {
+            setConnected(true);
+            setLoginData({
+                ...loginData,
+                publicKey: publicKey.toString(),
+            });
+        }
+        if(publicKey && loginData.email && step == 2) {
+            console.log('fetching user info');
+            fetchPubkeyInfo();
+        }
+    }, [publicKey, loginData.email, step]);
+
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <div className="fixed h-full inset-0 bg-black bg-opacity-100 flex items-center justify-center z-[100]">
@@ -380,20 +454,34 @@ export function SignupForm({ onClose }: SignupFormProps) {
                                         ))}
                                     </select>
                                     <div className="mt-4">
-                                        <h3 className="text-xl font-bold mb-2">CONNECT A SOCIAL</h3>
-                                        {loginData.authProvider && ( <p>Connected with {loginData.authProvider}</p> )}
-                                            <div className="flex flex-row mb-4 gap-4">
-                                                <Button disabled={connected || loginData.publicKey ? true : false} variant="outline" className="mt-2" onClick={() => loginWithGoogle()}>
+                                        <h3 className="text-xl font-bold mb-2">CONNECT A WALLET</h3>
+                                            <div className="flex flex-row justify-evenly mb-4 gap-4">
+                                                <Button disabled={connected || loginData.publicKey ? true : false} variant="outline" className='w-1/3 rounded-full border-none font-urbanist text-lg hover:bg-secondary hover:text-primary' style={{boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}} onClick={() => loginWithGoogle()}>
                                                     Google
                                                 </Button>
-                                                <Button disabled={true} variant="outline" className="mt-2" onClick={() => loginWithGoogle()}>
-                                                    Facebook
-                                                </Button>
+                                                <WalletMultiButton />
                                             </div>
-                                    
+                                            {loginData.authProvider || publicKey && ( <p className="flex felx-row text-green-600 mb-2 justify-center">Connected with {!publicKey ? loginData.authProvider : wallet?.adapter.name }</p> )}
                                     </div>
                                 </div>
-                                <>
+                                <>  
+                                    <div className="mb-4 self-center justify-center items-center flex flex-col">
+                                        <label className="flex items-center">
+                                            Enter an email address for your account
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            placeholder="Email"
+                                            value={loginData.email}
+                                            className='border p-2 rounded'
+                                            onChange={
+                                                (e) => {
+                                                    setLoginData((prevData: any) => ({ ...prevData, email: e.target.value }));
+                                                }
+                                            }
+                                        />
+                                    </div>
                                     <div className="mb-4">
                                         <label className="flex items-center">
                                             <input
@@ -401,14 +489,14 @@ export function SignupForm({ onClose }: SignupFormProps) {
                                                 name="acceptTerms"
                                                 checked={formData && formData.acceptTerms === new Date().toISOString() ? true : false} 
                                                 onChange={() => {setFormData((prevData: any)=> ({ ...prevData, acceptTerms: new Date().toISOString() }))}}
-                                                disabled={!loginData.publicKey}
+                                                // disabled={!loginData.publicKey || !publicKey ? true : false}
                                                 className="mr-2"
                                                 required
                                             />
                                             I have read and accept the terms of use
                                         </label>
                                     </div>
-                                    <Button disabled={!loginData.publicKey} type="submit" className="bg-black text-white px-4 py-2 rounded" onClick={()=> handleNext()}>
+                                    <Button disabled={!loginData.publicKey} type="submit" className="bg-secondary text-primary hover:text-secondary px-4 py-2 rounded" onClick={()=> handleNext()}>
                                         Next 
                                     </Button>
                                 </>
@@ -432,9 +520,13 @@ export function SignupForm({ onClose }: SignupFormProps) {
                                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <Check className="h-8 w-8 text-white" />
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4">WELCOME!</h3>
-                                <p className="mb-4">You have created your Artisan account!</p>
-                                <p className="mb-4">You can now enter to your account and start registering your creations.</p>
+                                <h3 className="text-2xl font-bold mb-4">Congratulations!</h3>
+                                <p className="mb-4">Your account with The Artisan has been created</p>
+                                <p className="mb-4">Head over to your dashboard to learn how to collect!</p>
+                                <p className="mb-4">
+                                    <strong>Wallet: {loginData.publicKey.slice(0,4)}...{loginData.publicKey.slice(-4)}</strong>
+                                    
+                                </p>
                                 <p className="mb-4">
                                     <strong>Email: {loginData.email}</strong>
                                 </p>
