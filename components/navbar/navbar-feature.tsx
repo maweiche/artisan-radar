@@ -141,7 +141,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
   const [web3auth, setWeb3auth] = useState<Web3AuthNoModal | null>(null);
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [showConfirmEmail, setShowConfirmEmail] = useState(false);
-  const { loginExistingUser, logout } = useAuth();
+  const { user, loginExistingUser, logout, checkAuth } = useAuth();
   const [checkRegistration, { loading: registrationLoading, data, error: registrationError }] = useLazyQuery(IS_USER_REGISTERED);
   const { publicKey } = useWallet();
   const router = useRouter();
@@ -241,7 +241,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
           const _isRegistered = await checkRegistration({ variables: { publicKey: publicKey } });
           
           console.log('is registered ->', _isRegistered.data.isUserRegistered);
-          // router.push('/register');
+          router.push('/register');
           if (_isRegistered.data.isUserRegistered) {
               console.log('user is registered logging in with userObject', userObject);
               await loginExistingUser({ email: userObject.email, publicKey: userObject.publicKey });
@@ -265,10 +265,11 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
         console.log('is registered ->', _isRegistered.data);
         if (!_isRegistered.data.isUserRegistered) {
           router.push('/register');
-        } else {
+        } 
           console.log('user is registered');
+          // await checkAuth();
           setShowConfirmEmail(true);
-        }
+        
       
     }
     if(publicKey) {
@@ -276,6 +277,13 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
         checkUser(publicKey);
     }
   }, [publicKey]);
+
+  useEffect(() => {
+    if(user && !userWallet) {
+      console.log('setting user wallet ->', user.publicKey);
+      setUserWallet(user.publicKey);
+    }
+  }, [user]);
 
   const UserDropdown = ({ publicKey }: { publicKey?: PublicKey }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -507,7 +515,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
               { !loading && (userWallet && !_params ? <UserDropdown publicKey={new PublicKey(userWallet!)}/> : <LoginDialog _isOpen={_params} />) }
           </ul>
         </motion.header>
-        <ConfirmEmailDialog _isOpen={showConfirmEmail} />
+        {showConfirmEmail && !user && <ConfirmEmailDialog  handleClose={()=>setShowConfirmEmail(false)}/>}
       </Suspense>
     );
   };

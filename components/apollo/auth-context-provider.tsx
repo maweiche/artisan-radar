@@ -168,7 +168,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuth = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (!token) {
+      console.log('No token found!!');
       setUser(null);
+      if(publicKey) disconnect();
       setLoading(false);
       return;
     }
@@ -185,6 +187,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (data && data.me) {
+        console.log('User data:', data.me);
         setUser(data.me);
       } else {
         throw new Error('No user data returned');

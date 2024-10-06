@@ -1,25 +1,20 @@
 'use client';
-
-import { Suspense, useState, useEffect, useMemo, use } from 'react';
+import { Suspense, useState, useEffect, useMemo } from 'react';
 import { Binoculars } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/shadcn/button-ui';
 import { fetchAssets } from '@/components/protocol/protocol-umi-access';
 import { useWallet } from '@solana/wallet-adapter-react';
-import {
-  fetchAssetsByOwner,
-  AssetV1,
-  fetchCollectionV1,
-  CollectionV1,
-} from '@metaplex-foundation/mpl-core';
-import { Card, CardContent } from '@/components/ui/shadcn/card-ui';
+import { AssetV1 } from '@metaplex-foundation/mpl-core';
+import { Card } from '@/components/ui/shadcn/card-ui';
 import { IconCurrencySolana } from '@tabler/icons-react';
 import { CrossCircledIcon, Share1Icon } from '@radix-ui/react-icons';
 import PortfolioGraph from './PortfolioGraph';
 import TopGainer from './TopGainer';
 import ArtisansTable from './ArtisansTable';
 import InvitationCTA from './InvitationCTA';
+import { useAuth } from '@/components/apollo/auth-context-provider';
 
 // Dynamically import Joyride with ssr disabled
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
@@ -30,20 +25,25 @@ export default function DashboardFeature() {
   const [isMounted, setIsMounted] = useState(false);
   const [joyrideStatus, setJoyrideStatus] = useState('idle');
   const { publicKey } = useWallet();
-  // useMemo to create a User object we can update as info comes in from our db
+  const { user: authUser, loading } = useAuth();
+
   const user = useMemo(() => {
+    if (!authUser) return null;
     return {
-      name: 'Souluser1234',
-      points: 10324,
-      rank: 1234,
-      walletValue: 10000,
-      walletValueChange: 120,
-      pointsChange: 60,
-      pointsChangePercentage: 1.32,
-      allTimeHigh: 13456,
-      allTimeHighDaysAgo: 54,
+      firstName: authUser.firstName || '',
+      lastName: authUser.lastName || '',
+      username: authUser.username || '',
+      publicKey: authUser.publicKey || null,
+      points: 100,
+      rank: 2,
+      walletValue:  0,
+      walletValueChange:  0,
+      pointsChange:  12,
+      pointsChangePercentage:  1,
+      allTimeHigh: 14,
+      allTimeHighDaysAgo: 2,
     };
-  }, []);
+  }, [authUser]);
 
   const steps = [
     {
@@ -92,30 +92,12 @@ export default function DashboardFeature() {
   async function fetchUserAssets(owner: string) {
     const assets = await fetchAssets(owner);
     console.log('user assets', assets);
-    const listingArray: any = [];
-    for (let i = 0; i < assets.length; i++) {
-      // // if the listing exists already in the listingArray with the same associatedId as the listing.listing, then increase the quantity by 1
-      // // else just push the new listing to the listingArray
-      // if (listingArray.find((item: any) => item.associatedId === assets[i].listing)) {
-      //   const index = listingArray.findIndex((item: any) => item.associatedId === listing.listing);
-      //   listingArray[index].quantity += 1;
-      //   continue;
-      // }
-      // listingArray.push({
-      //   ...assets[i],
-      //   associatedId: listing.listing,
-      //   price: listing.price,
-      //   quantity: 1,
-      // });
-    }
-    console.log('all user assets', listingArray);
     setUserAssets(assets);
   }
 
   useEffect(() => {
     setIsMounted(true);
 
-    // create a localStorage item to track if the user has completed the tour, it needs to be structured as boolean:DateIsoString
     const artisanTour = localStorage.getItem('artisanTour');
     if (!artisanTour) {
       localStorage.setItem(
@@ -129,7 +111,6 @@ export default function DashboardFeature() {
         setRunTour(true);
       }
 
-      // If the tour was completed more than 1 week ago, reset the tour
       if (
         completed &&
         new Date(date) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -141,7 +122,6 @@ export default function DashboardFeature() {
         setRunTour(true);
       }
 
-      // If the tour was completed, set the status to 'finished'
       if (completed) {
         setJoyrideStatus('finished');
         setRunTour(false);
@@ -154,6 +134,10 @@ export default function DashboardFeature() {
       fetchUserAssets(publicKey.toBase58());
     }
   }, [publicKey]);
+
+  if (loading || !user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Suspense fallback={<div />}>
@@ -174,18 +158,18 @@ export default function DashboardFeature() {
       )}
       <div className="flex flex-col bg-bg pt-6 mt-12 md:pt-14 pb-4 md:pb-8 gap-4 md:gap-8 items-center w-full overflow-auto px-4 md:px-0">
         {/* Header Section */}
-        <div className="flex flex-row  md:flex-row items-start md:items-center text-secondary gap-2 md:gap-4 w-full md:w-11/12">
+        <div className="flex flex-row md:flex-row items-start md:items-center text-secondary gap-2 md:gap-4 w-full md:w-11/12">
           <motion.h1 className="text-3xl md:text-5xl font-semibold">
             Welcome back
-            <span className="opacity-[.4]">{user.name}</span>
+            <span className="opacity-[.4]">
+              {user.publicKey ? `${user.publicKey.slice(0,4)}...${user.publicKey.slice(-4)}` : 'User'}
+            </span>
           </motion.h1>
           <div className="flex flex-col-reverse items-start md:flex-row md:items-center gap-2">
-            {' '}
             <div className="flex items-center gap-2 text-[#fff] bg-[#3F3F46] rounded-lg px-3 py-[6px] text-sm md:text-base">
               <CrossCircledIcon />
               <span>Unverified</span>
             </div>
-            {/* Button to activate tour */}
             <Button
               onClick={() => setRunTour(true)}
               className="bg-bg text-secondary rounded-xl border border-zinc-300 dark:border-zinc-700 text-sm md:text-base"
