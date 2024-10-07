@@ -48,7 +48,7 @@ const ConfirmEmailDialog: React.FC<DialogProps> = ({ _isOpen, handleClose }) => 
             console.log('Public Key:', publicKey?.toString());
             if (!userWallet || !user) await checkAuth();
             console.log('loginExistingUser:', userWallet);
-            await loginExistingUser({ email: formData.email, publicKey: userWallet || '' });
+            await loginExistingUser({ publicKey: userWallet! });
         } catch (error: any) {
             console.error('Error updating user:', error);
         }
