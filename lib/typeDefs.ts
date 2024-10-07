@@ -343,7 +343,7 @@ export const typeDefs = gql`
 
     addCreatorProfile(uuid: String!, publicKey: String!, creatorInfo: CreatorInfoInput!): User!
 
-    login(email: String!, password: String!): AuthPayload!
+    login(publicKey: String!, password: String!): AuthPayload!
 
     resetPassword(token: String!, newPassword: String!): Boolean!
     

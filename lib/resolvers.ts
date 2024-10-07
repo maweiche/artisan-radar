@@ -116,12 +116,12 @@ export const resolvers: IResolvers<any, Context> = {
       }
     },
 
-    login: async (_: any, { email, password }: {email: string, password: string}) => {
+    login: async (_: any, { publicKey, password }: {publicKey: string, password: string}) => {
       const { db } = await connectToDatabase();
       const usersCollection = db.collection('users');
   
-      // Find user by email
-      const user = await usersCollection.findOne({ email });
+      // Find user by publicKey
+      const user = await usersCollection.findOne({ publicKey });
       console.log('found the user ->', user)
       if (!user) {
         throw new Error('Invalid credentials');
@@ -129,18 +129,18 @@ export const resolvers: IResolvers<any, Context> = {
   
       // Check password
       const isValid = await compare(password, user.password);
-  
+      console.log('is valid ->', isValid)
       if (!isValid) {
         throw new Error('Invalid credentials');
       }
-  
       // Create token
       const token = jwt.sign(
         { _id: user._id.toString() },
-        process.env.JWT_SECRET as string,
+        process.env.JWT_SECRET! as string,
         { expiresIn: '1d' }
       );
-  
+      console.log('token ->', token)
+      console.log('success ->',  user)
       return {
         token,
         user

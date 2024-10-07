@@ -17,8 +17,8 @@ export async function POST(_req: Request) {
     const { email, password, publicKey, firstName, lastName, country, profilePictureUrl } = req;
 
     // Check if email and password are provided
-    if (!email || !password) {
-      return new Response(JSON.stringify({ error: 'Missing email or password' }), {
+    if (!publicKey) {
+      return new Response(JSON.stringify({ error: 'Missing publicKey' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -30,7 +30,7 @@ export async function POST(_req: Request) {
       const collection = db.collection('users');
 
       // Check if user already exists
-      const existingUser = await collection.findOne({ email });
+      const existingUser = await collection.findOne({ publicKey });
       console.log('existing user ->', existingUser)
       if (existingUser) {
         return new Response(JSON.stringify({ error: 'User already exists.' }), {

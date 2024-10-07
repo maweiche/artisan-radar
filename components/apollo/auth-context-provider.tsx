@@ -101,15 +101,50 @@ const IS_USER_REGISTERED = gql`
   }
 `;
 
+// const LOGIN_USER = gql`
+//   mutation LoginUser($email: String!, $password: String!) {
+//     login(email: $email, password: $password) {
+//       token
+//       user {
+//         _id
+//         email
+//         username
+//         # Include other user fields as needed
+//       }
+//     }
+//   }
+// `;
+
 const LOGIN_USER = gql`
-  mutation LoginUser($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation LoginUser($publicKey: String!, $password: String!) {
+    login(publicKey: $publicKey, password: $password) {
       token
       user {
         _id
         email
         username
-        # Include other user fields as needed
+        profilePictureUrl
+        publicKey
+        firstName
+        lastName
+        baseProfile {
+          displayName
+          displayRole
+          photoUrl
+          bio
+          createdAt
+          updatedAt
+        }
+          coverImageUrl
+          kycInfo {
+            kycStatus
+            kycCompletionDate
+            kycDocuments {
+              documentType
+              documentUrl
+              verificationStatus
+            }
+          }
       }
     }
   }
@@ -147,7 +182,8 @@ interface AuthContextType {
   login: (userObject: {email: string; publicKey: string}) => Promise<any>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
-  loginExistingUser: (userObject: {email: string; publicKey: string}) => Promise<void>;
+  // loginExistingUser: (userObject: {email: string; publicKey: string}) => Promise<void>;
+  loginExistingUser: (userObject: {publicKey: string}) => Promise<void>;
   checkUserRegistration: (email: string) => Promise<boolean>;
 }
 
@@ -160,7 +196,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const client = useApolloClient();
   const router = useRouter();
   const { toast } = useToast();
-  const { provider, login: web3Login, logout: web3Logout, getUserInfo } = useWeb3Auth();
+  const { provider, login: web3Login, logout: web3Logout, getUserInfo, web3auth } = useWeb3Auth();
   const { getAccounts } = useSolanaRPC(provider);
   const { publicKey, disconnect } = useWallet();
   const [loginUserMutation] = useMutation(LOGIN_USER);
@@ -201,15 +237,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [client]);
 
-  const loginExistingUser = useCallback(async (userObject: {email: string; publicKey: string}) => {
+  // const loginExistingUser = useCallback(async (userObject: {email: string; publicKey: string}) => {
+    const loginExistingUser = useCallback(async (userObject: {publicKey: string}) => {
+      console.log('Logging in existing user...', userObject);
     try {
       const result = await loginUserMutation({
         variables: {
-          email: userObject.email,
+          // email: userObject.email,
+          publicKey: userObject.publicKey,
           password: userObject.publicKey,
         },
       });
       const { token, user: userData } = result.data.login;
+      console.log('User data:', result.data.login);
       localStorage.setItem('token', token);
       setUser(userData);
       toast({
@@ -244,36 +284,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [client, toast]);
 
-  const login = useCallback(async (_userObject?: {email: string}) => {
+  const login = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      let _publicKey;
-      let _email;
-      if (!publicKey) {
+        if (!web3auth) {
+            console.log('web3Login not initialized yet, attempting to initialize');
+        }
         const connected = await web3Login();
         console.log('Connected:', connected);
         if (!connected) throw new Error('Failed to connect to web3 provider');
         
         const userInfo = await getUserInfo();
+        const email = userInfo?.email || '';
         if (!userInfo) throw new Error('Failed to get user info');
         
         const accounts = await getAccounts();
-        _publicKey = accounts![0];
-        _email = userInfo.email || 'error';
-      } else {
-        _publicKey = publicKey.toBase58();
-        _email = _userObject?.email || 'error';
-      }
+        const {idToken} = await web3auth!.authenticateUser();
 
-      const userObject: { email: string; publicKey: string } = {
-        email: _email,
-        publicKey: _publicKey,
+      const userObject: { publicKey: string, _token: string } = {
+        publicKey: accounts![0],
+        _token: idToken
       };
 
-      const isRegistered = await checkUserRegistration(_publicKey!);
+      const isRegistered = await checkUserRegistration(accounts![0]);
 
-      if (isRegistered && userObject.email && userObject.publicKey) {
+      if (isRegistered && userObject.publicKey) {
         await loginExistingUser(userObject);
       } else {
         // Handle new user registration
@@ -283,7 +319,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: userObject.email,
+            email: email,
             password: userObject.publicKey,
             publicKey: userObject.publicKey
           }),
@@ -311,11 +347,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(async () => {
     try {
       console.log('Logging out...');
-      try {
-        await web3Logout();
-      } catch (error) {
-        console.error('Web3 logout error:', error);
-      }
+      await web3Logout();
+      
       if(publicKey) {
         disconnect();
       }

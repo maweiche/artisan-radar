@@ -29,6 +29,7 @@ import { ChevronDown, Copy, Menu, X } from 'lucide-react'; // Changed to lucide-
 import { LogOut, Settings2, ListOrdered, EggFried } from 'lucide-react';
 import { IconCurrencySolana } from '@tabler/icons-react';
 import ConfirmEmailDialog from './confirm-email-feature';
+import { useToast } from '@/hooks/use-toast';
 import {
   Avatar,
   AvatarFallback,
@@ -143,8 +144,15 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
   const [showConfirmEmail, setShowConfirmEmail] = useState(false);
   const { user, loginExistingUser, logout, checkAuth } = useAuth();
   const [checkRegistration, { loading: registrationLoading, data, error: registrationError }] = useLazyQuery(IS_USER_REGISTERED);
-  const { publicKey } = useWallet();
+  // const { publicKey } = useWallet();
   const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    await logout();
+    setUserWallet(null);
+    router.push('/');
+  };
 
   useEffect(() => {
     const hideNavWhileScrolling = () => {
@@ -170,11 +178,11 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
     hideNavWhileScrolling({ when: !navbarCollapsed });
   }, [navbarCollapsed]);
 
-  useEffect(() => {
-    if(publicKey) {
-        setUserWallet(publicKey.toBase58());
-    }
-  }, [publicKey]);
+  // useEffect(() => {
+  //   if(publicKey) {
+  //       setUserWallet(publicKey.toBase58());
+  //   }
+  // }, [publicKey]);
 
   useEffect(() => {
     const init = async () => {
@@ -224,7 +232,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
           console.log('accounts', accounts);
           const publicKey = accounts![0];
           console.log('publicKey', publicKey);
-  
+          const{ idToken }= await web3auth.authenticateUser();
           const user = await web3auth.getUserInfo();
   
           console.log('user', user);
@@ -241,14 +249,22 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
           const _isRegistered = await checkRegistration({ variables: { publicKey: publicKey } });
           
           console.log('is registered ->', _isRegistered.data.isUserRegistered);
-          router.push('/register');
+          setUserWallet(userObject.publicKey);
+
           if (_isRegistered.data.isUserRegistered) {
               console.log('user is registered logging in with userObject', userObject);
-              await loginExistingUser({ email: userObject.email, publicKey: userObject.publicKey });
+              // await loginExistingUser({ email: userObject.email, publicKey: userObject.publicKey });
+              const _login = await loginExistingUser({ publicKey: userObject.publicKey });
+              console.log('login', _login);
+              toast({
+                title: 'Welcome back!',
+                description: 'You have successfully logged in.',
+              })
               // router.push('/dashboard');
+          } else {
+            router.push('/register');
           }
   
-          setUserWallet(userObject.publicKey);
         }
       } catch (error) {
         console.error(error);
@@ -258,25 +274,32 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
     init().then(() => setLoading(false));
   }, []);
 
+
   useEffect(() => {
-    const checkUser = async (_publicKey: PublicKey) => {
-        console.log('checking user registration ->', _publicKey.toString());
-        const _isRegistered = await checkRegistration({ variables: { publicKey: _publicKey.toString() } });
-        console.log('is registered ->', _isRegistered.data);
-        if (!_isRegistered.data.isUserRegistered) {
-          router.push('/register');
-        } 
-          console.log('user is registered');
-          // await checkAuth();
-          setShowConfirmEmail(true);
+    if (web3auth && web3auth.connected && !user) {
+      checkAuth();
+    }
+  }, [web3auth, user]);
+
+  // useEffect(() => {
+  //   const checkUser = async (_publicKey: PublicKey) => {
+  //       console.log('checking user registration ->', _publicKey.toString());
+  //       const _isRegistered = await checkRegistration({ variables: { publicKey: _publicKey.toString() } });
+  //       console.log('is registered ->', _isRegistered.data);
+  //       if (!_isRegistered.data.isUserRegistered) {
+  //         router.push('/register');
+  //       } 
+  //         console.log('user is registered');
+  //         // await checkAuth();
+  //         setShowConfirmEmail(true);
         
       
-    }
-    if(publicKey) {
-      console.log('checking user registration ->', publicKey.toString());
-        checkUser(publicKey);
-    }
-  }, [publicKey]);
+  //   }
+  //   if(publicKey) {
+  //     console.log('checking user registration ->', publicKey.toString());
+  //       checkUser(publicKey);
+  //   }
+  // }, [publicKey]);
 
   useEffect(() => {
     if(user && !userWallet) {
@@ -301,7 +324,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
             <Avatar>
-              <AvatarImage src="/api/placeholder/64x64" alt="Profile picture" />
+              <AvatarImage src="" alt="Profile picture" />
               <AvatarFallback>
                 <div className="w-16 h-16 rounded-3xl dark:bg-white bg-black"></div>
               </AvatarFallback>
@@ -315,7 +338,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
         >
           <div className="flex items-center space-x-4 mb-4">
             <Avatar className="w-16 h-16">
-              <AvatarImage src="/api/placeholder/64x64" alt="Profile picture" />
+              <AvatarImage src="" alt="Profile picture" />
               <AvatarFallback>
                 <div className="w-16 h-16 rounded-3xl dark:bg-white bg-black"></div>
               </AvatarFallback>
@@ -367,7 +390,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
             <EggFried className="mr-2 h-4 w-4" />
             <span className="text-sm font-semibold">Refer your friends</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer text-secondary" onClick={()=>{setUserWallet(null), logout()}}>
+          <DropdownMenuItem className="cursor-pointer text-secondary" onClick={()=>{handleLogout()}}>
             <LogOut className="mr-2 h-4 w-4" />
             <span className="text-sm font-semibold">Logout</span>
           </DropdownMenuItem>
@@ -432,7 +455,7 @@ const NavbarFeature: React.FC<NavbarProps> = ({ searchParams, links, scrollThres
             </Link>
           </div>
           
-          {navbarCollapsed && (publicKey ? <UserDropdown /> : <WalletButton style={{ width: 'fit-content', zIndex: '61'}} />)}
+          {/* {navbarCollapsed && web3auth && (web3auth.connected ? <UserDropdown /> : <WalletButton style={{ width: 'fit-content', zIndex: '61'}} />)} */}
           <NavButton
             onClick={() => {
               setNavbarCollapsed((prev) => !prev);
