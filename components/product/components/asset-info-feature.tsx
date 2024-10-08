@@ -1,14 +1,67 @@
 "use client"
 
 import { useState } from "react";
-
-
+import { VersionedTransaction } from "@solana/web3.js";
+import { useSolanaRPC } from "@/hooks/use-web3-rpc";
+import { useWeb3Auth } from "@/hooks/use-web3-auth";
+import RPC from "@/components/solana/web3auth/solana-rpc";
+import toast from "react-hot-toast";
 export default function AssetInfo({ asset }: { asset: any }) {
+  const { provider, login: web3Login, logout: web3Logout, getUserInfo, web3auth, userAccounts } = useWeb3Auth();
+  const { signVersionedTransaction, getAccounts } = useSolanaRPC(provider);
   console.log('asset for render ->', asset);
-  const [count, setCount] = useState(5); // Initial count set to 5
+  const [amount, setAmount] = useState(5); // Initial amount set to 5
 
-  const increment = () => setCount(count + 1);
-  const decrement = () => setCount(count - 1);
+  const increment = () => setAmount(amount + 1);
+  const decrement = () => setAmount(amount - 1);
+
+  const buyTx = async(id: number, reference: string, key: string, amount: number, uri: string) => {
+    try{
+      const response = await fetch('/api/protocol/buy', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: id,
+            reference: reference,
+            publicKey: key,
+            amount: amount,
+            uri: uri,
+        })
+      })
+      const { transaction } = await response.json(); //VersionedTransaction
+      const tx = VersionedTransaction.deserialize(Buffer.from(transaction, "base64"));
+      if(!tx){
+        console.log('no transaction');
+        return;
+      }
+      return tx;
+    } catch (error) {
+      console.error('Error sending transaction', error);
+    }
+  }
+
+  const handleBuy = async() => {
+    if (web3auth && web3auth.connected && web3auth.provider) {
+      const rpc = new RPC(web3auth.provider);
+      const accounts =  await getAccounts();
+      console.log('userAccounts ->',accounts);
+      if (!accounts) {
+        console.error('No accounts found');
+        return;
+      }
+      const tx = await buyTx(Number(asset.onChainData.id), asset.attributes[2].value, accounts![0], amount, asset.onChainData.watchUri);
+      console.log('tx ->', tx); // VersionedTransaction
+      if (tx) {
+        const signature = await rpc!.signVersionedTransaction({ tx });
+        console.log('signature ->', signature);
+        toast.success(`Transaction sent!`);
+      } else {
+        console.error('Transaction is undefined');
+      }
+    }
+  }
 
   return (
     <section className="bg-white rounded-3xl border-gray p-5 mb-5">
@@ -61,7 +114,7 @@ export default function AssetInfo({ asset }: { asset: any }) {
       <button
         style={{ height: "50px", width: "78px" }}
         className="bg-gray-300 flex justify-center items-center rounded-2xl"
-        onClick={decrement} // Decrement the count
+        onClick={decrement} // Decrement the amount
       >
         -
       </button>
@@ -69,18 +122,18 @@ export default function AssetInfo({ asset }: { asset: any }) {
         style={{ height: "50px", width: "78px" }}
         className="bg-white flex justify-center items-center rounded-2xl font-bold border-gray box-border"
       >
-        {count} {/* Display the current count */}
+        {amount} {/* Display the current amount */}
       </button>
       <button
         style={{ height: "50px", width: "78px" }}
         className="bg-gray-700 flex justify-center items-center rounded-2xl text-white"
-        onClick={increment} // Increment the count
+        onClick={increment} // Increment the amount
       >
         +
       </button>
     </div>
-        <button className="w-full md:w-2/3 bg-black text-white py-3 rounded-2xl">
-          {`Buy $${count * Number(asset.onChainData.price)} of this Fraction`}
+        <button className="w-full md:w-2/3 bg-black text-white py-3 rounded-2xl" onClick={()=> handleBuy()}>
+          {`Buy $${amount * Number(asset.onChainData.price)} of this Fraction`}
         </button>
       </div>
       <p className="text-sm text-gray-500 p-7 border-gray rounded-3xl">

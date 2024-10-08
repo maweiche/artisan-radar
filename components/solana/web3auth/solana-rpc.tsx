@@ -11,6 +11,7 @@ import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { createGenericFile, createSignerFromKeypair, publicKey, signerIdentity } from "@metaplex-foundation/umi"
 import { CustomChainConfig, IProvider } from "@web3auth/base";
 import { SolanaWallet } from "@web3auth/solana-provider";
+import * as b58 from "bs58";
   
   export default class SolanaRpc {
     private provider: IProvider;
@@ -144,6 +145,7 @@ import { SolanaWallet } from "@web3auth/solana-provider";
   
         const transaction = new VersionedTransaction(messageV0);
         const { signature } = await this.solanaWallet.signAndSendTransaction(transaction);
+        
         return signature;
       } catch (error) {
         console.error("Error sending versioned transaction:", error);
@@ -151,26 +153,36 @@ import { SolanaWallet } from "@web3auth/solana-provider";
       }
     }
   
-    async signVersionedTransaction(): Promise<VersionedTransaction> {
+    async signVersionedTransaction({ tx }: { tx: VersionedTransaction}): Promise<string> {
       try {
+        console.log('signing and sending transaction w/ web3auth');
         const accounts = await this.getAccounts();
-        const connection = await this.getConnection();
+        // const connection = await this.getConnection();
+        const connection = new Connection("https://soft-cold-energy.solana-devnet.quiknode.pro/ad0dda04b536ff45a76465f9ceee5eea6a048a8f");
         const { blockhash } = await connection.getLatestBlockhash("finalized");
   
-        const instruction = SystemProgram.transfer({
-          fromPubkey: new PublicKey(accounts[0]),
-          toPubkey: new PublicKey(accounts[0]),
-          lamports: 0.01 * LAMPORTS_PER_SOL,
+        const umi = createUmi('https://api.devnet.solana.com');
+        const UMI_KEY: string = process.env.NEXT_PUBLIC_UMI_KEY!;
+        const UMI_KEY_JSON = JSON.parse(UMI_KEY);
+        let keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(UMI_KEY_JSON));
+        const _signer = createSignerFromKeypair(umi, keypair);
+        umi.use(signerIdentity(_signer));
+  
+        const signedTx = await this.solanaWallet.signTransaction(tx);
+        console.log('signedTx:', signedTx);
+        // Convert the signed transaction to a format compatible with Umi
+        const umiTx = umi.transactions.deserialize(signedTx.serialize());
+        
+        const signature = await umi.rpc.sendTransaction(umiTx, {
+        skipPreflight: true,
         });
-  
-        const messageV0 = new TransactionMessage({
-          payerKey: new PublicKey(accounts[0]),
-          recentBlockhash: blockhash,
-          instructions: [instruction],
-        }).compileToV0Message();
-  
-        const transaction = new VersionedTransaction(messageV0);
-        return await this.solanaWallet.signTransaction<VersionedTransaction>(transaction);
+        const confirmResult = await umi.rpc.confirmTransaction(signature, {
+        strategy: { type: 'blockhash', ...(await umi.rpc.getLatestBlockhash()) },
+        })
+
+        console.log('Transaction confirmed:', confirmResult);
+        const string = b58.encode(Buffer.from(signature));
+        return string;
       } catch (error) {
         console.error("Error signing versioned transaction:", error);
         throw error;

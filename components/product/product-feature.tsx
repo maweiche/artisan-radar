@@ -43,7 +43,12 @@ const ProductFeature: React.FC<{ params: { id: string } }> = ({ params }) => {
       const details = await fetchObjectDetails(object);
       console.log('details:', details);
       setAttributes(details!.attributes!.attributeList as any);
-
+      setOnChainData((prev: any) => {
+        return {
+          ...prev,
+          watchUri: details!.uri
+        }
+      })
   };
 
   useEffect(() => {

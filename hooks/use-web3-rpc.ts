@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { IProvider } from "@web3auth/base";
 import SolanaRpc from '@/components/solana/web3auth/solana-rpc';
+import { VersionedTransaction } from '@solana/web3.js';
 
 export const useSolanaRPC = (provider: IProvider | null) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,8 +57,8 @@ export const useSolanaRPC = (provider: IProvider | null) => {
     executeRpcCall(() => rpc!.sendVersionedTransaction(), "Failed to send versioned transaction"),
   [rpc]);
 
-  const signVersionedTransaction = useCallback(() => 
-    executeRpcCall(() => rpc!.signVersionedTransaction(), "Failed to sign versioned transaction"),
+  const signVersionedTransaction = useCallback((tx: VersionedTransaction) => 
+    executeRpcCall(() => rpc!.signVersionedTransaction({ tx }), "Failed to sign versioned transaction"),
   [rpc]);
 
   const signAllTransactions = useCallback((count: number) => 
