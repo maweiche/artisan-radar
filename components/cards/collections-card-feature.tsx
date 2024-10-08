@@ -28,7 +28,7 @@ interface DefaultProps {
 const CollectionsCard = (
   props: DefaultProps
 ) => {
-  const [slides, setSlides] = useState(Array.from({ length: 5 }));
+  const [slides, setSlides] = useState(Array.from({ length: 4 }));
   // Initialize thumbsSwiper as SwiperType | null
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [progressAmount, setProgressAmount] = useState(0);
@@ -66,7 +66,7 @@ const CollectionsCard = (
                     </Button>
                     <div className={styles.badges}>
                       <p className="bg-secondary px-2 rounded-full text-primary text-md">
-                        3 assets available
+                        {index * 2} assets available
                       </p>
                       <Image
                         src={'/icons/check-icon.svg'}
@@ -78,14 +78,19 @@ const CollectionsCard = (
                   </div>
                   <div className={styles.body}>
                     <Image
-                      src={'/products/car.svg'}
+                      src={
+                        index == 0 ? '/products/rolex-bg.svg':
+                        index == 1 ? '/products/car.svg':
+                        index == 2 ? '/products/diamond.svg':
+                        '/products/whisky.svg'
+                      }
                       width={200}
                       height={200}
                       alt='car image'
                     />
                   </div>
                   <div className={styles.footer}>
-                    <Button className='bg-secondary text-primary' variant="default">Check the whole car collection</Button>
+                    <Button className='bg-secondary text-primary' variant="default">Check the whole collection</Button>
                     <Progress value={33} className="w-[60%]" />
                   </div>
                 </CardContent>
