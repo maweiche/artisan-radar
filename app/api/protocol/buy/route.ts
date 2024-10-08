@@ -34,9 +34,10 @@ export async function POST( request: Request ) {
     // @ts-expect-error - wallet is dummy variable, signing is not needed
     const provider = new AnchorProvider(connection,  wallet, {commitment: "confirmed"});
     const program = getArtisanProgram(provider);
-
+    console.log('program id ->', program.programId.toBase58());
     try {
         const req = await request.json();
+        console.log('incoming request ->', req);
         const fraction = Keypair.generate();
         console.log('fraction', fraction.publicKey.toBase58());
 
@@ -54,7 +55,7 @@ export async function POST( request: Request ) {
         const amount = req.amount;
         console.log('reference', reference);
         console.log('amount', amount);
-        const watch = PublicKey.findProgramAddressSync([Buffer.from('watch'),  Buffer.from(reference)], program.programId)[0];
+        const watch = PublicKey.findProgramAddressSync([Buffer.from('object'),  Buffer.from(reference)], program.programId)[0];
         const listing = PublicKey.findProgramAddressSync([Buffer.from('listing'), new anchor.BN(id).toBuffer("le", 8)], program.programId)[0];
         // const fraction = PublicKey.findProgramAddressSync([Buffer.from('fraction'), listing.toBuffer()], program.programId)[0];
         // const metadata = PublicKey.findProgramAddressSync([Buffer.from('metadata'), fraction.toBuffer()], program.programId)[0];
@@ -97,14 +98,14 @@ export async function POST( request: Request ) {
         console.log('listing: ', listing.toBase58());
         console.log('buyerCurrencyAta: ', buyerCurrencyAta.toBase58());
         console.log('listingCurrencyAta: ', listingCurrencyAta.toBase58());
-        console.log('manager: ', MANAGER.toBase58());
+        // console.log('manager: ', MANAGER.toBase58());
         console.log('buyer_profile: ', buyer_profile.toBase58());
         console.log('watch: ', watch.toBase58());
         console.log('fraction: ', fraction.publicKey.toBase58());
-        console.log('ASSOCIATED_TOKEN_PROGRAM_ID: ', ASSOCIATED_TOKEN_PROGRAM_ID.toBase58());
-        console.log('TOKEN_PROGRAM_ID: ', TOKEN_PROGRAM_ID.toBase58());
-        console.log('mplCoreProgram: ', mplCoreProgram.toBase58());
-        console.log('system_program: ', anchor.web3.SystemProgram.programId.toBase58());
+        // console.log('ASSOCIATED_TOKEN_PROGRAM_ID: ', ASSOCIATED_TOKEN_PROGRAM_ID.toBase58());
+        // console.log('TOKEN_PROGRAM_ID: ', TOKEN_PROGRAM_ID.toBase58());
+        // console.log('mplCoreProgram: ', mplCoreProgram.toBase58());
+        // console.log('system_program: ', anchor.web3.SystemProgram.programId.toBase58());
 
         const buyShareIx = await program.methods
             // @ts-ignore - missing accounts
@@ -115,12 +116,11 @@ export async function POST( request: Request ) {
                 mint: USDC_MINT,
                 object: watch,
                 fraction: fraction.publicKey,
-                buyerProfile: buyer_profile,
                 listing: listing,
             })
             .signers([feePayer, fraction])
             .instruction();
-        console.log('buyShareIx', buyShareIx)
+        // console.log('buyShareIx', buyShareIx)
         const { blockhash } = await connection.getLatestBlockhash("finalized");
         
         let ixs = [];
@@ -136,7 +136,7 @@ export async function POST( request: Request ) {
         }).compileToV0Message();
         
         const txn = new VersionedTransaction(messageV0);
-        console.log('txn', txn)
+        // console.log('txn', txn)
         txn.sign([feePayer, fraction])
 
         const base64 = Buffer.from(txn.serialize()).toString('base64'); 

@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/artsn_core.json`.
  */
 export type ArtsnCore = {
-  "address": "Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K",
+  "address": "6Z9hUFC9PnzqZsu2ji4WHDJBdD6qzTJ7N1bhkPVsaKEs",
   "metadata": {
     "name": "artsn_core",
     "version": "0.1.0",
@@ -1144,16 +1144,16 @@ export type ArtsnCore = {
       ]
     },
     {
-      "name": "create_watch",
+      "name": "create_object",
       "discriminator": [
         43,
+        191,
+        223,
+        200,
+        96,
+        241,
         228,
-        230,
-        104,
-        104,
-        205,
-        118,
-        208
+        219
       ],
       "accounts": [
         {
@@ -1222,18 +1222,19 @@ export type ArtsnCore = {
           }
         },
         {
-          "name": "watch",
+          "name": "object",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "const",
                 "value": [
-                  119,
-                  97,
-                  116,
+                  111,
+                  98,
+                  106,
+                  101,
                   99,
-                  104
+                  116
                 ]
               },
               {
@@ -1257,7 +1258,7 @@ export type ArtsnCore = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "CreateWatchArgs"
+              "name": "CreateObjectArgs"
             }
           }
         }
@@ -1397,8 +1398,12 @@ export type ArtsnCore = {
       ],
       "args": [
         {
-          "name": "username",
-          "type": "string"
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "AdminInitArgs"
+            }
+          }
         }
       ]
     },
@@ -1454,8 +1459,12 @@ export type ArtsnCore = {
       ],
       "args": [
         {
-          "name": "username",
-          "type": "string"
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "ProfileInitArgs"
+            }
+          }
         }
       ]
     },
@@ -2019,6 +2028,18 @@ export type ArtsnCore = {
   ],
   "types": [
     {
+      "name": "AdminInitArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
       "name": "AdminProfile",
       "type": {
         "kind": "struct",
@@ -2038,6 +2059,40 @@ export type ArtsnCore = {
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Attribute",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "key",
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Attributes",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "attribute_list",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Attribute"
+                }
+              }
+            }
           }
         ]
       }
@@ -2149,7 +2204,7 @@ export type ArtsnCore = {
       }
     },
     {
-      "name": "CreateWatchArgs",
+      "name": "CreateObjectArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -2162,40 +2217,18 @@ export type ArtsnCore = {
             "type": "string"
           },
           {
-            "name": "brand",
-            "type": "string"
-          },
-          {
-            "name": "model",
-            "type": "string"
-          },
-          {
             "name": "reference",
             "type": "string"
           },
           {
-            "name": "diameter",
-            "type": "u8"
-          },
-          {
-            "name": "movement",
-            "type": "string"
-          },
-          {
-            "name": "dial_color",
-            "type": "string"
-          },
-          {
-            "name": "case_material",
-            "type": "string"
-          },
-          {
-            "name": "bracelet_material",
-            "type": "string"
-          },
-          {
-            "name": "year_of_production",
-            "type": "u16"
+            "name": "attributes",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Attributes"
+                }
+              }
+            }
           }
         ]
       }
@@ -2390,6 +2423,18 @@ export type ArtsnCore = {
           },
           {
             "name": "Diamonds"
+          },
+          {
+            "name": "Art"
+          },
+          {
+            "name": "Cars"
+          },
+          {
+            "name": "Artifacts"
+          },
+          {
+            "name": "Other"
           }
         ]
       }
@@ -2470,6 +2515,18 @@ export type ArtsnCore = {
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProfileInitArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "username",
+            "type": "string"
           }
         ]
       }

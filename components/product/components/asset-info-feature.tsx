@@ -23,7 +23,9 @@ import { CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { set } from "@metaplex-foundation/umi/serializers";
 import { Button } from "@/components/ui/shadcn/button-ui";
+import { Progress } from "@/components/ui/shadcn/progress-ui";
 export default function AssetInfo({ asset }: { asset: any }) {
+  console.log('asset to render->', asset);
   const { provider, login: web3Login, logout: web3Logout, getUserInfo, web3auth, userAccounts } = useWeb3Auth();
   const { signVersionedTransaction, getAccounts } = useSolanaRPC(provider);
   const { toast } = useToast();
@@ -75,7 +77,7 @@ export default function AssetInfo({ asset }: { asset: any }) {
         console.error('No accounts found');
         return;
       }
-      const tx = await buyTx(Number(asset.onChainData.id), asset.attributes[2].value, accounts![0], amount, asset.onChainData.watchUri);
+      const tx = await buyTx(Number(asset.onChainData.id), asset.offChainData.reference, accounts![0], amount, asset.onChainData.watchUri);
       console.log('tx ->', tx); // VersionedTransaction
       if (tx) {
         setIsProcessing(true);
@@ -144,9 +146,7 @@ export default function AssetInfo({ asset }: { asset: any }) {
         {Number(asset.onChainData.share) - Number(asset.onChainData.shareSold)} / {asset.onChainData.share}
       </p>
       <p className="text-sm mb-2">{Number(asset.onChainData.price)}$ / fractions</p>
-      <div className="w-full bg-gray-200 h-2 rounded mb-5">
-        <div className="bg-black h-2 w-3/5 rounded"></div>
-      </div>
+        <Progress value={Number(asset.onChainData.share) - Number(asset.onChainData.shareSold)} max={Number(asset.onChainData.share)} className="my-4 bg-secondary text-primary" />
       <div className="flex md:flex-row flex-col justify-between items-start md:items-center mb-5 gap-4">
       <div className="w-full max-w-48 flex justify-between items-center gap-4">
       <button

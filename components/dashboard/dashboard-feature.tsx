@@ -15,6 +15,10 @@ import TopGainer from './TopGainer';
 import ArtisansTable from './ArtisansTable';
 import InvitationCTA from './InvitationCTA';
 import { useAuth } from '@/components/apollo/auth-context-provider';
+import { Connection, GetProgramAccountsConfig, Keypair, PublicKey } from '@solana/web3.js';
+import { Program } from '@coral-xyz/anchor';
+import { IDL } from '@coral-xyz/anchor/dist/cjs/native/system';
+import { ArtsnCore, getArtisanProgram } from '../solana/protocol/artisan-exports';
 
 // Dynamically import Joyride with ssr disabled
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
@@ -22,6 +26,8 @@ const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
 export default function DashboardFeature() {
   const [runTour, setRunTour] = useState(false);
   const [userAssets, setUserAssets] = useState<AssetV1[]>([]);
+  const [fractions, setFractions] = useState<any[]>([]);
+  const [tokensLoading, setTokensLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [joyrideStatus, setJoyrideStatus] = useState('idle');
   const { publicKey } = useWallet();
@@ -88,11 +94,70 @@ export default function DashboardFeature() {
     }
     setJoyrideStatus(status);
   };
+  async function getListingByWatch (key: string) {
+    try {
+      const memcmp_filter = {
+          memcmp: {
+            offset: 17,
+            bytes: new PublicKey(key).toBase58(),
+          },
+      };
+      const get_accounts_config: GetProgramAccountsConfig = {
+          commitment: "confirmed",
+          filters: [
+              memcmp_filter,
+            { dataSize: 70 }
+          ]
+      };
+      const connection = new Connection('https://devnet.helius-rpc.com/?api-key=b7faf1b9-5b70-4085-bf8e-a7be3e3b78c2', 'confirmed');
+      const wallet = Keypair.generate();
+      //@ts-expect-error - we are not signing
+      const provider = new AnchorProvider(connection,  wallet, {commitment: "confirmed"});
+      const program = getArtisanProgram(provider);
+      const nft = await connection.getProgramAccounts(
+        program.programId,
+        get_accounts_config 
+      );
+  
+      const nft_decoded = program.coder.accounts.decode(
+        "fractionalizedListing",
+        nft[0].account.data
+      );
+      return {
+        listing: nft[0].pubkey.toBase58(),
+        price: Number(nft_decoded.price),
+      };
+    } catch (error) {
+      console.error('Error fetching listing', error);
+    }
+  };
 
   async function fetchUserAssets(owner: string) {
     const assets = await fetchAssets(owner);
     console.log('user assets', assets);
     setUserAssets(assets);
+    const listingArray: any[] = [];
+
+    for (let i = 0; i < assets.length; i++) {
+      const listing = await getListingByWatch(assets[i].updateAuthority.address!);
+      if(!listing) continue;
+      // if the listing exists already in the listingArray with the same associatedId as the listing.listing, then increase the quantity by 1
+      // else just push the new listing to the listingArray
+      if (listingArray.find((item) => item.associatedId === listing!.listing)) {
+        const index = listingArray.findIndex((item) => item.associatedId === listing!.listing);
+        listingArray[index].quantity += 1;
+        continue; 
+      } 
+      listingArray.push({
+        ...assets[i],
+        associatedId: listing!.listing,
+        price: listing!.price,
+        quantity: 1,
+      });
+    }
+    console.log('sending to fractions ->', listingArray);
+    setFractions(listingArray);
+    setTokensLoading(false);
   }
 
   useEffect(() => {
@@ -130,10 +195,10 @@ export default function DashboardFeature() {
   }, []);
 
   useEffect(() => {
-    if (publicKey) {
-      fetchUserAssets(publicKey.toBase58());
+    if (authUser) {
+      fetchUserAssets(authUser.publicKey);
     }
-  }, [publicKey]);
+  }, [authUser]);
 
   if (loading || !user) {
     return <div>Loading...</div>;
@@ -228,7 +293,7 @@ export default function DashboardFeature() {
             <TopGainer />
           </div>
           <div className="md:col-span-5 portfolio-card-4">
-            <ArtisansTable />
+            <ArtisansTable assets={userAssets} />
           </div>
           <div className="md:col-span-2 portfolio-card-5">
             <InvitationCTA />

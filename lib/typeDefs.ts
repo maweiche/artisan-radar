@@ -223,6 +223,7 @@ export const typeDefs = gql`
     pastReturns: String
     earningPotential: String
     earningPotentialDuration: String
+    reference: String
     currency: String
     description: String
     model: String
