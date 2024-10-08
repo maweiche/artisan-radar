@@ -1,22 +1,45 @@
 "use client"
-
+import Image from "next/image";
 import { useState } from "react";
 import { VersionedTransaction } from "@solana/web3.js";
 import { useSolanaRPC } from "@/hooks/use-web3-rpc";
 import { useWeb3Auth } from "@/hooks/use-web3-auth";
 import RPC from "@/components/solana/web3auth/solana-rpc";
-import toast from "react-hot-toast";
+import { useHandleShare } from "@/hooks/use-handle-share";
+import { useRouter } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/shadcn/alert-dialog-ui"
+import { Separator } from "@/components/ui/shadcn/separator-ui";
+import { CreditCard } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { set } from "@metaplex-foundation/umi/serializers";
+import { Button } from "@/components/ui/shadcn/button-ui";
 export default function AssetInfo({ asset }: { asset: any }) {
   const { provider, login: web3Login, logout: web3Logout, getUserInfo, web3auth, userAccounts } = useWeb3Auth();
   const { signVersionedTransaction, getAccounts } = useSolanaRPC(provider);
-  console.log('asset for render ->', asset);
-  const [amount, setAmount] = useState(5); // Initial amount set to 5
-
-  const increment = () => setAmount(amount + 1);
-  const decrement = () => setAmount(amount - 1);
-
+  const { toast } = useToast();
+  const [amount, setAmount] = useState(1); // Initial amount set to 5
+  const [isBuying, setIsBuying] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
+  const { handleCopy, copied } = useHandleShare();
+  const increment = () => {if(amount < 4)setAmount(amount + 1)};
+  const decrement = () => {if(amount > 1) setAmount(amount - 1)};
+  const router = useRouter();
   const buyTx = async(id: number, reference: string, key: string, amount: number, uri: string) => {
     try{
+      toast({
+        title: 'Preparing transaction...',
+      })
       const response = await fetch('/api/protocol/buy', {
         method: 'POST',
         headers: {
@@ -43,6 +66,7 @@ export default function AssetInfo({ asset }: { asset: any }) {
   }
 
   const handleBuy = async() => {
+    setIsBuying(true);
     if (web3auth && web3auth.connected && web3auth.provider) {
       const rpc = new RPC(web3auth.provider);
       const accounts =  await getAccounts();
@@ -54,14 +78,23 @@ export default function AssetInfo({ asset }: { asset: any }) {
       const tx = await buyTx(Number(asset.onChainData.id), asset.attributes[2].value, accounts![0], amount, asset.onChainData.watchUri);
       console.log('tx ->', tx); // VersionedTransaction
       if (tx) {
+        setIsProcessing(true);
         const signature = await rpc!.signVersionedTransaction({ tx });
         console.log('signature ->', signature);
-        toast.success(`Transaction sent!`);
+        toast({
+          title: 'Transaction sent',
+          description: 'Transaction has been sent to the blockchain',
+        })
+        setIsBuying(false);
+        setIsProcessing(false);
+        setIsComplete(true);
       } else {
         console.error('Transaction is undefined');
       }
     }
   }
+
+
 
   return (
     <section className="bg-white rounded-3xl border-gray p-5 mb-5">
@@ -76,24 +109,29 @@ export default function AssetInfo({ asset }: { asset: any }) {
             </button>
           )}
         </div>
-        <button className="text-xs md:text-base bg-black text-white px-4 py-2.5 rounded-2xl shadow-sm">
+        <button className="text-xs md:text-base bg-black text-white px-4 py-2.5 rounded-2xl shadow-sm" onClick={()=> handleCopy(window.location.href)}>
           <span className="flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
-              />
-            </svg>
+            {!copied ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="size-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
+                />
+              </svg>
+            ) : (
+              <span> √ </span>
+            )}
             Share
           </span>
+            
         </button>
       </div>
       <div className="flex items-center justify-between">
@@ -131,10 +169,76 @@ export default function AssetInfo({ asset }: { asset: any }) {
       >
         +
       </button>
-    </div>
-        <button className="w-full md:w-2/3 bg-black text-white py-3 rounded-2xl" onClick={()=> handleBuy()}>
+      </div>
+        {/* <button className="w-full md:w-2/3 bg-black text-white py-3 rounded-2xl" onClick={()=> handleBuy()}>
           {`Buy $${amount * Number(asset.onChainData.price)} of this Fraction`}
-        </button>
+        </button> */}
+        <AlertDialog>
+          <AlertDialogTrigger className="w-full md:w-2/3 bg-black text-white py-3 rounded-2xl">{`Buy $${amount * Number(asset.onChainData.price)} of this Fraction`}</AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                <div className="flex flex-row w-full justify-between gap-4 items-center">
+                  {!isComplete ? (
+                    <p className="text-lg font-semibold text-secondary">Confirm Purchase</p>
+                  ) : (
+                    <p className="text-lg font-semibold text-secondary">Thanks for buying</p>
+                  )}
+                  <AlertDialogCancel className="w-fit rounded-xl bg-primary text-secondary hover:bg-secondary hover:text-primary">X</AlertDialogCancel>
+                </div>
+                
+              </AlertDialogTitle>
+              {!isComplete ? (
+              <AlertDialogDescription>
+                This action will purchase you {amount} fractions of the asset. Are you sure you want to continue?
+                <Separator className="my-2 bg-slate-300"/>  
+                <div className="flex flex-row justify-between gap-4 items-center px-4">
+                <div className="flex flex-row gap-2 items-center">
+                  <Image
+                    src={asset.offChainData.images[0]}
+                    alt={asset.attributes[0].value.toString()}
+                    width={100}
+                    height={100}
+                    className="rounded-3xl mt-5 border-gray border border-solid"
+                  />
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-semibold text-secondary">{asset.attributes[0].value.toString()} - {asset.attributes[1].value.toString()}</p>
+                    <p className="text-sm text-secondary" >x{" "}{amount}{" "}Fractions</p>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-gray-500">${Number(asset.onChainData.price)}</p> 
+              </div>    
+              </AlertDialogDescription>
+              ) : (
+                <AlertDialogDescription>
+                  You just bought x {amount} Fractions of {asset.attributes[0].value.toString()} - {asset.attributes[1].value.toString()}. Welcome to the Artisan family!
+                </AlertDialogDescription>
+              )}
+            </AlertDialogHeader>
+                     
+            <AlertDialogFooter>
+              {isBuying && !isProcessing && <div className="flex flex-col justify-between gap-2 items-center px-4 w-full"><p>Preparing your txn...</p></div>}
+              {isBuying && isProcessing && <div className="flex flex-col justify-between gap-2 items-center px-4 w-full"><p>Processing, one more sec...</p></div>}
+              {/* {!isBuying && isComplete && <p>Transaction complete</p>} */}
+              {!isBuying && !isComplete && (
+                <div className="flex flex-col justify-between gap-2 items-center px-4 w-full">
+                  <Separator className="bg-slate-300"/>    
+                  <Button className="w-full rounded-xl bg-secondary text-primary hover:bg-primary hover:text-secondary" onClick={()=> handleBuy()}>Pay with crypto</Button>
+                  <Button className="w-full rounded-xl bg-secondary text-primary hover:bg-primary hover:text-secondary" onClick={()=> handleBuy()}><CreditCard className="mr-2"/>Pay with card</Button>
+                </div>
+              )}
+              {isComplete && (
+                <div className="flex flex-col justify-between gap-2 items-center px-4 w-full">
+                  <div className="flex flex-row gap-4 items-center w-full">
+                    <AlertDialogCancel className="w-1/3 rounded-xl bg-primary text-secondary hover:bg-primary hover:text-secondary" onClick={()=> setIsComplete(false)}>Buy more</AlertDialogCancel>
+                    <AlertDialogAction className="w-2/3 rounded-xl bg-secondary text-primary hover:bg-primary hover:text-secondary" onClick={()=> router.push('/dashboard')}>Take me to my dashboard</AlertDialogAction>
+                  </div>
+                </div>
+              )}
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <p className="text-sm text-gray-500 p-7 border-gray rounded-3xl">
         {asset.offChainData.about}{" "}
