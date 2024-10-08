@@ -176,3 +176,26 @@ export const CHECK_EMAIL = gql`
     checkEmail(publicKey: $publicKey, input: $input)
   }
 `;
+
+export const GET_LISTING = gql`
+  query($associatedId: String!) {
+    getListing(query: { associatedId: $associatedId}) {
+        _id
+        assetDetails
+        associatedId
+        earningPotential
+        earningPotentialDuration
+        expectedNetReturn
+        images
+        marketValue
+        pastReturns
+        currency
+        model
+        offerViews
+        sold
+        total
+        mintAddress
+        about
+    }
+  }
+`;

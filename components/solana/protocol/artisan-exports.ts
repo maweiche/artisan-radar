@@ -19,11 +19,11 @@ export function getArtisanProgram(provider: AnchorProvider) {
 export function getArtisanProgramId(cluster: Cluster) {
   switch (cluster) {
     case 'devnet': 
-      return new PublicKey("G56BJf467y89k5HwfvuPi4Fz7x1YRtugFUcp4evBh3A7");
+      return new PublicKey("Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K");
     case 'testnet': 
-      return new PublicKey("G56BJf467y89k5HwfvuPi4Fz7x1YRtugFUcp4evBh3A7");
+      return new PublicKey("Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K");
     case 'mainnet-beta': 
-      return new PublicKey("G56BJf467y89k5HwfvuPi4Fz7x1YRtugFUcp4evBh3A7");
+      return new PublicKey("Hyjee2KiJXJRtabtvwQgWGt9ZozPEF18DYr5oRvYTq6K");
     default:
       return ARTISAN_PROGRAM_ID;
   }

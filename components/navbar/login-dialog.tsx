@@ -280,7 +280,7 @@ const LoginDialog: React.FC<DialogProps> = ({ _isOpen }) => {
                                 </CardFooter>
                             </Card>
                             <Card className='bg-bg flex flex-col relative w-1/2 text-secondary overflow-hidden'>
-                            <div className='h-full w-full rounded-xl bg-[url(/products/rolex-bg.svg)] bg-contain bg-right-top bg-no-repeat transform translate-x-20 scale-150 t-ranslate-y-[7rem]  -rotate-[40deg]' />
+                            <div className='h-full w-full rounded-xl bg-[url(/products/rolex-bg.svg)] bg-contain bg-right-middle bg-no-repeat transform translate-x-[6rem] scale-[140]translate-y-10 ' />
                             <CardHeader className='absolute bottom-0 left-0 w-1/2'>
                                     <CardTitle className='text-xl font-bold'>Buy a fraction of your favorite asset</CardTitle>
                                     <CardDescription className='text-md'>Democratizing Luxury one fraction at a time</CardDescription>

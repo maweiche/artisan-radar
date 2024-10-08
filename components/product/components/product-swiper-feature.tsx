@@ -15,7 +15,7 @@ const watchImages = [
   "/images/product.png",
 ];
 
-const ProductSwiper = () => {
+const ProductSwiper = ({ images }: { images: string[] }) => {
   // Initialize thumbsSwiper as SwiperType | null
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
@@ -53,7 +53,7 @@ const ProductSwiper = () => {
         slidesPerView={1} // Only show one main image at a time
         className="main-swiper"
       >
-        {watchImages.map((image, index) => (
+        {images.map((image, index) => (
           <SwiperSlide key={index} className="border-gray rounded-2xl p-12">
             <img
               src={image}
@@ -112,7 +112,7 @@ const ProductSwiper = () => {
         watchSlidesProgress // Keep track of which thumbnail is active
         className="thumbs-swiper"
       >
-        {watchImages.map((image, index) => (
+        {images.map((image, index) => (
           <SwiperSlide key={index} className="border-gray rounded-2xl p-2">
             <img
               src={image}

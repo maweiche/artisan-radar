@@ -214,6 +214,25 @@ export const typeDefs = gql`
     totalShares: Int!
   }
 
+  type Listing {
+    associatedId: String!
+    images: [String!]
+    assetDetails: String
+    expectedNetReturn: String
+    marketValue: String
+    pastReturns: String
+    earningPotential: String
+    earningPotentialDuration: String
+    currency: String
+    description: String
+    model: String
+    offerViews: String
+    sold: Int
+    total: Int
+    mintAddress: String
+    about: String
+  }
+
   input IPAssetInput {
     creatorId: String!
     name: String!
@@ -334,6 +353,7 @@ export const typeDefs = gql`
     getAllIPs: [IPAsset!]!
     isUserRegistered(publicKey: String!): Boolean!
     checkEmail(email: String!): User
+    getListing(associatedId: String!): Listing
   }
 
   type Mutation {

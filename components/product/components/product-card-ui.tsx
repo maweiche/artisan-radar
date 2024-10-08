@@ -1,26 +1,61 @@
-// components/ProductCard.tsx
-
+import React, { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-
-type ProductCardProps = {
-  name: string;
-  price: string;
-  imageUrl: string;
+import { PublicKey } from "@solana/web3.js";
+import {
+  useArtisanProgramAccount,
+} from '@/components/protocol/protocol-data-access';
+import { BN } from '@coral-xyz/anchor';
+import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
+import { fetchCollectionV1 } from '@metaplex-foundation/mpl-core'
+import { publicKey } from '@metaplex-foundation/umi'
+import { set } from "@metaplex-foundation/umi/serializers";
+type Listing = {
+  id: BN;
+  objectType: any;
+  object: PublicKey;
+  share: number;
+  shareSold: number;
+  price: BN;
+  startingTime: BN;
+  bump: number;
 };
 
-const ProductCard = ({ name, price, imageUrl }: ProductCardProps) => {
+const ProductCard = ({ account, listing, image }: { image: string, account: PublicKey, listing: Listing }) => {
+  console.log('account ->', account.toString())
+  const [loading, setLoading] = useState<boolean>(true);
+  const [obj, setObj] = useState<any>(null);
+  const umi = createUmi('https://soft-cold-energy.solana-devnet.quiknode.pro/ad0dda04b536ff45a76465f9ceee5eea6a048a8f'); 
+  const _pubkey = publicKey(account.toString());
+  const getObjInfo = async () => {
+    const watch = await fetchCollectionV1(umi, _pubkey);
+    console.log('watch ->', watch)
+    setObj(watch.attributes?.attributeList);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getObjInfo();
+  }, []);
+
   return (
+    <>
+      {loading && <p>Loading...</p>}
+      {!loading && (
+
     <div className="bg-white rounded-3xl p-3.5 flex border-gray flex-col justify-between">
-      <img
-        src={imageUrl}
-        alt={name}
+      <Image 
+        src={`https://artisan-solana.s3.eu-central-1.amazonaws.com/${image}-0.jpg`}
+        alt='listing image'
+        width={300}
+        height={300}
         className="w-full h-auto object-contain mb-4 rounded-2xl bg-gray"
       />
       <div className="flex justify-between items-center">
         <div>
-          <Link href={"/product"}>
+          <Link href="/product">
             <h3 className="text-md text-black font-semibold font-urban">
-              {name}
+              {obj[0].value.toString()} - {obj[1].value.toString()}
             </h3>
           </Link>
           <p className="text-gray-500 flex items-center gap-2">
@@ -63,14 +98,16 @@ const ProductCard = ({ name, price, imageUrl }: ProductCardProps) => {
                 fill="#D9D9D9"
               />
             </svg>
-            Starting from {price}
+            Starting from {Number(listing.price.toString())}
           </p>
         </div>
-        <Link href={"/product"} className="bg-black text-white px-4 py-2 rounded-2xl">
+        <Link href={`/product/${image}`} className="bg-black text-white px-4 py-2 rounded-2xl">
           Collect
         </Link>
       </div>
     </div>
+    )}
+    </>
   );
 };
 

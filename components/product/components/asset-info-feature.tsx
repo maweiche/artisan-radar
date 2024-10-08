@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 
-export default function AssetInfo() {
+
+export default function AssetInfo({ asset }: { asset: any }) {
+  console.log('asset for render ->', asset);
   const [count, setCount] = useState(5); // Initial count set to 5
 
   const increment = () => setCount(count + 1);
@@ -13,11 +15,13 @@ export default function AssetInfo() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-3">
           <button className="text-xs md:text-base border-gray text-black p-2.5 rounded-2xl shadow-sm">
-            <span>Watch</span>
+            <span>{asset.onChainData.objectType.watch ? 'Watch' : 'Diamonds'}</span>
           </button>
-          <button className="text-xs md:text-base border-gray text-black p-2.5 rounded-2xl shadow-sm">
-            <span>Automatic movement</span>
-          </button>
+          {asset.onChainData.objectType.watch && (
+            <button className="text-xs md:text-base border-gray text-black p-2.5 rounded-2xl shadow-sm">
+              <span>{asset.attributes[4].value.toString()}</span>
+            </button>
+          )}
         </div>
         <button className="text-xs md:text-base bg-black text-white px-4 py-2.5 rounded-2xl shadow-sm">
           <span className="flex items-center gap-2">
@@ -40,12 +44,15 @@ export default function AssetInfo() {
         </button>
       </div>
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-semibold">Ulysse Nardin</h1>
+        <h1 className="text-3xl font-semibold">{asset.attributes[0].value.toString()}</h1>
       </div>
-      <p className="text-gray-600 mb-5">Freak</p>
+      <p className="text-gray-600 mb-5">{asset.attributes[1].value.toString()}</p>
       <p className="text-lg mb-3">Remaining fractions</p>
-      <p className="text-3xl font-bold mb-2">23/1000</p>
-      <p className="text-sm mb-2">100$ / fractions</p>
+      <p className="text-3xl font-bold mb-2">
+        {/* {asset.share - asset.shareSold} / {asset.share} */}
+        {Number(asset.onChainData.share) - Number(asset.onChainData.shareSold)} / {asset.onChainData.share}
+      </p>
+      <p className="text-sm mb-2">{Number(asset.onChainData.price)}$ / fractions</p>
       <div className="w-full bg-gray-200 h-2 rounded mb-5">
         <div className="bg-black h-2 w-3/5 rounded"></div>
       </div>
@@ -73,12 +80,11 @@ export default function AssetInfo() {
       </button>
     </div>
         <button className="w-full md:w-2/3 bg-black text-white py-3 rounded-2xl">
-          Buy $500 of this Fraction
+          {`Buy $${count * Number(asset.onChainData.price)} of this Fraction`}
         </button>
       </div>
       <p className="text-sm text-gray-500 p-7 border-gray rounded-3xl">
-        The Freak collection is an extraordinary series of watches produced by
-        the renowned Swiss watchmaker Ulysse Nardin.{" "}
+        {asset.offChainData.about}{" "}
         <a href="#" className="text-blue-600">
           See more
         </a>

@@ -1,9 +1,16 @@
+'use client';
+import { useState, useEffect } from 'react';
 import Breadcrumb from "./components/breadcrumb-feature";
 import SidebarFilter from "./components/sidebar-feature";
 import ProductCard from "@/components/product/components/product-card-ui";
 import RelatedProductCard from "@/components/product/components/product-related-feature";
 import ReferralCard from "./components/referall-card-feature";
 import TabSwitcher from "./components/tab-switcher-ui";
+import {
+  useArtisanProgram,
+  useArtisanProgramAccount,
+} from '@/components/protocol/protocol-data-access';
+  
 
 const products = [
   {
@@ -72,6 +79,17 @@ const related_products = [
 ];
 
 export default function MarketplaceFeature() {
+  const { listings, watches, profiles, getProgramAccount } = useArtisanProgram();
+  const [allListings, setAllListings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (listings.data) {
+      console.log('all listings ->', listings.data);
+      console.log('number 1 ->', listings.data[0].account.object)
+      setAllListings(listings.data);
+      setLoading(false)
+    }
+  }, [listings]);
   return (
     <div className="mt-20">
       <Breadcrumb />
@@ -88,20 +106,26 @@ export default function MarketplaceFeature() {
           </div>
 
           {/* Product Grid */}
-          <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
-            {products.map((product, index) => (
-              <>
-                {index === 6 && <ReferralCard key="referral-card" />}{" "}
-                {/* Insert ReferralCard at the 7th position */}
-                <ProductCard
-                  key={index}
-                  name={product.name}
-                  price={product.price}
-                  imageUrl={product.imageUrl}
-                />
-              </>
-            ))}
-          </div>
+          {!loading && (
+            <div className="w-full md:w-3/4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
+              {allListings.map((account, index) => (
+                <>
+                  {index === 6 && <ReferralCard key="referral-card" />}{" "}
+                  {/* Insert ReferralCard at the 7th position */}
+                  <ProductCard
+                    // key={index}
+                    // name={product.name}
+                    // price={product.price}
+                    // imageUrl={product.imageUrl}
+                    key={index}
+                    image={account.publicKey}
+                    account={account.account.object}
+                    listing={account.account}
+                  />
+                </>
+              ))}
+            </div>
+          )}
         </div>
         <div className="max-w-screen-xl mx-auto flex my-6">
           <div className="w-1/4 hidden md:block"></div>

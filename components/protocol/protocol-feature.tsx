@@ -5,7 +5,6 @@ import { WalletButton } from '../solana/solana-provider';
 import { AppHero, ellipsify } from '../ui/ui-layout';
 import { ExplorerLink } from '../cluster/cluster-ui';
 import { useArtisanProgram } from './protocol-data-access';
-import { ListingList } from './protocol-ui';
 
 export default function ProtocolFeature() {
   const { publicKey } = useWallet();
@@ -27,7 +26,6 @@ export default function ProtocolFeature() {
         </p>
         {/* <CounterCreate /> */}
       </AppHero>
-      <ListingList />
     </div>
   ) : (
     <div className="max-w-4xl mx-auto">

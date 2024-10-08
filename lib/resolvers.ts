@@ -27,6 +27,11 @@ export const resolvers: IResolvers<any, Context> = {
     isUserRegistered: async (_parent, { publicKey }, { db }): Promise<boolean> => {
       const user = await db.collection('users').findOne({ publicKey });
       return !!user;
+    },
+    getListing: async (_parent, { associatedId }, { db }) => {
+      const listing = await db.collection('listings').findOne({ associatedId });
+      console.log('listing ->', listing)
+      return listing;
     }
   },
   Mutation: {
