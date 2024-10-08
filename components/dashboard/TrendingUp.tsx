@@ -2,17 +2,17 @@
 import { Card, CardContent } from '@/components/ui/shadcn/card-ui';
 import Image from 'next/image';
 
-const TopGainer = () => {
+const TrendingUp = () => {
   return (
     <Card className=" rounded-3xl w-full h-full bg-bg text-secondary border-zinc-300 dark:border-zinc-700  ">
       <CardContent className="p-6 h-full flex flex-col justify-between">
-        <h2 className="text-xl font-semibold text-secondary ">Top Gainer</h2>
+        <h2 className="text-xl font-semibold text-secondary ">Trending Up</h2>
 
         <Image
-          src="/products/rolex-bg.svg"
+          src="/products/watch.svg"
           alt="Top Gainer"
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           className="rounded-xl w-full border border-zinc-300 dark:border-zinc-700 my-8 max-h-44"
         />
 
@@ -37,4 +37,4 @@ const TopGainer = () => {
   );
 };
 
-export default TopGainer;
+export default TrendingUp;

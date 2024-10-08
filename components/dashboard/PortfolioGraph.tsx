@@ -14,13 +14,13 @@ import {
 } from 'recharts';
 
 const data = [
-  { name: 'Jan', value: 4000 },
-  { name: 'Feb', value: 3000 },
-  { name: 'Mar', value: 5000 },
-  { name: 'Apr', value: 2780 },
-  { name: 'May', value: 1890 },
-  { name: 'Jun', value: 2390 },
-  { name: 'Jul', value: 3490 },
+  { name: 'Jan', value: 5290 },
+  { name: 'Feb', value: 7410 },
+  { name: 'Mar', value: 10120 },
+  { name: 'Apr', value: 12800 },
+  { name: 'May', value: 14124 },
+  { name: 'Jun', value: 13390 },
+  { name: 'Jul', value: 13924 },
 ];
 
 const PortfolioGraph = () => {
@@ -48,7 +48,7 @@ const PortfolioGraph = () => {
               <p className="text-sm text-zinc-700 dark:text-zinc-300">
                 Current Value
               </p>
-              <h1 className="text-3xl text-secondary">$10,324</h1>
+              <h1 className="text-3xl text-secondary">$13,924</h1>
             </div>
             <p className="text-sm text-zinc-700 dark:text-zinc-300 mb-1">
               +123$
@@ -59,7 +59,7 @@ const PortfolioGraph = () => {
               <p className="text-sm text-zinc-700 dark:text-zinc-300">
                 All time high
               </p>
-              <h1 className="text-3xl text-secondary">$10,324</h1>
+              <h1 className="text-3xl text-secondary">$14,124</h1>
             </div>
             <p className="text-sm text-zinc-700 dark:text-zinc-300 mb-1">
               54 days ago

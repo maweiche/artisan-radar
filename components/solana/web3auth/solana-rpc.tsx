@@ -7,11 +7,14 @@ import {
     TransactionMessage,
     VersionedTransaction,
 } from "@solana/web3.js";
+import { USDC_MINT } from "../protocol/artisan-exports";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { createGenericFile, createSignerFromKeypair, publicKey, signerIdentity } from "@metaplex-foundation/umi"
 import { CustomChainConfig, IProvider } from "@web3auth/base";
 import { SolanaWallet } from "@web3auth/solana-provider";
 import * as b58 from "bs58";
+import { get } from "http";
+import { getAccount, getAssociatedTokenAddress, getAssociatedTokenAddressSync } from "@solana/spl-token";
   
   export default class SolanaRpc {
     private provider: IProvider;
@@ -40,15 +43,26 @@ import * as b58 from "bs58";
       }
     }
   
-    async getBalance(): Promise<string> {
+    async getBalance(): Promise<{sol: any, usdc: any}> {
       try {
         const conn = await this.getConnection();
         const accounts = await this.getAccounts();
         const balance = await conn.getBalance(new PublicKey(accounts[0]));
-        return balance.toString();
+        console.log('balance***:', balance);
+        const usdcAta = await getAssociatedTokenAddress(new PublicKey(accounts[0]), new PublicKey(USDC_MINT));
+        console.log('usdcAta:', usdcAta);
+        // const usdcBalance = await conn.getTokenAccountBalance(usdcAta);
+        // console.log('usdcBalance****:', usdcBalance);
+        // // const amount = Number(usdcBalance.amount);
+        // console.log('usdcBalance:', usdcBalance);
+        const obj = {
+          sol: balance,
+          usdc: 27,
+        }
+        return obj;
       } catch (error) {
         console.error("Error getting balance:", error);
-        return "0";
+        return {sol: 0, usdc: 0};
       }
     }
   

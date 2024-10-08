@@ -19,6 +19,11 @@ import { Connection, GetProgramAccountsConfig, Keypair, PublicKey } from '@solan
 import { Program } from '@coral-xyz/anchor';
 import { IDL } from '@coral-xyz/anchor/dist/cjs/native/system';
 import { ArtsnCore, getArtisanProgram } from '../solana/protocol/artisan-exports';
+import TrendingUp from './TrendingUp';
+import { TrendingUp as TrendingIcon } from "lucide-react"
+
+import { useSolanaRPC } from "@/hooks/use-web3-rpc";
+import { useWeb3Auth } from '@/hooks/use-web3-auth';
 
 // Dynamically import Joyride with ssr disabled
 const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
@@ -26,12 +31,15 @@ const Joyride = dynamic(() => import('react-joyride'), { ssr: false });
 export default function DashboardFeature() {
   const [runTour, setRunTour] = useState(false);
   const [userAssets, setUserAssets] = useState<AssetV1[]>([]);
+  const [userBalance, setUserBalance] = useState<any>();
   const [fractions, setFractions] = useState<any[]>([]);
   const [tokensLoading, setTokensLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [joyrideStatus, setJoyrideStatus] = useState('idle');
   const { publicKey } = useWallet();
   const { user: authUser, loading } = useAuth();
+  const { provider, login: web3Login, logout: web3Logout, getUserInfo, web3auth, userAccounts } = useWeb3Auth();
+  const { signVersionedTransaction, getAccounts, getBalance } = useSolanaRPC(provider);
 
   const user = useMemo(() => {
     if (!authUser) return null;
@@ -197,6 +205,10 @@ export default function DashboardFeature() {
   useEffect(() => {
     if (authUser) {
       fetchUserAssets(authUser.publicKey);
+      getBalance().then((balance) => {
+        console.log('balance', balance);
+        setUserBalance(balance);
+      });
     }
   }, [authUser]);
 
@@ -246,9 +258,7 @@ export default function DashboardFeature() {
 
         {/* Cards Section */}
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-11/12 text-secondary">
-          {[1, 2, 3].map((_, index) => (
             <Card
-              key={index}
               className="rounded-3xl flex flex-row items-center gap-4 justify-between w-full bg-bg p-4 border-zinc-300 dark:border-zinc-700"
             >
               <div className="h-12 md:h-16 aspect-square border border-zinc-300 dark:border-zinc-700 rounded-2xl px-2 md:px-3 py-2 md:py-3 text-secondary">
@@ -260,15 +270,54 @@ export default function DashboardFeature() {
                     Buying Power
                   </motion.p>
                   <motion.h1 className="text-xl md:text-3xl text-secondary">
-                    $1000
+                    $1,337
                   </motion.h1>
                 </div>
                 <motion.p className="text-xs md:text-md text-secondary text-zinc-700 dark:text-zinc-300 mb-1">
-                  $100 USDC
+                  $,337 USDC
                 </motion.p>
               </div>
             </Card>
-          ))}
+            <Card
+              className="rounded-3xl flex flex-row items-center gap-4 justify-between w-full bg-bg p-4 border-zinc-300 dark:border-zinc-700"
+            >
+              <div className="h-12 md:h-16 aspect-square border border-zinc-300 dark:border-zinc-700 rounded-2xl px-2 md:px-3 py-2 md:py-3 text-secondary">
+                <IconCurrencySolana className="w-full h-full" />
+              </div>
+              <div className="flex w-full items-end gap-2">
+                <div className="flex flex-col gap-1">
+                  <motion.p className="text-xs md:text-sm text-[#D4D4D8] text-secondary">
+                    Buying Power
+                  </motion.p>
+                  <motion.h1 className="text-xl md:text-3xl text-secondary">
+                    27.2 SOL
+                  </motion.h1>
+                </div>
+                <motion.p className="text-xs md:text-md text-secondary text-zinc-700 dark:text-zinc-300 mb-1">
+                  $3,808 USDC
+                </motion.p>
+              </div>
+            </Card>
+            <Card
+              className="rounded-3xl flex flex-row items-center gap-4 justify-between w-full bg-bg p-4 border-zinc-300 dark:border-zinc-700"
+            >
+              <div className="h-12 md:h-16 aspect-square border border-zinc-300 dark:border-zinc-700 rounded-2xl px-2 md:px-3 py-2 md:py-3 text-secondary">
+                <TrendingIcon className="w-full h-full" />
+              </div>
+              <div className="flex w-full items-end gap-2">
+                <div className="flex flex-col gap-1">
+                  <motion.p className="text-xs md:text-sm text-[#D4D4D8] text-secondary">
+                    24 Hour Change
+                  </motion.p>
+                  <motion.h1 className="text-xl md:text-3xl text-secondary">
+                    $102
+                  </motion.h1>
+                </div>
+                <motion.p className="text-xs md:text-md text-secondary text-zinc-700 dark:text-zinc-300 mb-1">
+                  +12%
+                </motion.p>
+              </div>
+            </Card>
         </div>
 
         {/* Body Section */}
@@ -290,7 +339,7 @@ export default function DashboardFeature() {
             <TopGainer />
           </div>
           <div className="md:col-span-2 portfolio-card-3">
-            <TopGainer />
+            <TrendingUp />
           </div>
           <div className="md:col-span-5 portfolio-card-4">
             <ArtisansTable assets={userAssets} />
