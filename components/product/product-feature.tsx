@@ -52,6 +52,7 @@ const ProductFeature: React.FC<{ params: { id: string } }> = ({ params }) => {
         }
       })
   };
+  
 
   useEffect(() => {
     if (params.id) {

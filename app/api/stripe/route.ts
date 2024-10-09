@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
 
   const stripe = new Stripe(stripeSecretKey);
   const body = await req.json();
+  console.log('body', body);  
   const date = new Date().toISOString();
   const idempotencyKey = req.headers.get('Idempotency-Key');
 
