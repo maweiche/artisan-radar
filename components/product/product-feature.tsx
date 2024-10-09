@@ -28,7 +28,8 @@ const ProductFeature: React.FC<{ params: { id: string } }> = ({ params }) => {
   const { listingQuery, loading: isListingLoading } = useArtisanProgramAccount({ account: new PublicKey(params.id) });
 
   const fetchOffChainData = async (id: string) => {
-    const response = await fetch('/api/data/listing', {
+    const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+      const response = await fetch(`${baseUrl}/api/data/listing`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
@@ -69,6 +70,9 @@ const ProductFeature: React.FC<{ params: { id: string } }> = ({ params }) => {
   }, [isListingLoading, listingQuery.data]);
 
   useEffect(() => {
+    console.log('offChainData:', offChainData);
+    console.log('onChainData:', onChainData);
+    console.log('attributes:', attributes);
     if(offChainData && onChainData && attributes.length > 0) {
       setProductData({
         offChainData,
