@@ -28,7 +28,7 @@ const ProductFeature: React.FC<{ params: { id: string } }> = ({ params }) => {
   const { listingQuery, loading: isListingLoading } = useArtisanProgramAccount({ account: new PublicKey(params.id) });
 
   const fetchOffChainData = async (id: string) => {
-    const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
       const response = await fetch(`${baseUrl}/api/data/listing`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

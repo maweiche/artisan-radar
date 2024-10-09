@@ -7,6 +7,13 @@ The Artisan is a RWA marketplace where users can buy fractionalized shares of lu
   Your browser does not support the video tag.
 </video>
 
+## Program ID
+| Cluster      | Program Id |
+| :---        |    :----:   |
+| **Localnet**     | `s8TwaQ8iKA4NPRgeSEGJfajD4hZAvriK5xisz82yBbU` |
+| **Devnet**  | `s8TwaQ8iKA4NPRgeSEGJfajD4hZAvriK5xisz82yBbU` |
+| **Mainnet**  | `coming soon`  |
+
 ## Table of Contents
 
 - [Features](#features)
@@ -22,9 +29,22 @@ The Artisan is a RWA marketplace where users can buy fractionalized shares of lu
 
 - Custom Solana Program to facilitate minting and distribution of Metaplex Core NFTs
 
+
+
 - Custom off-chain Database to manage asset and user details necessary for compliance
 
+<video width="320" height="240" controls>
+  <source src="./public/readme/dashboard.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 - Access Luxury Collections to purchase, trade, and sell fractions of available assets
+
+<video width="320" height="240" controls>
+  <source src="./public/readme/marketplace.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 
 - Use your Email as a wallet and pay using Stripe or Crypto
 
