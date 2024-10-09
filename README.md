@@ -2,6 +2,11 @@
 
 The Artisan is a RWA marketplace where users can buy fractionalized shares of luxury assets backed by Metaplex's Core NFT's. With our custom Solana Program, Artisan Protocol, we are able to ensure all regulatory compliances are met while providing access to Luxury Assets at an affordable price.
 
+<video width="320" height="240" controls>
+  <source src="./public/readme/landing.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ## Table of Contents
 
 - [Features](#features)
@@ -16,9 +21,18 @@ The Artisan is a RWA marketplace where users can buy fractionalized shares of lu
 ## Features
 
 - Custom Solana Program to facilitate minting and distribution of Metaplex Core NFTs
+
 - Custom off-chain Database to manage asset and user details necessary for compliance
+
 - Access Luxury Collections to purchase, trade, and sell fractions of available assets
+
 - Use your Email as a wallet and pay using Stripe or Crypto
+
+<video width="320" height="240" controls>
+  <source src="./public/readme/web3auth.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 - Track your assets via an intuitive User Dashboard
 - Refer friends to earn points and rewards
 
